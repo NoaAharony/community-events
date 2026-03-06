@@ -1586,6 +1586,7 @@ async function loadEditPage(editKey) {
     };
 
     document.getElementById('e-name').value = e.name || '';
+    populateYearDropdowns();
     prefillDatePicker(e.event_date, 'e');
     const normalizeTime = t => t ? t.substring(0,8).padEnd(8,'0') : '';
     document.getElementById('e-start-time').value = normalizeTime(e.start_time);
