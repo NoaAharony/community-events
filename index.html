@@ -1595,7 +1595,8 @@ function resetSubmitForm() {
   // reset address visibility toggle to No
   const addrBtns = document.querySelectorAll('#page-submit .toggle-group');
   // reset date pickers
-  ['s-month','s-day','s-year'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  ['s-month','s-day'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  const syear = document.getElementById('s-year'); if(syear) syear.value = String(new Date().getFullYear());
   removeImage();
 }
 
