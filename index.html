@@ -226,7 +226,7 @@
 <div id="page-home" class="page-view active">
   <div class="topbar">
     <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
-    <button class="btn-submit-top" onclick="showPage('page-submit')">+ Submit Event</button>
+    <button class="btn-submit-top" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Event</button>
   </div>
 
   <div class="filter-bar">
@@ -313,7 +313,7 @@
   <footer class="site-footer">
     <div class="footer-links">
       <span class="footer-link" onclick="showPage('page-about')">About</span>
-      <span class="footer-link" onclick="showPage('page-submit')">+ Submit Event</span>
+      <span class="footer-link" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Event</span>
     </div>
     <span style="font-size:11px; color:rgba(255,255,255,0.3); font-style:italic;">Community links coming soon</span>
   </footer>
@@ -923,7 +923,7 @@
     <div class="error-desc">The edit link you used could not be found or is no longer valid.<br>If you submitted this event and still need to make changes,<br>please check your email for the original edit link.</div>
     <div class="error-actions">
       <button class="btn-primary" onclick="showPage('page-home')">← Back to Events</button>
-      <button class="btn-secondary" onclick="showPage('page-submit')">+ Submit a New Event</button>
+      <button class="btn-secondary" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit a New Event</button>
     </div>
   </div>
 </div>
@@ -933,7 +933,7 @@
 <div id="page-about" class="page-view">
   <div class="topbar">
     <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
-    <button class="btn-submit-top" onclick="showPage('page-submit')">+ Submit Event</button>
+    <button class="btn-submit-top" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Event</button>
   </div>
   <div class="about-body">
     <span class="footer-link" onclick="showPage('page-home')" style="color:var(--blue); font-size:13px; cursor:pointer; display:inline-block; margin-bottom:20px;">← Back to Events</span>
@@ -946,7 +946,7 @@
   <footer class="site-footer">
     <div class="footer-links">
       <span class="footer-link" onclick="showPage('page-about')">About</span>
-      <span class="footer-link" onclick="showPage('page-submit')">+ Submit Event</span>
+      <span class="footer-link" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Event</span>
     </div>
     <span style="font-size:11px; color:rgba(255,255,255,0.3); font-style:italic;">Community links coming soon</span>
   </footer>
@@ -1215,7 +1215,7 @@ function renderEvents() {
   if (events.length === 0) {
     const hasAnyEvents = allEvents.filter(e => !isPast(e.event_date) && e.status !== 'cancelled').length > 0;
     if (!hasAnyEvents) {
-      container.innerHTML = `<div class="empty-box"><div class="empty-icon">📭</div><div class="empty-title">No events yet</div><div class="empty-desc">There are no upcoming events right now.<br>Be the first to add one!</div><button class="btn-primary" onclick="showPage('page-submit')">+ Submit an Event</button></div>`;
+      container.innerHTML = `<div class="empty-box"><div class="empty-icon">📭</div><div class="empty-title">No events yet</div><div class="empty-desc">There are no upcoming events right now.<br>Be the first to add one!</div><button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit an Event</button></div>`;
     } else {
       container.innerHTML = `<div class="empty-box"><div class="empty-icon">🔍</div><div class="empty-title">No events match your filters</div><div class="empty-desc">Try adjusting or clearing your filters.</div><button class="btn-secondary" onclick="clearFilters()">✕ Clear Filters</button></div>`;
     }
