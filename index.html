@@ -1587,8 +1587,9 @@ async function loadEditPage(editKey) {
 
     document.getElementById('e-name').value = e.name || '';
     prefillDatePicker(e.event_date, 'e');
-    document.getElementById('e-start-time').value = e.start_time || '';
-    document.getElementById('e-end-time').value = e.end_time || '';
+    const normalizeTime = t => t ? t.substring(0,8).padEnd(8,'0') : '';
+    document.getElementById('e-start-time').value = normalizeTime(e.start_time);
+    document.getElementById('e-end-time').value = normalizeTime(e.end_time);
     document.getElementById('e-type').value = e.event_type || '';
     // prefill audience checkboxes
     const eAudiences = (e.audience || '').split(',').map(a => a.trim());
@@ -1597,7 +1598,13 @@ async function loadEditPage(editKey) {
     });
     document.getElementById('e-desc').value = e.description || '';
     document.getElementById('e-reg-link').value = e.registration_link || '';
-    document.getElementById('e-city').value = e.city || '';
+    const eCityEl = document.getElementById('e-city');
+    eCityEl.value = e.city || '';
+    if (e.city && eCityEl.value !== e.city) {
+      eCityEl.value = 'other';
+      document.getElementById('e-city-other').value = e.city;
+      document.getElementById('e-city-other').style.display = 'block';
+    }
     document.getElementById('e-address').value = e.full_address || '';
     document.getElementById('e-organizer').value = e.organizer_name || '';
     document.getElementById('e-email').value = e.contact_email || '';
