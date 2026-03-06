@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Israeli Community Events – Metro Atlanta</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1a3a5c; --blue-light: #2a5a8c; --gold: #c8963e; --gold-light: #e8b86a;
+    --cream: #f9f5ef; --white: #ffffff; --gray-100: #f4f1ec; --gray-200: #e8e2d8;
+    --gray-400: #a09880; --gray-600: #6b6355; --gray-800: #3a342a;
+    --red: #b83030; --green: #2d6a3f;
+    --tag-party: #fde8e8; --tag-party-b: #d4909090;
+    --tag-meetup: #e8f0fd; --tag-meetup-b: #90a8d490;
+    --tag-food: #e8f5e8; --tag-food-b: #90c490;
+    --tag-conf: #f0e8fd; --tag-conf-b: #b090d490;
+    --tag-talk: #fdf5e0; --tag-talk-b: #d4b86090;
+    --tag-workshop: #e0f5fd; --tag-workshop-b: #60b8d490;
+    --tag-other: #f0f0f0; --tag-other-b: #b0b0b090;
+    --tag-kids: #fde8f5; --tag-kids-b: #d490b890;
+    --tag-adults: #e8eef5; --tag-adults-b: #90a8c490;
+    --tag-all: #f0f5e8; --tag-all-b: #a8c49090;
+    --tag-teens: #f5ede8; --tag-teens-b: #c4a89090;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--gray-800); min-height: 100vh; }
+
+  .topbar { background: var(--blue); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+  .site-name { font-family: 'DM Serif Display', serif; color: var(--white); font-size: 18px; letter-spacing: 0.3px; cursor: pointer; }
+  .site-name span { color: var(--gold-light); }
+  .btn-submit-top { background: var(--gold); color: var(--white); border: none; padding: 8px 18px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 3px; transition: background 0.2s; }
+  .btn-submit-top:hover { background: var(--gold-light); }
+
+  .filter-bar { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 10px 24px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .filter-label { font-size: 12px; color: var(--gray-400); font-weight: 500; margin-right: 4px; }
+  .filter-chip { background: var(--gray-100); border: 1px solid var(--gray-200); padding: 5px 12px; font-size: 12px; font-family: 'DM Sans', sans-serif; border-radius: 20px; cursor: pointer; transition: all 0.15s; color: var(--gray-600); position: relative; white-space: nowrap; }
+  .filter-chip:hover { border-color: var(--blue-light); color: var(--blue); }
+  .filter-chip.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
+  .dropdown-menu { display: none; position: absolute; top: calc(100% + 6px); left: 0; background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 200; min-width: 160px; overflow: hidden; }
+  .filter-chip.open .dropdown-menu { display: block; }
+  .dropdown-item { padding: 9px 16px; font-size: 13px; cursor: pointer; color: var(--gray-800); transition: background 0.1s; }
+  .dropdown-item:hover { background: var(--gray-100); }
+  .dropdown-item.selected { color: var(--blue); font-weight: 600; }
+
+  .main { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
+  .results-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .results-count { font-size: 13px; color: var(--gray-600); }
+  .active-filters { font-size: 12px; color: var(--gray-400); font-style: italic; }
+
+  .date-group { margin-bottom: 28px; }
+  .date-header { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-400); padding: 0 0 8px 0; border-bottom: 2px solid var(--gray-200); margin-bottom: 10px; }
+
+  .event-row { display: flex; align-items: stretch; background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; overflow: hidden; }
+  .event-row:hover { border-color: var(--blue-light); box-shadow: 0 2px 12px rgba(26,58,92,0.1); transform: translateY(-1px); }
+  .event-row.cancelled { opacity: 0.55; cursor: default; pointer-events: none; }
+  .row-thumb { width: 72px; min-width: 72px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 22px; border-right: 1px solid var(--gray-200); overflow: hidden; }
+  .row-thumb img { width: 72px; height: 100%; object-fit: cover; }
+  .row-main { flex: 1; padding: 12px 14px; min-width: 0; }
+  .row-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+  .row-title { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+  .row-title.cancelled-title { text-decoration: line-through; color: var(--gray-400); }
+  .cancelled-badge { background: var(--red); color: white; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 2px; letter-spacing: 0.5px; white-space: nowrap; }
+  .row-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--gray-600); margin-bottom: 7px; }
+  .row-meta span { display: flex; align-items: center; gap: 4px; }
+  .row-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+  .tag { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; border: 1px solid; }
+  .tag-party { background: var(--tag-party); border-color: var(--tag-party-b); color: #a03030; }
+  .tag-meetup { background: var(--tag-meetup); border-color: var(--tag-meetup-b); color: #2a4a8c; }
+  .tag-food { background: var(--tag-food); border-color: var(--tag-food-b); color: #2a6a2a; }
+  .tag-conf { background: var(--tag-conf); border-color: var(--tag-conf-b); color: #6030a0; }
+  .tag-talk { background: var(--tag-talk); border-color: var(--tag-talk-b); color: #8a6010; }
+  .tag-workshop { background: var(--tag-workshop); border-color: var(--tag-workshop-b); color: #106080; }
+  .tag-other { background: var(--tag-other); border-color: var(--tag-other-b); color: #606060; }
+  .tag-kids { background: var(--tag-kids); border-color: var(--tag-kids-b); color: #8a3070; }
+  .tag-adults { background: var(--tag-adults); border-color: var(--tag-adults-b); color: #304870; }
+  .tag-all { background: var(--tag-all); border-color: var(--tag-all-b); color: #3a6030; }
+  .tag-teens { background: var(--tag-teens); border-color: var(--tag-teens-b); color: #7a4830; }
+  .row-arrow { display: flex; align-items: center; padding: 0 16px; font-size: 18px; color: var(--gray-400); border-left: 1px solid var(--gray-200); min-width: 48px; justify-content: center; }
+
+  .notice-bar { background: #fef8e8; border: 1px solid #e8d880; border-radius: 6px; padding: 10px 16px; font-size: 13px; color: #7a6020; margin-bottom: 20px; }
+  .empty-box { text-align: center; padding: 60px 24px; background: var(--white); border: 1px dashed var(--gray-200); border-radius: 8px; }
+  .empty-icon { font-size: 40px; margin-bottom: 14px; }
+  .empty-title { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 8px; }
+  .empty-desc { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin-bottom: 20px; }
+
+  .btn-primary { background: var(--blue); color: white; border: none; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: background 0.2s; }
+  .btn-primary:hover { background: var(--blue-light); }
+  .btn-secondary { background: var(--gray-200); color: var(--gray-800); border: none; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 4px; transition: background 0.2s; }
+  .btn-secondary:hover { background: var(--gray-400); color: white; }
+  .btn-danger { background: var(--red); color: white; border: none; padding: 10px 18px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; }
+
+  .site-footer { background: var(--blue); color: rgba(255,255,255,0.7); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; margin-top: 40px; font-size: 13px; flex-wrap: wrap; gap: 12px; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-link { color: rgba(255,255,255,0.7); cursor: pointer; transition: color 0.15s; }
+  .footer-link:hover { color: var(--gold-light); }
+
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 16px; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: 10px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
+  @keyframes modalIn { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+  .modal-header { background: var(--blue); color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px 10px 0 0; }
+  .modal-header h3 { font-family: 'DM Serif Display', serif; font-size: 16px; font-weight: 400; }
+  .modal-close-btn { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 20px; cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 3px; transition: color 0.15s; }
+  .modal-close-btn:hover { color: white; }
+  .modal-body { padding: 20px; }
+  .modal-event-img { width: 100%; height: 140px; background: var(--gray-100); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 16px; overflow: hidden; }
+  .modal-event-img img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-event-title { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 14px; color: var(--blue); }
+  .modal-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .modal-field label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); font-weight: 600; display: block; margin-bottom: 2px; }
+  .modal-field span { font-size: 14px; color: var(--gray-800); }
+  .modal-field.full { grid-column: span 2; }
+  .modal-desc { background: var(--gray-100); border-radius: 6px; padding: 12px; font-size: 13px; color: var(--gray-600); line-height: 1.6; margin-bottom: 16px; }
+  .modal-divider { border: none; border-top: 1px solid var(--gray-200); margin: 16px 0; }
+  .modal-action-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 6px; margin-bottom: 10px; transition: background 0.2s; text-decoration: none; display: block; text-align: center; }
+  .modal-action-btn:hover { background: var(--blue-light); }
+  .modal-action-btn.gold { background: var(--gold); }
+  .modal-action-btn.gold:hover { background: var(--gold-light); }
+  .contact-section { margin-top: 14px; }
+  .contact-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); font-weight: 600; margin-bottom: 8px; }
+  .contact-item { display: flex; align-items: center; justify-content: space-between; background: var(--gray-100); border-radius: 6px; padding: 10px 14px; margin-bottom: 6px; }
+  .contact-item-info { font-size: 13px; color: var(--gray-600); }
+  .contact-btn { background: var(--blue); color: white; border: none; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 4px; font-family: 'DM Sans', sans-serif; text-decoration: none; }
+
+  .form-success { display: none; background: #e8f5e8; border: 1px solid #90c490; border-radius: 6px; padding: 16px; text-align: center; margin-top: 14px; }
+  .form-success.show { display: block; }
+  .form-group { margin-bottom: 12px; }
+  .form-group label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-600); display: block; margin-bottom: 4px; }
+  .form-group label .req { color: var(--red); }
+  .form-input { width: 100%; border: 1px solid var(--gray-200); border-radius: 4px; padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--gray-800); background: var(--white); transition: border-color 0.15s; }
+  .form-input:focus { outline: none; border-color: var(--blue-light); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .privacy-note { font-size: 11px; color: var(--gray-400); margin-top: 6px; }
+  .field-hint { font-size: 11px; color: var(--gray-400); margin-top: 4px; font-style: italic; }
+
+  .page-view { display: none; }
+  .page-view.active { display: block; }
+  .page-header { background: var(--blue); color: white; padding: 20px 24px; }
+  .page-header .back-link { font-size: 13px; color: rgba(255,255,255,0.7); cursor: pointer; margin-bottom: 8px; display: inline-block; transition: color 0.15s; }
+  .page-header .back-link:hover { color: white; }
+  .page-header h1 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; margin-bottom: 4px; }
+  .page-header p { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .form-body { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
+  .form-section { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--gray-200); }
+  .form-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--blue); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-100); }
+  .toggle-group { display: flex; border: 1px solid var(--gray-200); border-radius: 4px; overflow: hidden; }
+  .toggle-btn { flex: 1; padding: 9px; text-align: center; font-size: 13px; cursor: pointer; background: var(--gray-100); color: var(--gray-600); border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .toggle-btn.on { background: var(--blue); color: white; font-weight: 600; }
+  .optional-tag { font-size: 10px; color: var(--gray-400); font-weight: 400; font-style: italic; margin-left: 4px; }
+  .amount-field { display: none; }
+  .amount-field.show { display: block; }
+  .form-actions { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--white); border-top: 1px solid var(--gray-200); position: sticky; bottom: 0; max-width: 680px; margin: 0 auto; }
+
+  .confirmation-box { max-width: 560px; margin: 40px auto; background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .confirmation-header { background: var(--green); color: white; padding: 24px; text-align: center; }
+  .confirmation-header .icon { font-size: 40px; margin-bottom: 10px; }
+  .confirmation-header h2 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; }
+  .confirmation-body { padding: 24px; }
+  .edit-link-box { background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 6px; padding: 14px; margin: 16px 0; font-size: 12px; color: var(--blue); word-break: break-all; font-family: monospace; }
+  .confirmation-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
+  .edit-cancel-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--white); border-top: 1px solid var(--gray-200); position: sticky; bottom: 0; max-width: 680px; margin: 0 auto; }
+  .btn-right { display: flex; gap: 10px; }
+
+  .cancel-modal { max-width: 420px; }
+  .cancel-modal .modal-header { background: var(--red); }
+  .cancel-warning { background: #fef0f0; border: 1px solid #f0c0c0; border-radius: 6px; padding: 14px; margin: 14px 0; font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+
+  .error-box { max-width: 480px; margin: 80px auto; text-align: center; padding: 24px; }
+  .error-icon { font-size: 48px; margin-bottom: 16px; }
+  .error-title { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--red); margin-bottom: 12px; }
+  .error-desc { font-size: 14px; color: var(--gray-600); line-height: 1.7; margin-bottom: 24px; }
+  .error-actions { display: flex; gap: 10px; justify-content: center; }
+
+  .about-body { max-width: 640px; margin: 0 auto; padding: 40px 16px; }
+  .about-body h2 { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--blue); margin-bottom: 16px; }
+  .about-body p { font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 16px; }
+
+  .admin-badge { background: var(--red); color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 3px; margin-left: 12px; }
+  .admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; padding: 0 16px; }
+  .stat-box { background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px; padding: 14px; text-align: center; }
+  .stat-num { font-size: 24px; font-weight: 700; color: var(--blue); }
+  .stat-num.red { color: var(--red); }
+  .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); margin-top: 2px; }
+  .admin-table-wrap { padding: 0 16px 24px; overflow-x: auto; }
+  .admin-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .admin-table th { background: var(--gray-100); padding: 10px 12px; text-align: left; border: 1px solid var(--gray-200); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-600); }
+  .admin-table td { padding: 10px 12px; border: 1px solid var(--gray-200); vertical-align: top; }
+  .admin-table tr:nth-child(even) td { background: var(--gray-100); }
+  .admin-table tr.cancelled-row td { opacity: 0.65; }
+  .status-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .status-active { background: #e8f5e8; color: var(--green); border: 1px solid #90c490; }
+  .status-cancelled { background: #fef0f0; color: var(--red); border: 1px solid #f0c0c0; }
+  .status-past { background: var(--gray-100); color: var(--gray-400); border: 1px solid var(--gray-200); }
+  .admin-btn-delete { background: var(--red); color: white; border: none; padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer; border-radius: 3px; font-family: 'DM Sans', sans-serif; }
+  .admin-btn-edit { background: none; border: none; color: var(--gray-400); font-size: 11px; cursor: pointer; text-decoration: underline; padding: 4px 6px; font-family: 'DM Sans', sans-serif; }
+  .admin-btn-edit:hover { color: var(--blue); }
+
+  .loading-spinner { text-align: center; padding: 60px; font-size: 13px; color: var(--gray-400); }
+  .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .upload-area { border: 2px dashed var(--gray-200); border-radius: 6px; padding: 28px; text-align: center; color: var(--gray-400); cursor: pointer; font-size: 13px; transition: border-color 0.15s; }
+  .upload-area:hover { border-color: var(--blue-light); }
+  .upload-area input { display: none; }
+  .upload-preview { display: flex; gap: 12px; align-items: flex-start; }
+  .upload-thumb { width: 80px; height: 70px; background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 24px; overflow: hidden; }
+  .upload-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  .inline-error { background: #fef0f0; border: 1px solid #f0c0c0; border-radius: 4px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 12px; }
+
+  @media (max-width: 600px) {
+    .modal-fields { grid-template-columns: 1fr; }
+    .modal-field.full { grid-column: span 1; }
+    .form-row { grid-template-columns: 1fr; }
+    .admin-stats { grid-template-columns: 1fr 1fr; }
+    .site-name { font-size: 15px; }
+    .confirmation-actions { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ PAGE: HOME ═══ -->
+<div id="page-home" class="page-view active">
+  <div class="topbar">
+    <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
+    <button class="btn-submit-top" onclick="showPage('page-submit')">+ Submit Event</button>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <div class="filter-chip active" id="chip-date" onclick="toggleDropdown('dd-date', event)">
+      📅 <span id="date-label">This Week</span> ▾
+      <div class="dropdown-menu" id="dd-date">
+        <div class="dropdown-item selected" onclick="setDateFilter('this-week','This Week',event)">This Week</div>
+        <div class="dropdown-item" onclick="setDateFilter('this-weekend','This Weekend',event)">This Weekend</div>
+        <div class="dropdown-item" onclick="setDateFilter('next-week','Next Week',event)">Next Week</div>
+        <div class="dropdown-item" onclick="setDateFilter('this-month','This Month',event)">This Month</div>
+        <div class="dropdown-item" onclick="setDateFilter('all','All Upcoming',event)">All Upcoming</div>
+      </div>
+    </div>
+    <div class="filter-chip" id="chip-city" onclick="toggleDropdown('dd-city', event)">
+      📍 <span id="city-label">City</span> ▾
+      <div class="dropdown-menu" id="dd-city">
+        <div class="dropdown-item selected" onclick="setCityFilter('all','City',event)">All Cities</div>
+        <div class="dropdown-item" onclick="setCityFilter('Alpharetta','Alpharetta',event)">Alpharetta</div>
+        <div class="dropdown-item" onclick="setCityFilter('Sandy Springs','Sandy Springs',event)">Sandy Springs</div>
+        <div class="dropdown-item" onclick="setCityFilter('Dunwoody','Dunwoody',event)">Dunwoody</div>
+        <div class="dropdown-item" onclick="setCityFilter('Roswell','Roswell',event)">Roswell</div>
+        <div class="dropdown-item" onclick="setCityFilter('Johns Creek','Johns Creek',event)">Johns Creek</div>
+        <div class="dropdown-item" onclick="setCityFilter('Brookhaven','Brookhaven',event)">Brookhaven</div>
+        <div class="dropdown-item" onclick="setCityFilter('Atlanta','Atlanta',event)">Atlanta</div>
+        <div class="dropdown-item" onclick="setCityFilter('Other','Other',event)">Other</div>
+      </div>
+    </div>
+    <div class="filter-chip" id="chip-type" onclick="toggleDropdown('dd-type', event)">
+      🎉 <span id="type-label">Event Type</span> ▾
+      <div class="dropdown-menu" id="dd-type">
+        <div class="dropdown-item selected" onclick="setTypeFilter('all','Event Type',event)">All Types</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Party','Party',event)">Party</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Meetup','Meetup',event)">Meetup</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Food Market','Food Market',event)">Food Market</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Conference','Conference',event)">Conference</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Talk / Lecture','Talk / Lecture',event)">Talk / Lecture</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Workshop','Workshop',event)">Workshop</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Other','Other',event)">Other</div>
+      </div>
+    </div>
+    <div class="filter-chip" id="chip-cost" onclick="toggleDropdown('dd-cost', event)">
+      💰 <span id="cost-label">Cost</span> ▾
+      <div class="dropdown-menu" id="dd-cost">
+        <div class="dropdown-item selected" onclick="setCostFilter('all','Cost',event)">Any Cost</div>
+        <div class="dropdown-item" onclick="setCostFilter('Free','Free',event)">Free Only</div>
+        <div class="dropdown-item" onclick="setCostFilter('Paid','Paid',event)">Paid Only</div>
+      </div>
+    </div>
+    <div class="filter-chip" id="chip-audience" onclick="toggleDropdown('dd-audience', event)">
+      👥 <span id="audience-label">For</span> ▾
+      <div class="dropdown-menu" id="dd-audience">
+        <div class="dropdown-item selected" onclick="setAudienceFilter('all','For',event)">Everyone</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('All Ages','All Ages',event)">All Ages</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Adults','Adults',event)">Adults</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Kids','Kids',event)">Kids</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Teens','Teens',event)">Teens</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Families','Families',event)">Families</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Parents','Parents',event)">Parents</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main" id="events-container">
+    <div class="loading-spinner"><div class="spinner"></div><br>Loading events...</div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-links">
+      <span class="footer-link" onclick="showPage('page-about')">About</span>
+      <span class="footer-link" onclick="showPage('page-submit')">+ Submit Event</span>
+    </div>
+    <span style="font-size:11px; color:rgba(255,255,255,0.3); font-style:italic;">Community links coming soon</span>
+  </footer>
+</div>
+
+
+<!-- ═══ PAGE: SUBMIT ═══ -->
+<div id="page-submit" class="page-view">
+  <div class="topbar">
+    <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
+  </div>
+  <div class="page-header">
+    <span class="back-link" onclick="showPage('page-home')">← Back to Events</span>
+    <h1>Submit a New Event</h1>
+    <p>Fill in the details below. No account required. * Required fields</p>
+  </div>
+  <div class="form-body">
+    <div id="submit-error" class="inline-error" style="display:none;"></div>
+
+    <div class="form-section">
+      <div class="form-section-title">1 · Event Information</div>
+      <div class="form-group">
+        <label>Event Name <span class="req">*</span></label>
+        <input class="form-input" id="s-name" type="text" placeholder="e.g. Purim Party, Shabbat Dinner...">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date <span class="req">*</span></label>
+          <div style="display:flex; gap:4px;">
+            <select class="form-input" id="s-month" style="flex:2;"><option value="">Month</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
+            <select class="form-input" id="s-day" style="flex:1;"><option value="">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+            <select class="form-input" id="s-year" style="flex:1.5;"><option value="">Year</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option></select>
+          </div>
+          <input type="hidden" id="s-date">
+        </div>
+        <div class="form-group">
+          <label>Start Time <span class="req">*</span></label>
+          <select class="form-input" id="s-start-time">
+            <option value="">Select time...</option>
+            <option value="00:00:00">12:00 AM</option>
+            <option value="00:30:00">12:30 AM</option>
+            <option value="01:00:00">1:00 AM</option>
+            <option value="01:30:00">1:30 AM</option>
+            <option value="02:00:00">2:00 AM</option>
+            <option value="02:30:00">2:30 AM</option>
+            <option value="03:00:00">3:00 AM</option>
+            <option value="03:30:00">3:30 AM</option>
+            <option value="04:00:00">4:00 AM</option>
+            <option value="04:30:00">4:30 AM</option>
+            <option value="05:00:00">5:00 AM</option>
+            <option value="05:30:00">5:30 AM</option>
+            <option value="06:00:00">6:00 AM</option>
+            <option value="06:30:00">6:30 AM</option>
+            <option value="07:00:00">7:00 AM</option>
+            <option value="07:30:00">7:30 AM</option>
+            <option value="08:00:00">8:00 AM</option>
+            <option value="08:30:00">8:30 AM</option>
+            <option value="09:00:00">9:00 AM</option>
+            <option value="09:30:00">9:30 AM</option>
+            <option value="10:00:00">10:00 AM</option>
+            <option value="10:30:00">10:30 AM</option>
+            <option value="11:00:00">11:00 AM</option>
+            <option value="11:30:00">11:30 AM</option>
+            <option value="12:00:00">12:00 PM</option>
+            <option value="12:30:00">12:30 PM</option>
+            <option value="13:00:00">1:00 PM</option>
+            <option value="13:30:00">1:30 PM</option>
+            <option value="14:00:00">2:00 PM</option>
+            <option value="14:30:00">2:30 PM</option>
+            <option value="15:00:00">3:00 PM</option>
+            <option value="15:30:00">3:30 PM</option>
+            <option value="16:00:00">4:00 PM</option>
+            <option value="16:30:00">4:30 PM</option>
+            <option value="17:00:00">5:00 PM</option>
+            <option value="17:30:00">5:30 PM</option>
+            <option value="18:00:00">6:00 PM</option>
+            <option value="18:30:00">6:30 PM</option>
+            <option value="19:00:00">7:00 PM</option>
+            <option value="19:30:00">7:30 PM</option>
+            <option value="20:00:00">8:00 PM</option>
+            <option value="20:30:00">8:30 PM</option>
+            <option value="21:00:00">9:00 PM</option>
+            <option value="21:30:00">9:30 PM</option>
+            <option value="22:00:00">10:00 PM</option>
+            <option value="22:30:00">10:30 PM</option>
+            <option value="23:00:00">11:00 PM</option>
+            <option value="23:30:00">11:30 PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>End Time <span class="optional-tag">(optional)</span></label>
+        <select class="form-input" id="s-end-time">
+            <option value="">— No end time —</option>
+            <option value="00:00:00">12:00 AM</option>
+            <option value="00:30:00">12:30 AM</option>
+            <option value="01:00:00">1:00 AM</option>
+            <option value="01:30:00">1:30 AM</option>
+            <option value="02:00:00">2:00 AM</option>
+            <option value="02:30:00">2:30 AM</option>
+            <option value="03:00:00">3:00 AM</option>
+            <option value="03:30:00">3:30 AM</option>
+            <option value="04:00:00">4:00 AM</option>
+            <option value="04:30:00">4:30 AM</option>
+            <option value="05:00:00">5:00 AM</option>
+            <option value="05:30:00">5:30 AM</option>
+            <option value="06:00:00">6:00 AM</option>
+            <option value="06:30:00">6:30 AM</option>
+            <option value="07:00:00">7:00 AM</option>
+            <option value="07:30:00">7:30 AM</option>
+            <option value="08:00:00">8:00 AM</option>
+            <option value="08:30:00">8:30 AM</option>
+            <option value="09:00:00">9:00 AM</option>
+            <option value="09:30:00">9:30 AM</option>
+            <option value="10:00:00">10:00 AM</option>
+            <option value="10:30:00">10:30 AM</option>
+            <option value="11:00:00">11:00 AM</option>
+            <option value="11:30:00">11:30 AM</option>
+            <option value="12:00:00">12:00 PM</option>
+            <option value="12:30:00">12:30 PM</option>
+            <option value="13:00:00">1:00 PM</option>
+            <option value="13:30:00">1:30 PM</option>
+            <option value="14:00:00">2:00 PM</option>
+            <option value="14:30:00">2:30 PM</option>
+            <option value="15:00:00">3:00 PM</option>
+            <option value="15:30:00">3:30 PM</option>
+            <option value="16:00:00">4:00 PM</option>
+            <option value="16:30:00">4:30 PM</option>
+            <option value="17:00:00">5:00 PM</option>
+            <option value="17:30:00">5:30 PM</option>
+            <option value="18:00:00">6:00 PM</option>
+            <option value="18:30:00">6:30 PM</option>
+            <option value="19:00:00">7:00 PM</option>
+            <option value="19:30:00">7:30 PM</option>
+            <option value="20:00:00">8:00 PM</option>
+            <option value="20:30:00">8:30 PM</option>
+            <option value="21:00:00">9:00 PM</option>
+            <option value="21:30:00">9:30 PM</option>
+            <option value="22:00:00">10:00 PM</option>
+            <option value="22:30:00">10:30 PM</option>
+            <option value="23:00:00">11:00 PM</option>
+            <option value="23:30:00">11:30 PM</option>
+          </select>
+        <div class="field-hint">Leave empty if end time is not known</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Event Type <span class="req">*</span></label>
+          <select class="form-input" id="s-type">
+            <option value="">Select type...</option>
+            <option>Party</option><option>Meetup</option><option>Food Market</option>
+            <option>Conference</option><option>Talk / Lecture</option><option>Workshop</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>For <span class="req">*</span></label>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="All Ages"> All Ages</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="Adults"> Adults</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="Kids"> Kids</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="Teens"> Teens</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="Families"> Families</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="Parents"> Parents</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Cost <span class="req">*</span></label>
+        <div class="toggle-group">
+          <button class="toggle-btn on" id="cost-free-btn" onclick="setCost('Free',this)">Free</button>
+          <button class="toggle-btn" id="cost-paid-btn" onclick="setCost('Paid',this)">Paid</button>
+        </div>
+      </div>
+      <div class="form-group amount-field" id="amount-field">
+        <label>Amount</label>
+        <input class="form-input" id="s-amount" type="text" placeholder="e.g. $25 per person">
+      </div>
+      <div class="form-group">
+        <label>Description <span class="optional-tag">(optional)</span></label>
+        <textarea class="form-input" id="s-desc" rows="4" dir="auto" placeholder="Describe your event..."></textarea>
+        <div class="field-hint">You can write in Hebrew or English</div>
+      </div>
+      <div class="form-group">
+        <label>Registration Link <span class="optional-tag">(optional)</span></label>
+        <input class="form-input" id="s-reg-link" type="url" placeholder="https://">
+        <div class="field-hint">If provided, visitors will be directed to this link to register</div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">2 · Location</div>
+      <div class="form-group">
+        <label>City <span class="req">*</span></label>
+        <select class="form-input" id="s-city">
+          <option value="">Select city...</option>
+          <option>Alpharetta</option><option>Sandy Springs</option><option>Dunwoody</option>
+          <option>Roswell</option><option>Johns Creek</option><option>Brookhaven</option>
+          <option>Atlanta</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Full Address <span class="optional-tag">(optional)</span></label>
+        <input class="form-input" id="s-address" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA">
+      </div>
+      <div class="form-group">
+        <label>Show address publicly? <span class="req">*</span></label>
+        <div class="toggle-group">
+          <button class="toggle-btn" onclick="setAddressVisibility(true,this)">Yes — show publicly</button>
+          <button class="toggle-btn on" onclick="setAddressVisibility(false,this)">No — keep private</button>
+        </div>
+        <div class="field-hint">If No — visitors will see city only and can request the address</div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">3 · Organizer Information</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Organizer / Business Name <span class="req">*</span></label>
+          <input class="form-input" id="s-organizer" type="text" placeholder="Your name or business name">
+        </div>
+        <div class="form-group">
+          <label>Type <span class="req">*</span></label>
+          <div class="toggle-group">
+            <button class="toggle-btn on" onclick="setOrgType('Business',this)">Business</button>
+            <button class="toggle-btn" onclick="setOrgType('Individual',this)">Individual</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email <span class="optional-tag">(optional)</span></label>
+          <input class="form-input" id="s-email" type="email" placeholder="your@email.com">
+          <div class="privacy-note">🔒 Not shown publicly</div>
+        </div>
+        <div class="form-group">
+          <label>Phone <span class="optional-tag">(optional)</span></label>
+          <input class="form-input" id="s-phone" type="tel" placeholder="+1 (404) 555-0000">
+          <div class="privacy-note">🔒 Not shown publicly</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Allow visitors to contact you? <span class="req">*</span></label>
+        <div class="toggle-group">
+          <button class="toggle-btn" onclick="setContactOptIn(true,this)">Yes</button>
+          <button class="toggle-btn on" onclick="setContactOptIn(false,this)">No</button>
+        </div>
+        <div class="field-hint">If Yes — your email/phone will appear on your event for visitors to contact you</div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">4 · Media <span class="optional-tag">(optional)</span></div>
+      <div class="form-group">
+        <label>Event Image <span class="optional-tag">(optional)</span></label>
+        <div id="upload-area" class="upload-area" onclick="document.getElementById('s-image').click()">
+          📷 Upload a flyer, logo, or any image<br>
+          <span style="font-size:11px;">JPG, PNG · Max 5MB</span>
+          <input type="file" id="s-image" accept="image/jpeg,image/png" onchange="handleImageSelect(this)">
+        </div>
+        <div id="upload-preview" class="upload-preview" style="display:none;">
+          <div class="upload-thumb"><img id="upload-thumb-img" src=""></div>
+          <div>
+            <div class="upload-area" style="padding:12px 20px;" onclick="document.getElementById('s-image').click()">📷 Replace Image</div>
+            <div style="font-size:11px; color:var(--red); cursor:pointer; margin-top:6px;" onclick="removeImage()">✕ Remove image</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-secondary" onclick="showPage('page-home')">Cancel</button>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-size:11px; color:var(--gray-400);">By submitting you confirm all details are accurate</span>
+        <button class="btn-primary" id="submit-btn" onclick="submitEvent()">Submit Event →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE: CONFIRMATION ═══ -->
+<div id="page-confirm" class="page-view">
+  <div class="topbar">
+    <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
+  </div>
+  <div style="padding: 16px;">
+    <div class="confirmation-box">
+      <div class="confirmation-header">
+        <div class="icon">✅</div>
+        <h2>Your event was submitted successfully!</h2>
+      </div>
+      <div class="confirmation-body">
+        <p style="font-size:14px; color:var(--gray-600); line-height:1.7;">
+          Use the link below to <strong>edit or cancel</strong> your event at any time.<br>
+          Save it — this is the only way to manage your event.
+        </p>
+        <p style="font-size:13px; color:var(--gray-400); margin-top:8px; font-style:italic;">
+          If you provided an email address, this link has been sent to your inbox.
+        </p>
+        <div class="edit-link-box" id="confirm-link"></div>
+        <button class="btn-secondary" style="width:100%;" onclick="copyConfirmLink()">📋 Copy Link</button>
+        <div class="confirmation-actions">
+          <button class="btn-secondary" onclick="showPage('page-home'); loadEvents()">← Back to Events</button>
+          <button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Another Event</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE: EDIT ═══ -->
+<div id="page-edit" class="page-view">
+  <div class="topbar">
+    <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
+  </div>
+  <div class="page-header">
+    <span class="back-link" onclick="showPage('page-home')">← Back to Events</span>
+    <h1>Edit Your Event</h1>
+    <p>Update any details below and click Save Changes. * Required fields</p>
+  </div>
+  <div class="form-body">
+    <div id="edit-error" class="inline-error" style="display:none;"></div>
+
+    <div class="form-section">
+      <div class="form-section-title">1 · Event Information</div>
+      <div class="form-group">
+        <label>Event Name <span class="req">*</span></label>
+        <input class="form-input" id="e-name" type="text">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date <span class="req">*</span></label>
+          <div style="display:flex; gap:4px;">
+            <select class="form-input" id="e-month" style="flex:2;"><option value="">Month</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
+            <select class="form-input" id="e-day" style="flex:1;"><option value="">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+            <select class="form-input" id="e-year" style="flex:1.5;"><option value="">Year</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option></select>
+          </div>
+          <input type="hidden" id="e-date">
+        </div>
+        <div class="form-group">
+          <label>Start Time <span class="req">*</span></label>
+          <select class="form-input" id="e-start-time">
+            <option value="">Select time...</option>
+            <option value="00:00:00">12:00 AM</option>
+            <option value="00:30:00">12:30 AM</option>
+            <option value="01:00:00">1:00 AM</option>
+            <option value="01:30:00">1:30 AM</option>
+            <option value="02:00:00">2:00 AM</option>
+            <option value="02:30:00">2:30 AM</option>
+            <option value="03:00:00">3:00 AM</option>
+            <option value="03:30:00">3:30 AM</option>
+            <option value="04:00:00">4:00 AM</option>
+            <option value="04:30:00">4:30 AM</option>
+            <option value="05:00:00">5:00 AM</option>
+            <option value="05:30:00">5:30 AM</option>
+            <option value="06:00:00">6:00 AM</option>
+            <option value="06:30:00">6:30 AM</option>
+            <option value="07:00:00">7:00 AM</option>
+            <option value="07:30:00">7:30 AM</option>
+            <option value="08:00:00">8:00 AM</option>
+            <option value="08:30:00">8:30 AM</option>
+            <option value="09:00:00">9:00 AM</option>
+            <option value="09:30:00">9:30 AM</option>
+            <option value="10:00:00">10:00 AM</option>
+            <option value="10:30:00">10:30 AM</option>
+            <option value="11:00:00">11:00 AM</option>
+            <option value="11:30:00">11:30 AM</option>
+            <option value="12:00:00">12:00 PM</option>
+            <option value="12:30:00">12:30 PM</option>
+            <option value="13:00:00">1:00 PM</option>
+            <option value="13:30:00">1:30 PM</option>
+            <option value="14:00:00">2:00 PM</option>
+            <option value="14:30:00">2:30 PM</option>
+            <option value="15:00:00">3:00 PM</option>
+            <option value="15:30:00">3:30 PM</option>
+            <option value="16:00:00">4:00 PM</option>
+            <option value="16:30:00">4:30 PM</option>
+            <option value="17:00:00">5:00 PM</option>
+            <option value="17:30:00">5:30 PM</option>
+            <option value="18:00:00">6:00 PM</option>
+            <option value="18:30:00">6:30 PM</option>
+            <option value="19:00:00">7:00 PM</option>
+            <option value="19:30:00">7:30 PM</option>
+            <option value="20:00:00">8:00 PM</option>
+            <option value="20:30:00">8:30 PM</option>
+            <option value="21:00:00">9:00 PM</option>
+            <option value="21:30:00">9:30 PM</option>
+            <option value="22:00:00">10:00 PM</option>
+            <option value="22:30:00">10:30 PM</option>
+            <option value="23:00:00">11:00 PM</option>
+            <option value="23:30:00">11:30 PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>End Time <span class="optional-tag">(optional)</span></label>
+        <select class="form-input" id="e-end-time">
+            <option value="">— No end time —</option>
+            <option value="00:00:00">12:00 AM</option>
+            <option value="00:30:00">12:30 AM</option>
+            <option value="01:00:00">1:00 AM</option>
+            <option value="01:30:00">1:30 AM</option>
+            <option value="02:00:00">2:00 AM</option>
+            <option value="02:30:00">2:30 AM</option>
+            <option value="03:00:00">3:00 AM</option>
+            <option value="03:30:00">3:30 AM</option>
+            <option value="04:00:00">4:00 AM</option>
+            <option value="04:30:00">4:30 AM</option>
+            <option value="05:00:00">5:00 AM</option>
+            <option value="05:30:00">5:30 AM</option>
+            <option value="06:00:00">6:00 AM</option>
+            <option value="06:30:00">6:30 AM</option>
+            <option value="07:00:00">7:00 AM</option>
+            <option value="07:30:00">7:30 AM</option>
+            <option value="08:00:00">8:00 AM</option>
+            <option value="08:30:00">8:30 AM</option>
+            <option value="09:00:00">9:00 AM</option>
+            <option value="09:30:00">9:30 AM</option>
+            <option value="10:00:00">10:00 AM</option>
+            <option value="10:30:00">10:30 AM</option>
+            <option value="11:00:00">11:00 AM</option>
+            <option value="11:30:00">11:30 AM</option>
+            <option value="12:00:00">12:00 PM</option>
+            <option value="12:30:00">12:30 PM</option>
+            <option value="13:00:00">1:00 PM</option>
+            <option value="13:30:00">1:30 PM</option>
+            <option value="14:00:00">2:00 PM</option>
+            <option value="14:30:00">2:30 PM</option>
+            <option value="15:00:00">3:00 PM</option>
+            <option value="15:30:00">3:30 PM</option>
+            <option value="16:00:00">4:00 PM</option>
+            <option value="16:30:00">4:30 PM</option>
+            <option value="17:00:00">5:00 PM</option>
+            <option value="17:30:00">5:30 PM</option>
+            <option value="18:00:00">6:00 PM</option>
+            <option value="18:30:00">6:30 PM</option>
+            <option value="19:00:00">7:00 PM</option>
+            <option value="19:30:00">7:30 PM</option>
+            <option value="20:00:00">8:00 PM</option>
+            <option value="20:30:00">8:30 PM</option>
+            <option value="21:00:00">9:00 PM</option>
+            <option value="21:30:00">9:30 PM</option>
+            <option value="22:00:00">10:00 PM</option>
+            <option value="22:30:00">10:30 PM</option>
+            <option value="23:00:00">11:00 PM</option>
+            <option value="23:30:00">11:30 PM</option>
+          </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Event Type <span class="req">*</span></label>
+          <select class="form-input" id="e-type">
+            <option>Party</option><option>Meetup</option><option>Food Market</option>
+            <option>Conference</option><option>Talk / Lecture</option><option>Workshop</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>For <span class="req">*</span></label>
+          <select class="form-input" id="e-audience">
+            <option>All Ages</option><option>Adults</option><option>Kids</option>
+            <option>Teens</option><option>Families</option><option>Parents</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Cost <span class="req">*</span></label>
+        <div class="toggle-group">
+          <button class="toggle-btn" id="e-cost-free" onclick="setEditCost('Free',this)">Free</button>
+          <button class="toggle-btn" id="e-cost-paid" onclick="setEditCost('Paid',this)">Paid</button>
+        </div>
+      </div>
+      <div class="form-group amount-field" id="e-amount-field">
+        <label>Amount</label>
+        <input class="form-input" id="e-amount" type="text">
+      </div>
+      <div class="form-group">
+        <label>Description <span class="optional-tag">(optional)</span></label>
+        <textarea class="form-input" id="e-desc" rows="4" dir="auto"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Registration Link <span class="optional-tag">(optional)</span></label>
+        <input class="form-input" id="e-reg-link" type="url" placeholder="https://">
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">2 · Location</div>
+      <div class="form-group">
+        <label>City <span class="req">*</span></label>
+        <select class="form-input" id="e-city">
+          <option>Alpharetta</option><option>Sandy Springs</option><option>Dunwoody</option>
+          <option>Roswell</option><option>Johns Creek</option><option>Brookhaven</option>
+          <option>Atlanta</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Full Address <span class="optional-tag">(optional)</span></label>
+        <input class="form-input" id="e-address" type="text">
+      </div>
+      <div class="form-group">
+        <label>Show address publicly?</label>
+        <div class="toggle-group">
+          <button class="toggle-btn" id="e-addr-yes" onclick="setEditAddressVisibility(true,this)">Yes — show publicly</button>
+          <button class="toggle-btn" id="e-addr-no" onclick="setEditAddressVisibility(false,this)">No — keep private</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">3 · Organizer Information</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name <span class="req">*</span></label>
+          <input class="form-input" id="e-organizer" type="text">
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <div class="toggle-group">
+            <button class="toggle-btn" id="e-org-business" onclick="setEditOrgType('Business',this)">Business</button>
+            <button class="toggle-btn" id="e-org-individual" onclick="setEditOrgType('Individual',this)">Individual</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email</label>
+          <input class="form-input" id="e-email" type="email">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input class="form-input" id="e-phone" type="tel">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Allow visitors to contact you?</label>
+        <div class="toggle-group">
+          <button class="toggle-btn" id="e-contact-yes" onclick="setEditContactOptIn(true,this)">Yes</button>
+          <button class="toggle-btn" id="e-contact-no" onclick="setEditContactOptIn(false,this)">No</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">4 · Media</div>
+      <div class="form-group">
+        <label>Event Image</label>
+        <div id="e-upload-area" class="upload-area" onclick="document.getElementById('e-image').click()">
+          📷 Upload a flyer, logo, or any image<br>
+          <span style="font-size:11px;">JPG, PNG · Max 5MB</span>
+          <input type="file" id="e-image" accept="image/jpeg,image/png" onchange="handleEditImageSelect(this)">
+        </div>
+        <div id="e-upload-preview" class="upload-preview" style="display:none;">
+          <div class="upload-thumb"><img id="e-upload-thumb-img" src=""></div>
+          <div>
+            <div class="upload-area" style="padding:12px 20px;" onclick="document.getElementById('e-image').click()">📷 Replace Image</div>
+            <div style="font-size:11px; color:var(--red); cursor:pointer; margin-top:6px;" onclick="removeEditImage()">✕ Remove image</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="edit-cancel-bar">
+      <button class="btn-danger" onclick="openCancelConfirm()">🗑 Cancel Event</button>
+      <div class="btn-right">
+        <button class="btn-secondary" onclick="showPage('page-home')">Discard Changes</button>
+        <button class="btn-primary" id="save-btn" onclick="saveEvent()">Save Changes →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE: INVALID LINK ═══ -->
+<div id="page-invalid" class="page-view">
+  <div class="topbar"><div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div></div>
+  <div class="error-box">
+    <div class="error-icon">⚠️</div>
+    <div class="error-title">This link is invalid or has expired</div>
+    <div class="error-desc">The edit link you used could not be found or is no longer valid.<br>If you submitted this event and still need to make changes,<br>please check your email for the original edit link.</div>
+    <div class="error-actions">
+      <button class="btn-primary" onclick="showPage('page-home')">← Back to Events</button>
+      <button class="btn-secondary" onclick="showPage('page-submit')">+ Submit a New Event</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE: ABOUT ═══ -->
+<div id="page-about" class="page-view">
+  <div class="topbar">
+    <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
+    <button class="btn-submit-top" onclick="showPage('page-submit')">+ Submit Event</button>
+  </div>
+  <div class="about-body">
+    <span class="footer-link" onclick="showPage('page-home')" style="color:var(--blue); font-size:13px; cursor:pointer; display:inline-block; margin-bottom:20px;">← Back to Events</span>
+    <h2>About This Site</h2>
+    <p>Israeli Events Atlanta is a community platform for Israelis and the broader Jewish community in Metro Atlanta, Georgia.</p>
+    <p>We created this site to solve a simple problem: events in our community are scattered across WhatsApp groups, Facebook pages, and word of mouth. There was no single place to see what's happening.</p>
+    <p>This site is open to everyone in the Israeli and Jewish community. Anyone can submit an event — no account needed. Just fill out the form and your event will appear on the list.</p>
+    <p style="color:var(--gray-400); font-size:13px;">Have questions or feedback? Reach out via the community WhatsApp group.</p>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-links">
+      <span class="footer-link" onclick="showPage('page-about')">About</span>
+      <span class="footer-link" onclick="showPage('page-submit')">+ Submit Event</span>
+    </div>
+    <span style="font-size:11px; color:rgba(255,255,255,0.3); font-style:italic;">Community links coming soon</span>
+  </footer>
+</div>
+
+
+<!-- ═══ PAGE: ADMIN ═══ -->
+<div id="page-admin" class="page-view">
+  <div class="topbar">
+    <div style="display:flex; align-items:center;">
+      <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
+      <span class="admin-badge">🔒 Admin Mode</span>
+    </div>
+    <button class="btn-secondary" onclick="showPage('page-home'); loadEvents()" style="font-size:12px; padding:6px 14px;">← Back to Site</button>
+  </div>
+  <div style="padding: 20px 16px 8px;">
+    <div class="admin-stats" id="admin-stats">
+      <div class="stat-box"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-upcoming">—</div><div class="stat-label">Upcoming</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-past">—</div><div class="stat-label">Past</div></div>
+      <div class="stat-box"><div class="stat-num red" id="stat-cancelled">—</div><div class="stat-label">Cancelled</div></div>
+    </div>
+  </div>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Event</th><th>Date & Time</th><th>City</th><th>Organizer</th>
+          <th>Contact</th><th>Type</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="admin-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- Event Detail Modal -->
+<div class="overlay" id="overlay-event" onclick="closeModalOnBg(event,'overlay-event')">
+  <div class="modal" id="modal-event">
+    <div class="modal-header">
+      <h3>Event Details</h3>
+      <button class="modal-close-btn" onclick="closeModal('overlay-event')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-event-body"></div>
+  </div>
+</div>
+
+<!-- Request Address Modal -->
+<div class="overlay" id="overlay-address" onclick="closeModalOnBg(event,'overlay-address')">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-header">
+      <h3>Request Address</h3>
+      <button class="modal-close-btn" onclick="closeModal('overlay-address')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:16px;">Fill in your details and the organizer will contact you with the address.</p>
+      <div id="address-form">
+        <div class="form-row">
+          <div class="form-group"><label>First Name <span class="req">*</span></label><input class="form-input" id="req-fname" type="text"></div>
+          <div class="form-group"><label>Last Name <span class="req">*</span></label><input class="form-input" id="req-lname" type="text"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email <span class="req">*</span></label><input class="form-input" id="req-email" type="email"></div>
+          <div class="form-group"><label>Phone <span class="req">*</span></label><input class="form-input" id="req-phone" type="tel"></div>
+        </div>
+        <div class="form-group"><label>Message <span class="optional-tag">(optional)</span></label><textarea class="form-input" id="req-message" rows="3" dir="auto"></textarea></div>
+        <button class="modal-action-btn" onclick="submitAddressRequest()">Send Request</button>
+        <div class="privacy-note" style="text-align:center; margin-top:8px;">🔒 Your details are sent only to the organizer and are not displayed publicly</div>
+      </div>
+      <div class="form-success" id="address-success">
+        <div style="font-size:28px; margin-bottom:6px;">✅</div>
+        <p style="font-size:13px; color:var(--green); font-weight:500;">Your request has been sent!<br>The organizer will contact you directly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel Event Confirmation Modal -->
+<div class="overlay" id="overlay-cancel" onclick="closeModalOnBg(event,'overlay-cancel')">
+  <div class="modal cancel-modal">
+    <div class="modal-header">
+      <h3>⚠ Cancel Event</h3>
+      <button class="modal-close-btn" onclick="closeModal('overlay-cancel')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px;">Are you sure you want to cancel this event?</p>
+      <div class="cancel-warning" id="cancel-warning-text"></div>
+      <p style="font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:20px;">The event will remain visible on the site but will be marked as <strong>Cancelled</strong> so visitors are informed.</p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-danger" style="flex:1; padding:11px;" onclick="confirmCancelEvent()">Yes, Cancel Event</button>
+        <button class="btn-secondary" style="flex:1; padding:11px;" onclick="closeModal('overlay-cancel')">No, Go Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Delete Modal -->
+<div class="overlay" id="overlay-admin-delete" onclick="closeModalOnBg(event,'overlay-admin-delete')">
+  <div class="modal cancel-modal">
+    <div class="modal-header">
+      <h3>⚠ Delete Event</h3>
+      <button class="modal-close-btn" onclick="closeModal('overlay-admin-delete')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px;">Are you sure you want to permanently delete this event?</p>
+      <div class="cancel-warning">This action cannot be undone. The event will be completely removed from the site.</div>
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn-danger" style="flex:1; padding:11px;" onclick="confirmAdminDelete()">Yes, Delete Permanently</button>
+        <button class="btn-secondary" style="flex:1; padding:11px;" onclick="closeModal('overlay-admin-delete')">No, Go Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// SUPABASE CONFIG
+// ═══════════════════════════════════════════════════════════
+const SUPABASE_URL = 'https://pscedpbjswyajgledixu.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzY2VkcGJqc3d5YWpnbGVkaXh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NDYwMTMsImV4cCI6MjA4ODMyMjAxM30.gnxxN1E3_UVFE-HKplmHOLfovy8FDz50TDG0Xs37q3I';
+
+async function sbFetch(path, options = {}) {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': options.prefer || 'return=representation',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let allEvents = [];
+let filters = { date: 'this-week', city: 'all', type: 'all', cost: 'all', audience: 'all' };
+let submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', contactOptIn: false, imageFile: null };
+let editFormState = { cost: 'Free', addressPublic: true, orgType: 'Business', contactOptIn: false, imageFile: null, removeImage: false, eventId: null, editKey: null };
+let adminDeleteId = null;
+let currentEditEventId = null;
+
+// ═══════════════════════════════════════════════════════════
+// DATE HELPERS
+// ═══════════════════════════════════════════════════════════
+function getDateRange(filter) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const dayOfWeek = today.getDay(); // 0=Sun
+
+  if (filter === 'this-week') {
+    const start = new Date(today); start.setDate(today.getDate() - dayOfWeek);
+    const end = new Date(start); end.setDate(start.getDate() + 6);
+    return { start, end };
+  }
+  if (filter === 'this-weekend') {
+    const sat = new Date(today); sat.setDate(today.getDate() + (6 - dayOfWeek));
+    const sun = new Date(sat); sun.setDate(sat.getDate() + 1);
+    return { start: sat, end: sun };
+  }
+  if (filter === 'next-week') {
+    const start = new Date(today); start.setDate(today.getDate() + (7 - dayOfWeek));
+    const end = new Date(start); end.setDate(start.getDate() + 6);
+    return { start, end };
+  }
+  if (filter === 'this-month') {
+    const start = new Date(today.getFullYear(), today.getMonth(), 1);
+    const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    return { start, end };
+  }
+  return null; // all upcoming
+}
+
+function formatDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+
+function formatTime(timeStr) {
+  if (!timeStr) return '';
+  const parts = timeStr.split(':');
+  const h = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+
+function isPast(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const eventDate = new Date(y, m - 1, d);
+  const today = new Date(); today.setHours(0,0,0,0);
+  return eventDate < today;
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOAD & RENDER EVENTS
+// ═══════════════════════════════════════════════════════════
+async function loadEvents() {
+  const container = document.getElementById('events-container');
+  container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><br>Loading events...</div>';
+  try {
+    allEvents = await sbFetch('events?order=event_date.asc,start_time.asc&select=*');
+    renderEvents();
+  } catch (e) {
+    container.innerHTML = '<div class="empty-box"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load events</div><div class="empty-desc">' + e.message + '</div></div>';
+  }
+}
+
+function renderEvents() {
+  const container = document.getElementById('events-container');
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  const noOtherFilters = filters.city === 'all' && filters.type === 'all' && filters.cost === 'all' && filters.audience === 'all';
+
+  // Helper to apply non-date filters
+  function matchesFilters(e) {
+    if (filters.city !== 'all' && e.city !== filters.city) return false;
+    if (filters.type !== 'all' && e.event_type !== filters.type) return false;
+    if (filters.cost !== 'all' && e.cost !== filters.cost) return false;
+    if (filters.audience !== 'all') {
+      const audiences = (e.audience || '').split(',').map(a => a.trim());
+      if (!audiences.includes(filters.audience)) return false;
+    }
+    return true;
+  }
+
+  // Filter
+  let events = allEvents.filter(e => {
+    if (e.status === 'cancelled') return matchesFilters(e);
+    if (isPast(e.event_date)) return false;
+
+    const [y,m,d] = e.event_date.split('-').map(Number);
+    const eDate = new Date(y, m-1, d);
+
+    const range = getDateRange(filters.date);
+    if (range && (eDate < range.start || eDate > range.end)) return false;
+    if (!range && eDate < today) return false;
+
+    return matchesFilters(e);
+  });
+
+  // Only fall back to upcoming if NO other filters are active and date is this-week
+  let noticeBanner = '';
+  if (filters.date === 'this-week' && noOtherFilters && events.filter(e => e.status !== 'cancelled').length === 0) {
+    const upcomingAll = allEvents.filter(e => e.status !== 'cancelled' && !isPast(e.event_date));
+    if (upcomingAll.length > 0) {
+      noticeBanner = '<div class="notice-bar">📭 No events this week. Showing upcoming events instead.</div>';
+      events = upcomingAll.slice(0, 10);
+    }
+  }
+
+  if (events.length === 0) {
+    const hasAnyEvents = allEvents.filter(e => !isPast(e.event_date) && e.status !== 'cancelled').length > 0;
+    if (!hasAnyEvents) {
+      container.innerHTML = `<div class="empty-box"><div class="empty-icon">📭</div><div class="empty-title">No events yet</div><div class="empty-desc">There are no upcoming events right now.<br>Be the first to add one!</div><button class="btn-primary" onclick="showPage('page-submit')">+ Submit an Event</button></div>`;
+    } else {
+      container.innerHTML = `<div class="empty-box"><div class="empty-icon">🔍</div><div class="empty-title">No events match your filters</div><div class="empty-desc">Try adjusting or clearing your filters.</div><button class="btn-secondary" onclick="clearFilters()">✕ Clear Filters</button></div>`;
+    }
+    return;
+  }
+
+  // Group by date
+  const grouped = {};
+  events.forEach(e => {
+    if (!grouped[e.event_date]) grouped[e.event_date] = [];
+    grouped[e.event_date].push(e);
+  });
+
+  const count = events.length;
+  let html = `<div class="results-bar"><span class="results-count">${count} event${count !== 1 ? 's' : ''} found</span></div>`;
+  html += noticeBanner;
+
+  Object.keys(grouped).sort().forEach(date => {
+    html += `<div class="date-group"><div class="date-header">${formatDate(date)}</div>`;
+    grouped[date].forEach(e => {
+      html += renderEventRow(e);
+    });
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function getEventEmoji(type) {
+  const map = { 'Party':'🎭','Meetup':'🕯️','Food Market':'🧆','Conference':'📋','Talk / Lecture':'🎤','Workshop':'🎨','Other':'📌' };
+  return map[type] || '📅';
+}
+
+function getTagClass(type) {
+  const map = { 'Party':'tag-party','Meetup':'tag-meetup','Food Market':'tag-food','Conference':'tag-conf','Talk / Lecture':'tag-talk','Workshop':'tag-workshop','Other':'tag-other' };
+  return map[type] || 'tag-other';
+}
+
+function getAudienceTagClass(a) {
+  const map = { 'All Ages':'tag-all','Adults':'tag-adults','Kids':'tag-kids','Teens':'tag-teens' };
+  return map[a] || 'tag-all';
+}
+
+function renderEventRow(e) {
+  const cancelled = e.status === 'cancelled';
+  const thumb = e.image_url
+    ? `<div class="row-thumb"><img src="${e.image_url}" alt=""></div>`
+    : `<div class="row-thumb">${getEventEmoji(e.event_type)}</div>`;
+
+  const timeStr = e.end_time ? `${formatTime(e.start_time)} – ${formatTime(e.end_time)}` : formatTime(e.start_time);
+  const costStr = e.cost === 'Paid' && e.amount ? e.amount : e.cost;
+  const orgIcon = e.org_type === 'Individual' ? '🧑' : '🏢';
+
+  const titleHtml = cancelled
+    ? `<div class="row-title cancelled-title">${e.name}</div><span class="cancelled-badge">CANCELLED</span>`
+    : `<div class="row-title">${e.name}</div>`;
+
+  const arrow = cancelled ? '' : (e.registration_link ? '↗' : '›');
+  const clickHandler = cancelled ? '' : (e.registration_link
+    ? `onclick="window.open('${e.registration_link}','_blank')"`
+    : `onclick="openEventModal('${e.id}')"`);
+
+  return `
+    <div class="event-row ${cancelled ? 'cancelled' : ''}" ${clickHandler}>
+      ${thumb}
+      <div class="row-main">
+        <div class="row-title-row">${titleHtml}</div>
+        <div class="row-meta">
+          <span>🕐 ${timeStr}</span>
+          <span>📍 ${e.city}</span>
+          <span>💰 ${costStr}</span>
+          <span>${orgIcon} ${e.organizer_name}</span>
+        </div>
+        <div class="row-tags">
+          <span class="tag ${getTagClass(e.event_type)}">${e.event_type}</span>
+          <span class="tag ${getAudienceTagClass(e.audience)}">${e.audience}</span>
+        </div>
+      </div>
+      <div class="row-arrow">${arrow}</div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// EVENT DETAIL MODAL
+// ═══════════════════════════════════════════════════════════
+function openEventModal(id) {
+  const e = allEvents.find(ev => ev.id === id);
+  if (!e) return;
+
+  const timeStr = e.end_time ? `${formatTime(e.start_time)} – ${formatTime(e.end_time)}` : formatTime(e.start_time);
+  const costStr = e.cost === 'Paid' && e.amount ? e.amount : e.cost;
+
+  const imgHtml = e.image_url
+    ? `<div class="modal-event-img"><img src="${e.image_url}" alt=""></div>`
+    : `<div class="modal-event-img">${getEventEmoji(e.event_type)}</div>`;
+
+  let addressHtml = '';
+  if (e.address_public && e.full_address) {
+    addressHtml = `<div class="modal-field full"><label>Address</label><span>${e.full_address}</span></div>`;
+  } else {
+    addressHtml = `<div class="modal-field full"><label>City</label><span>${e.city} <button onclick="openAddressRequest('${e.id}')" style="margin-left:10px; background:var(--blue); color:white; border:none; padding:5px 12px; border-radius:4px; font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif;">📍 Request Address</button></span></div>`;
+  }
+
+  let contactHtml = '';
+  if (e.contact_opt_in && (e.contact_email || e.contact_phone)) {
+    contactHtml = `<hr class="modal-divider"><div class="contact-section"><div class="contact-label">Contact Organizer</div>`;
+    if (e.contact_email) contactHtml += `<div class="contact-item"><div class="contact-item-info">✉ ${e.contact_email}</div><a href="mailto:${e.contact_email}" class="contact-btn">Send Email</a></div>`;
+    if (e.contact_phone) contactHtml += `<div class="contact-item"><div class="contact-item-info">📞 ${e.contact_phone}</div><a href="tel:${e.contact_phone}" class="contact-btn">Call</a></div>`;
+    contactHtml += `</div>`;
+  }
+
+  const regBtn = e.registration_link
+    ? `<a href="${e.registration_link}" target="_blank" class="modal-action-btn gold">Register Now ↗</a>`
+    : '';
+
+  document.getElementById('modal-event-body').innerHTML = `
+    ${imgHtml}
+    <div class="modal-event-title">${e.name}</div>
+    <div class="modal-fields">
+      <div class="modal-field"><label>Date</label><span>${formatDate(e.event_date)}</span></div>
+      <div class="modal-field"><label>Time</label><span>${timeStr}</span></div>
+      <div class="modal-field"><label>Cost</label><span>${costStr}</span></div>
+      <div class="modal-field"><label>Organizer</label><span>${e.organizer_name}</span></div>
+      <div class="modal-field"><label>Type</label><span>${e.event_type}</span></div>
+      <div class="modal-field"><label>Audience</label><span>${e.audience}</span></div>
+      ${addressHtml}
+    </div>
+    ${e.description ? `<div class="modal-desc" dir="auto">${e.description}</div>` : ''}
+    ${regBtn}
+    ${contactHtml}
+  `;
+  document.getElementById('overlay-event').classList.add('open');
+}
+
+function openAddressRequest(eventId) {
+  closeModal('overlay-event');
+  document.getElementById('address-form').style.display = 'block';
+  document.getElementById('address-success').classList.remove('show');
+  document.getElementById('overlay-address').classList.add('open');
+}
+
+function submitAddressRequest() {
+  const fname = document.getElementById('req-fname').value.trim();
+  const lname = document.getElementById('req-lname').value.trim();
+  const email = document.getElementById('req-email').value.trim();
+  const phone = document.getElementById('req-phone').value.trim();
+  if (!fname || !lname || !email || !phone) { alert('Please fill in all required fields.'); return; }
+  document.getElementById('address-form').style.display = 'none';
+  document.getElementById('address-success').classList.add('show');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SUBMIT EVENT
+// ═══════════════════════════════════════════════════════════
+function generateEditKey() {
+  return Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+}
+
+async function uploadImage(file, folder) {
+  const ext = file.name.split('.').pop();
+  const filename = `${folder}/${Date.now()}.${ext}`;
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/event-images/${filename}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      'Content-Type': file.type,
+    },
+    body: file
+  });
+  if (!res.ok) throw new Error('Image upload failed');
+  return `${SUPABASE_URL}/storage/v1/object/public/event-images/${filename}`;
+}
+
+function buildTimeValue(hourId, minId, ampmId) {
+  const hour = document.getElementById(hourId).value;
+  const min = document.getElementById(minId).value;
+  const ampm = document.getElementById(ampmId).value;
+  if (!hour || !min || !ampm || ampm === '—' || ampm === '') return '';
+  let h = parseInt(hour);
+  if (ampm === 'PM' && h !== 12) h += 12;
+  if (ampm === 'AM' && h === 12) h = 0;
+  return String(h).padStart(2,'0') + ':' + min + ':00';
+}
+
+function prefillTimePicker(timeStr, hourId, minId, ampmId) {
+  if (!timeStr) return;
+  const parts = timeStr.split(':');
+  let h = parseInt(parts[0]);
+  const m = parts[1] || '00';
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hour12 = h % 12 || 12;
+  document.getElementById(hourId).value = String(hour12);
+  // find closest minute option
+  const minSel = document.getElementById(minId);
+  const mInt = parseInt(m);
+  const closest = [0,15,30,45].reduce((a,b) => Math.abs(b-mInt) < Math.abs(a-mInt) ? b : a);
+  minSel.value = String(closest).padStart(2,'0');
+  document.getElementById(ampmId).value = ampm;
+}
+
+function buildDateValue(mid) {
+  const m = document.getElementById(mid+'-month') ? document.getElementById(mid+'-month').value : '';
+  const d = document.getElementById(mid+'-day') ? document.getElementById(mid+'-day').value : '';
+  const y = document.getElementById(mid+'-year') ? document.getElementById(mid+'-year').value : '';
+  if (!m || !d || !y) return '';
+  return y + '-' + m + '-' + d;
+}
+
+function prefillDatePicker(dateStr, mid) {
+  if (!dateStr) return;
+  const parts = dateStr.split('-');
+  if (document.getElementById(mid+'-year')) document.getElementById(mid+'-year').value = parts[0];
+  if (document.getElementById(mid+'-month')) document.getElementById(mid+'-month').value = parts[1];
+  if (document.getElementById(mid+'-day')) document.getElementById(mid+'-day').value = parts[2];
+}
+
+function getAudienceValues() {
+  const checked = document.querySelectorAll('input[name="s-audience"]:checked');
+  return Array.from(checked).map(c => c.value).join(', ');
+}
+
+async function submitEvent() {
+  const btn = document.getElementById('submit-btn');
+  const errDiv = document.getElementById('submit-error');
+  errDiv.style.display = 'none';
+
+  const name = document.getElementById('s-name').value.trim();
+  const date = buildDateValue('s');
+  // Build time values from AM/PM dropdowns
+  const startTime = document.getElementById('s-start-time').value;
+  const endTime = document.getElementById('s-end-time').value;
+  const type = document.getElementById('s-type').value;
+  const audience = getAudienceValues();
+  const city = document.getElementById('s-city').value;
+  const organizer = document.getElementById('s-organizer').value.trim();
+
+  if (!name || !date || !startTime || !type || !audience || !city || !organizer) {
+    errDiv.textContent = 'Please fill in all required fields. Make sure to select at least one audience.';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try {
+    let imageUrl = null;
+    if (submitFormState.imageFile) {
+      imageUrl = await uploadImage(submitFormState.imageFile, 'events');
+    }
+
+    const editKey = generateEditKey();
+    const payload = {
+      name,
+      event_date: date,
+      start_time: startTime,
+      end_time: endTime || null,
+      event_type: type,
+      audience,
+      cost: submitFormState.cost,
+      amount: submitFormState.cost === 'Paid' ? document.getElementById('s-amount').value.trim() : null,
+      description: document.getElementById('s-desc').value.trim() || null,
+      registration_link: document.getElementById('s-reg-link').value.trim() || null,
+      city,
+      full_address: document.getElementById('s-address').value.trim() || null,
+      address_public: submitFormState.addressPublic,
+      organizer_name: organizer,
+      org_type: submitFormState.orgType,
+      contact_email: document.getElementById('s-email').value.trim() || null,
+      contact_phone: document.getElementById('s-phone').value.trim() || null,
+      contact_opt_in: submitFormState.contactOptIn,
+      image_url: imageUrl,
+      edit_key: editKey,
+      status: 'active'
+    };
+
+    const result = await sbFetch('events', { method: 'POST', body: JSON.stringify(payload) });
+    const newId = result[0].id;
+    const editLink = `${window.location.origin}${window.location.pathname}?edit=${editKey}`;
+    document.getElementById('confirm-link').textContent = editLink;
+    showPage('page-confirm');
+  } catch (e) {
+    errDiv.textContent = 'Error submitting event: ' + e.message;
+    errDiv.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit Event →';
+  }
+}
+
+function resetSubmitForm() {
+  ['s-name','s-date','s-amount','s-desc','s-reg-link','s-address','s-email','s-phone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('s-type').value = '';
+  document.querySelectorAll('input[name="s-audience"]').forEach(c => c.checked = false);
+  document.getElementById('s-city').value = '';
+  submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', contactOptIn: false, imageFile: null };
+  document.getElementById('cost-free-btn').classList.add('on');
+  document.getElementById('cost-paid-btn').classList.remove('on');
+  document.getElementById('amount-field').classList.remove('show');
+  // reset address visibility toggle to No
+  const addrBtns = document.querySelectorAll('#page-submit .toggle-group');
+  // reset date pickers
+  ['s-month','s-day','s-year'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  removeImage();
+}
+
+function copyConfirmLink() {
+  const link = document.getElementById('confirm-link').textContent;
+  navigator.clipboard.writeText(link).catch(() => {});
+  event.target.textContent = '✅ Copied!';
+  setTimeout(() => { event.target.textContent = '📋 Copy Link'; }, 2000);
+}
+
+// ═══════════════════════════════════════════════════════════
+// EDIT EVENT
+// ═══════════════════════════════════════════════════════════
+async function loadEditPage(editKey) {
+  try {
+    const results = await sbFetch(`events?edit_key=eq.${editKey}&select=*`);
+    if (!results || results.length === 0) { showPage('page-invalid'); return; }
+    const e = results[0];
+    currentEditEventId = e.id;
+    editFormState = {
+      cost: e.cost, addressPublic: e.address_public,
+      orgType: e.org_type, contactOptIn: e.contact_opt_in,
+      imageFile: null, removeImage: false, editKey
+    };
+
+    document.getElementById('e-name').value = e.name || '';
+    prefillDatePicker(e.event_date, 'e');
+    document.getElementById('e-start-time').value = e.start_time || '';
+    document.getElementById('e-end-time').value = e.end_time || '';
+    document.getElementById('e-type').value = e.event_type || '';
+    document.getElementById('e-audience').value = e.audience || '';
+    document.getElementById('e-desc').value = e.description || '';
+    document.getElementById('e-reg-link').value = e.registration_link || '';
+    document.getElementById('e-city').value = e.city || '';
+    document.getElementById('e-address').value = e.full_address || '';
+    document.getElementById('e-organizer').value = e.organizer_name || '';
+    document.getElementById('e-email').value = e.contact_email || '';
+    document.getElementById('e-phone').value = e.contact_phone || '';
+    document.getElementById('e-amount').value = e.amount || '';
+
+    setEditCost(e.cost);
+    setEditAddressVisibility(e.address_public);
+    setEditOrgType(e.org_type);
+    setEditContactOptIn(e.contact_opt_in);
+
+    if (e.image_url) {
+      document.getElementById('e-upload-area').style.display = 'none';
+      document.getElementById('e-upload-preview').style.display = 'flex';
+      document.getElementById('e-upload-thumb-img').src = e.image_url;
+    } else {
+      document.getElementById('e-upload-area').style.display = 'block';
+      document.getElementById('e-upload-preview').style.display = 'none';
+    }
+
+    const cancelWarning = document.getElementById('cancel-warning-text');
+    const timeStr = e.end_time ? `${formatTime(e.start_time)} – ${formatTime(e.end_time)}` : formatTime(e.start_time);
+    cancelWarning.innerHTML = `<strong>${e.name}</strong><br>${formatDate(e.event_date)} · ${timeStr} · ${e.city}`;
+
+    showPage('page-edit');
+  } catch (err) {
+    showPage('page-invalid');
+  }
+}
+
+async function saveEvent() {
+  const btn = document.getElementById('save-btn');
+  const errDiv = document.getElementById('edit-error');
+  errDiv.style.display = 'none';
+
+  const name = document.getElementById('e-name').value.trim();
+  const date = buildDateValue('e');
+  const startTime = document.getElementById('e-start-time').value;
+  const city = document.getElementById('e-city').value;
+  const organizer = document.getElementById('e-organizer').value.trim();
+
+  if (!name || !date || !startTime || !city || !organizer) {
+    errDiv.textContent = 'Please fill in all required fields.';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  try {
+    let imageUrl = undefined;
+    if (editFormState.imageFile) {
+      imageUrl = await uploadImage(editFormState.imageFile, 'events');
+    } else if (editFormState.removeImage) {
+      imageUrl = null;
+    }
+
+    const payload = {
+      name,
+      event_date: date,
+      start_time: startTime,
+      end_time: document.getElementById('e-end-time').value || null,
+      event_type: document.getElementById('e-type').value,
+      audience: document.getElementById('e-audience').value,
+      cost: editFormState.cost,
+      amount: editFormState.cost === 'Paid' ? document.getElementById('e-amount').value.trim() : null,
+      description: document.getElementById('e-desc').value.trim() || null,
+      registration_link: document.getElementById('e-reg-link').value.trim() || null,
+      city,
+      full_address: document.getElementById('e-address').value.trim() || null,
+      address_public: editFormState.addressPublic,
+      organizer_name: organizer,
+      org_type: editFormState.orgType,
+      contact_email: document.getElementById('e-email').value.trim() || null,
+      contact_phone: document.getElementById('e-phone').value.trim() || null,
+      contact_opt_in: editFormState.contactOptIn,
+    };
+    if (imageUrl !== undefined) payload.image_url = imageUrl;
+
+    await sbFetch(`events?id=eq.${currentEditEventId}`, {
+      method: 'PATCH', body: JSON.stringify(payload), prefer: 'return=minimal'
+    });
+    await loadEvents();
+    showPage('page-home');
+  } catch (e) {
+    errDiv.textContent = 'Error saving: ' + e.message;
+    errDiv.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save Changes →';
+  }
+}
+
+function openCancelConfirm() {
+  document.getElementById('overlay-cancel').classList.add('open');
+}
+
+async function confirmCancelEvent() {
+  try {
+    await sbFetch(`events?id=eq.${currentEditEventId}`, {
+      method: 'PATCH', body: JSON.stringify({ status: 'cancelled' }), prefer: 'return=minimal'
+    });
+    closeModal('overlay-cancel');
+    await loadEvents();
+    showPage('page-home');
+  } catch (e) {
+    alert('Error cancelling event: ' + e.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════════════════════════
+async function loadAdminPage() {
+  showPage('page-admin');
+  try {
+    const events = await sbFetch('events?order=event_date.asc&select=*');
+    const now = new Date(); now.setHours(0,0,0,0);
+    let total = events.length, upcoming = 0, past = 0, cancelled = 0;
+
+    let rows = '';
+    events.forEach(e => {
+      const [y,m,d] = e.event_date.split('-').map(Number);
+      const eDate = new Date(y,m-1,d);
+      const isCancelled = e.status === 'cancelled';
+      const isPastEvent = !isCancelled && eDate < now;
+      if (isCancelled) cancelled++;
+      else if (isPastEvent) past++;
+      else upcoming++;
+
+      const status = isCancelled ? 'cancelled' : (isPastEvent ? 'past' : 'active');
+      const statusBadge = status === 'active' ? '<span class="status-badge status-active">Active</span>'
+        : status === 'cancelled' ? '<span class="status-badge status-cancelled">Cancelled</span>'
+        : '<span class="status-badge status-past">Past</span>';
+
+      const timeStr = e.end_time ? `${formatTime(e.start_time)}–${formatTime(e.end_time)}` : formatTime(e.start_time);
+      const editBtn = !isCancelled ? `<button class="admin-btn-edit" onclick="loadEditPage('${e.edit_key}')">Edit</button>` : '';
+
+      rows += `<tr class="${isCancelled ? 'cancelled-row' : ''}">
+        <td><strong>${isCancelled ? '<s>' : ''}${e.name}${isCancelled ? '</s>' : ''}</strong></td>
+        <td>${e.event_date.slice(5).replace('-','/')} · ${timeStr}</td>
+        <td>${e.city}</td>
+        <td>${e.organizer_name}<br><span style="font-size:10px;color:var(--gray-400)">${e.org_type}</span></td>
+        <td>${e.contact_email || '—'}<br>${e.contact_phone || ''}</td>
+        <td>${e.event_type}</td>
+        <td>${statusBadge}</td>
+        <td><button class="admin-btn-delete" onclick="openAdminDelete('${e.id}')">Delete</button> ${editBtn}</td>
+      </tr>`;
+    });
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-upcoming').textContent = upcoming;
+    document.getElementById('stat-past').textContent = past;
+    document.getElementById('stat-cancelled').textContent = cancelled;
+    document.getElementById('admin-tbody').innerHTML = rows || '<tr><td colspan="8" style="text-align:center; color:var(--gray-400)">No events</td></tr>';
+  } catch (e) {
+    document.getElementById('admin-tbody').innerHTML = `<tr><td colspan="8" style="color:var(--red)">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function openAdminDelete(id) {
+  adminDeleteId = id;
+  document.getElementById('overlay-admin-delete').classList.add('open');
+}
+
+async function confirmAdminDelete() {
+  try {
+    await sbFetch(`events?id=eq.${adminDeleteId}`, { method: 'DELETE', prefer: 'return=minimal' });
+    closeModal('overlay-admin-delete');
+    loadAdminPage();
+  } catch (e) {
+    alert('Error deleting: ' + e.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// FILTERS
+// ═══════════════════════════════════════════════════════════
+function setDateFilter(value, label, e) { e.stopPropagation(); filters.date = value; document.getElementById('date-label').textContent = label; updateFilterChip('chip-date', true); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-date', label); }
+function setCityFilter(value, label, e) { e.stopPropagation(); filters.city = value; document.getElementById('city-label').textContent = label; updateFilterChip('chip-city', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-city', label); }
+function setTypeFilter(value, label, e) { e.stopPropagation(); filters.type = value; document.getElementById('type-label').textContent = label; updateFilterChip('chip-type', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-type', label); }
+function setCostFilter(value, label, e) { e.stopPropagation(); filters.cost = value; document.getElementById('cost-label').textContent = label; updateFilterChip('chip-cost', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-cost', label); }
+function setAudienceFilter(value, label, e) { e.stopPropagation(); filters.audience = value; document.getElementById('audience-label').textContent = label; updateFilterChip('chip-audience', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-audience', label); }
+
+function updateFilterChip(id, active) { document.getElementById(id).classList.toggle('active', active); }
+function updateDropdownSelected(ddId, label) { document.querySelectorAll(`#${ddId} .dropdown-item`).forEach(i => i.classList.toggle('selected', i.textContent.trim() === label)); }
+function closeAllDropdowns() { document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open')); }
+function clearFilters() { filters = { date: 'this-week', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'This Week'; document.getElementById('city-label').textContent = 'City'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.add('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); renderEvents(); }
+
+function toggleDropdown(id, e) {
+  e.stopPropagation();
+  const chipId = 'chip-' + id.replace('dd-','');
+  document.querySelectorAll('.filter-chip').forEach(c => { if (c.id !== chipId) c.classList.remove('open'); });
+  document.getElementById(chipId).classList.toggle('open');
+}
+document.addEventListener('click', closeAllDropdowns);
+
+// ═══════════════════════════════════════════════════════════
+// FORM HELPERS
+// ═══════════════════════════════════════════════════════════
+function setCost(type, btn) {
+  submitFormState.cost = type;
+  document.getElementById('cost-free-btn').classList.toggle('on', type === 'Free');
+  document.getElementById('cost-paid-btn').classList.toggle('on', type === 'Paid');
+  document.getElementById('amount-field').classList.toggle('show', type === 'Paid');
+  document.getElementById('s-desc').placeholder = type === 'Paid'
+    ? "Describe your event. If accepting payment via Venmo, Zelle, or other method, include payment instructions here."
+    : "Describe your event...";
+}
+function setAddressVisibility(val, btn) { submitFormState.addressPublic = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+function setContactOptIn(val, btn) { submitFormState.contactOptIn = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+
+function setEditCost(type, btn) {
+  editFormState.cost = type;
+  document.getElementById('e-cost-free').classList.toggle('on', type === 'Free');
+  document.getElementById('e-cost-paid').classList.toggle('on', type === 'Paid');
+  document.getElementById('e-amount-field').classList.toggle('show', type === 'Paid');
+  if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');}
+}
+function setEditAddressVisibility(val, btn) { editFormState.addressPublic = val; const yes=document.getElementById('e-addr-yes'), no=document.getElementById('e-addr-no'); if(yes&&no){yes.classList.toggle('on',val); no.classList.toggle('on',!val);} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+function setEditOrgType(val, btn) { editFormState.orgType = val; const b=document.getElementById('e-org-business'), i=document.getElementById('e-org-individual'); if(b&&i){b.classList.toggle('on',val==='Business'); i.classList.toggle('on',val==='Individual');} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+function setEditContactOptIn(val, btn) { editFormState.contactOptIn = val; const y=document.getElementById('e-contact-yes'), n=document.getElementById('e-contact-no'); if(y&&n){y.classList.toggle('on',val); n.classList.toggle('on',!val);} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+
+function handleImageSelect(input) {
+  const file = input.files[0]; if (!file) return;
+  submitFormState.imageFile = file;
+  const reader = new FileReader();
+  reader.onload = e => { document.getElementById('upload-thumb-img').src = e.target.result; document.getElementById('upload-area').style.display = 'none'; document.getElementById('upload-preview').style.display = 'flex'; };
+  reader.readAsDataURL(file);
+}
+function removeImage() { submitFormState.imageFile = null; document.getElementById('s-image').value = ''; document.getElementById('upload-area').style.display = 'block'; document.getElementById('upload-preview').style.display = 'none'; }
+
+function handleEditImageSelect(input) {
+  const file = input.files[0]; if (!file) return;
+  editFormState.imageFile = file; editFormState.removeImage = false;
+  const reader = new FileReader();
+  reader.onload = e => { document.getElementById('e-upload-thumb-img').src = e.target.result; document.getElementById('e-upload-area').style.display = 'none'; document.getElementById('e-upload-preview').style.display = 'flex'; };
+  reader.readAsDataURL(file);
+}
+function removeEditImage() { editFormState.imageFile = null; editFormState.removeImage = true; document.getElementById('e-image').value = ''; document.getElementById('e-upload-area').style.display = 'block'; document.getElementById('e-upload-preview').style.display = 'none'; }
+
+// ═══════════════════════════════════════════════════════════
+// MODALS & PAGE NAV
+// ═══════════════════════════════════════════════════════════
+function showPage(id) { document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.has('admin')) {
+    await loadAdminPage();
+    return;
+  }
+  if (params.has('edit')) {
+    await loadEditPage(params.get('edit'));
+    return;
+  }
+
+  await loadEvents();
+});
+</script>
+</body>
+</html>
