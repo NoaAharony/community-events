@@ -231,10 +231,10 @@
 
   <div class="filter-bar">
     <span class="filter-label">Filter:</span>
-    <div class="filter-chip active" id="chip-date" onclick="toggleDropdown('dd-date', event)">
-      📅 <span id="date-label">This Week</span> ▾
+    <div class="filter-chip" id="chip-date" onclick="toggleDropdown('dd-date', event)">
+      📅 <span id="date-label">Date</span> ▾
       <div class="dropdown-menu" id="dd-date">
-        <div class="dropdown-item selected" onclick="setDateFilter('this-week','This Week',event)">This Week</div>
+        <div class="dropdown-item" onclick="setDateFilter('this-week','This Week',event)">This Week</div>
         <div class="dropdown-item" onclick="setDateFilter('this-weekend','This Weekend',event)">This Weekend</div>
         <div class="dropdown-item" onclick="setDateFilter('next-week','Next Week',event)">Next Week</div>
         <div class="dropdown-item" onclick="setDateFilter('this-month','This Month',event)">This Month</div>
