@@ -764,10 +764,20 @@
         </div>
         <div class="form-group">
           <label>For <span class="req">*</span></label>
-          <select class="form-input" id="e-audience">
-            <option>All Ages</option><option>Adults</option><option>Kids</option>
-            <option>Teens</option><option>Families</option><option>Parents</option>
-          </select>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="All Ages"> All Ages</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="Adults"> Adults</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="Kids"> Kids</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="Teens"> Teens</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="Families"> Families</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="Parents"> Parents</label>
+          </div>
         </div>
       </div>
       <div class="form-group">
@@ -1517,7 +1527,11 @@ async function loadEditPage(editKey) {
     document.getElementById('e-start-time').value = e.start_time || '';
     document.getElementById('e-end-time').value = e.end_time || '';
     document.getElementById('e-type').value = e.event_type || '';
-    document.getElementById('e-audience').value = e.audience || '';
+    // prefill audience checkboxes
+    const eAudiences = (e.audience || '').split(',').map(a => a.trim());
+    document.querySelectorAll('input[name="e-audience"]').forEach(cb => {
+      cb.checked = eAudiences.includes(cb.value);
+    });
     document.getElementById('e-desc').value = e.description || '';
     document.getElementById('e-reg-link').value = e.registration_link || '';
     document.getElementById('e-city').value = e.city || '';
@@ -1585,7 +1599,7 @@ async function saveEvent() {
       start_time: startTime,
       end_time: document.getElementById('e-end-time').value || null,
       event_type: document.getElementById('e-type').value,
-      audience: document.getElementById('e-audience').value,
+      audience: Array.from(document.querySelectorAll('input[name="e-audience"]:checked')).map(c => c.value).join(', '),
       cost: editFormState.cost,
       amount: editFormState.cost === 'Paid' ? document.getElementById('e-amount').value.trim() : null,
       description: document.getElementById('e-desc').value.trim() || null,
