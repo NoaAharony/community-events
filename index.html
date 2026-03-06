@@ -143,7 +143,7 @@
   .page-header p { font-size: 13px; color: rgba(255,255,255,0.7); }
   .form-body { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
   .form-section { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 24px; border: 2px solid var(--blue); box-shadow: 0 2px 8px rgba(26,58,92,0.08); }
-  .form-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--white); background: var(--blue); margin: -20px -20px 20px -20px; padding: 12px 20px; border-radius: 6px 6px 0 0; }
+  .form-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--blue); background: var(--gray-100); margin: -20px -20px 20px -20px; padding: 10px 20px; border-radius: 6px 6px 0 0; border-bottom: 2px solid var(--blue); }
   .toggle-group { display: flex; border: 1px solid var(--gray-200); border-radius: 4px; overflow: hidden; }
   .toggle-btn { flex: 1; padding: 9px; text-align: center; font-size: 13px; cursor: pointer; background: var(--gray-100); color: var(--gray-600); border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
   .toggle-btn.on { background: var(--blue); color: white; font-weight: 600; }
@@ -620,7 +620,7 @@
       <div class="confirmation-body">
         <p style="font-size:14px; color:var(--gray-600); line-height:1.7;">
           Use the link below to <strong>edit or cancel</strong> your event at any time.<br>
-          Save it — this is the only way to manage your event.
+          Save it - this is the only way to manage your event.
         </p>
         <p style="font-size:13px; color:var(--gray-400); margin-top:8px; font-style:italic;">
           If you provided an email address, this link has been sent to your inbox.
@@ -940,7 +940,7 @@
     <h2>About This Site</h2>
     <p>Israeli Events Atlanta is a community platform for Israelis and the broader Jewish community in Metro Atlanta, Georgia.</p>
     <p>We created this site to solve a simple problem: events in our community are scattered across WhatsApp groups, Facebook pages, and word of mouth. There was no single place to see what's happening.</p>
-    <p>This site is open to everyone in the Israeli and Jewish community. Anyone can submit an event — no account needed. Just fill out the form and your event will appear on the list.</p>
+    <p>This site is open to everyone in the Israeli and Jewish community. Anyone can submit an event - no account needed. Just fill out the form and your event will appear on the list.</p>
     <p style="color:var(--gray-400); font-size:13px;">Have questions or feedback? Reach out via the community WhatsApp group.</p>
   </div>
   <footer class="site-footer">
@@ -1265,7 +1265,7 @@ function renderEventRow(e) {
     ? `<div class="row-thumb"><img src="${e.image_url}" alt=""></div>`
     : `<div class="row-thumb">${getEventEmoji(e.event_type)}</div>`;
 
-  const timeStr = e.end_time ? `${formatTime(e.start_time)} – ${formatTime(e.end_time)}` : formatTime(e.start_time);
+  const timeStr = e.end_time ? `${formatTime(e.start_time)} - ${formatTime(e.end_time)}` : formatTime(e.start_time);
   const costStr = e.cost === 'Paid' && e.amount ? e.amount : e.cost;
   const orgIcon = e.org_type === 'Individual' ? '🧑' : '🏢';
 
@@ -1305,7 +1305,7 @@ function openEventModal(id) {
   const e = allEvents.find(ev => ev.id === id);
   if (!e) return;
 
-  const timeStr = e.end_time ? `${formatTime(e.start_time)} – ${formatTime(e.end_time)}` : formatTime(e.start_time);
+  const timeStr = e.end_time ? `${formatTime(e.start_time)} - ${formatTime(e.end_time)}` : formatTime(e.start_time);
   const costStr = e.cost === 'Paid' && e.amount ? e.amount : e.cost;
 
   const imgHtml = e.image_url
@@ -1582,7 +1582,7 @@ async function loadEditPage(editKey) {
     }
 
     const cancelWarning = document.getElementById('cancel-warning-text');
-    const timeStr = e.end_time ? `${formatTime(e.start_time)} – ${formatTime(e.end_time)}` : formatTime(e.start_time);
+    const timeStr = e.end_time ? `${formatTime(e.start_time)} - ${formatTime(e.end_time)}` : formatTime(e.start_time);
     cancelWarning.innerHTML = `<strong>${e.name}</strong><br>${formatDate(e.event_date)} · ${timeStr} · ${e.city}`;
 
     showPage('page-edit');
@@ -1697,7 +1697,7 @@ async function loadAdminPage() {
         : status === 'cancelled' ? '<span class="status-badge status-cancelled">Cancelled</span>'
         : '<span class="status-badge status-past">Past</span>';
 
-      const timeStr = e.end_time ? `${formatTime(e.start_time)}–${formatTime(e.end_time)}` : formatTime(e.start_time);
+      const timeStr = e.end_time ? `${formatTime(e.start_time)} - ${formatTime(e.end_time)}` : formatTime(e.start_time);
       const editBtn = !isCancelled ? `<button class="admin-btn-edit" onclick="loadEditPage('${e.edit_key}')">Edit</button>` : '';
 
       rows += `<tr class="${isCancelled ? 'cancelled-row' : ''}">
@@ -1705,7 +1705,7 @@ async function loadAdminPage() {
         <td>${e.event_date.slice(5).replace('-','/')} · ${timeStr}</td>
         <td>${e.city}</td>
         <td>${e.organizer_name}<br><span style="font-size:10px;color:var(--gray-400)">${e.org_type}</span></td>
-        <td>${e.contact_email || '—'}<br>${e.contact_phone || ''}</td>
+        <td>${e.contact_email || '-'}<br>${e.contact_phone || ''}</td>
         <td>${e.event_type}</td>
         <td>${statusBadge}</td>
         <td><button class="admin-btn-delete" onclick="openAdminDelete('${e.id}')">Delete</button> ${editBtn}</td>
