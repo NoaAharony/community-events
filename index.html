@@ -1039,11 +1039,18 @@
     <div class="modal-body">
       <p style="font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px;">Are you sure you want to cancel this event?</p>
       <div class="cancel-warning" id="cancel-warning-text"></div>
-      <p style="font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:20px;">The event will remain visible on the site but will be marked as <strong>Cancelled</strong> so visitors are informed.</p>
-      <div style="display:flex; gap:10px;">
-        <button class="btn-danger" style="flex:1; padding:11px;" onclick="confirmCancelEvent()">Yes, Cancel Event</button>
-        <button class="btn-secondary" style="flex:1; padding:11px;" onclick="closeModal('overlay-cancel')">No, Go Back</button>
+      <p style="font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:16px;">How would you like to handle it?</p>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px;">
+        <button class="btn-danger" style="padding:13px; text-align:left; display:flex; flex-direction:column; gap:3px;" onclick="confirmCancelEvent('keep')">
+          <span style="font-size:13px; font-weight:700;">Mark as Cancelled — keep visible</span>
+          <span style="font-size:11px; font-weight:400; opacity:0.85;">The event stays on the site with a "Cancelled" badge so people know it's off</span>
+        </button>
+        <button style="background:#6b6355; color:white; border:none; padding:13px; border-radius:4px; cursor:pointer; text-align:left; display:flex; flex-direction:column; gap:3px; font-family:'DM Sans',sans-serif;" onclick="confirmCancelEvent('remove')">
+          <span style="font-size:13px; font-weight:700;">Remove completely</span>
+          <span style="font-size:11px; font-weight:400; opacity:0.85;">The event is deleted and will no longer appear on the site</span>
+        </button>
       </div>
+      <button class="btn-secondary" style="width:100%; padding:11px;" onclick="closeModal('overlay-cancel')">No, Go Back</button>
     </div>
   </div>
 </div>
@@ -1661,11 +1668,15 @@ function openCancelConfirm() {
   document.getElementById('overlay-cancel').classList.add('open');
 }
 
-async function confirmCancelEvent() {
+async function confirmCancelEvent(action) {
   try {
-    await sbFetch(`events?id=eq.${currentEditEventId}`, {
-      method: 'PATCH', body: JSON.stringify({ status: 'cancelled' }), prefer: 'return=minimal'
-    });
+    if (action === 'remove') {
+      await sbFetch(`events?id=eq.${currentEditEventId}`, { method: 'DELETE', prefer: 'return=minimal' });
+    } else {
+      await sbFetch(`events?id=eq.${currentEditEventId}`, {
+        method: 'PATCH', body: JSON.stringify({ status: 'cancelled' }), prefer: 'return=minimal'
+      });
+    }
     closeModal('overlay-cancel');
     await loadEvents();
     showPage('page-home');
