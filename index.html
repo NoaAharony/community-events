@@ -1465,10 +1465,10 @@ function populateYearDropdowns() {
       const opt = document.createElement('option');
       opt.value = String(y);
       opt.textContent = String(y);
-      if (y === currentYear) opt.selected = !current;
       sel.appendChild(opt);
     });
-    if (current) sel.value = current;
+    if (current && current !== '') sel.value = current;
+    else sel.value = String(currentYear);
   });
 }
 
