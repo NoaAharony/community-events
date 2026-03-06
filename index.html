@@ -261,7 +261,7 @@
         <div class="dropdown-item" onclick="setCityFilter('Roswell','Roswell',event)">Roswell</div>
         <div class="dropdown-item" onclick="setCityFilter('Sandy Springs','Sandy Springs',event)">Sandy Springs</div>
         <div class="dropdown-item" onclick="setCityFilter('Suwanee','Suwanee',event)">Suwanee</div>
-        <div class="dropdown-item" onclick="setCityFilter('other','Other',event)">Other</div>
+        <div class="dropdown-item" id="city-filter-other" style="display:none" onclick="setCityFilter('other','Other',event)">Other</div>
       </div>
     </div>
     <div class="filter-chip" id="chip-type" onclick="toggleDropdown('dd-type', event)">
@@ -1181,6 +1181,9 @@ async function loadEvents() {
   container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><br>Loading events...</div>';
   try {
     allEvents = await sbFetch('events?order=event_date.asc,start_time.asc&select=*');
+    const knownCities = ['Alpharetta','Atlanta','Brookhaven','Cumming','Duluth','Dunwoody','East Cobb','Johns Creek','Peachtree Corners','Roswell','Sandy Springs','Suwanee'];
+    const hasOther = allEvents.some(e => e.city && !knownCities.includes(e.city));
+    document.getElementById('city-filter-other').style.display = hasOther ? 'block' : 'none';
     renderEvents();
   } catch (e) {
     container.innerHTML = '<div class="empty-box"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load events</div><div class="empty-desc">' + e.message + '</div></div>';
@@ -1343,7 +1346,7 @@ function openEventModal(id) {
   if (e.contact_opt_in && (e.contact_email || e.contact_phone)) {
     contactHtml = `<hr class="modal-divider"><div class="contact-section"><div class="contact-label">Contact Organizer</div>`;
     if (e.contact_email) contactHtml += `<div class="contact-item"><a href="mailto:${e.contact_email}" class="contact-btn">Send Email</a></div>`;
-    if (e.contact_phone) contactHtml += `<div class="contact-item"><span class="contact-phone-desktop">${e.contact_phone}</span><a href="tel:${e.contact_phone}" class="contact-btn contact-call-mobile">Call</a></div>`;
+    if (e.contact_phone) contactHtml += `<div class="contact-item"><span class="contact-phone-desktop">📞 ${e.contact_phone}</span><a href="tel:${e.contact_phone}" class="contact-btn contact-call-mobile">Call</a></div>`;
     contactHtml += `</div>`;
   }
 
