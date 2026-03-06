@@ -143,7 +143,7 @@
   .page-header p { font-size: 13px; color: rgba(255,255,255,0.7); }
   .form-body { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
   .form-section { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--gray-200); }
-  .form-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--blue); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-100); }
+  .form-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--white); background: var(--blue); margin: -20px -20px 20px -20px; padding: 10px 20px; border-radius: 8px 8px 0 0; }
   .toggle-group { display: flex; border: 1px solid var(--gray-200); border-radius: 4px; overflow: hidden; }
   .toggle-btn { flex: 1; padding: 9px; text-align: center; font-size: 13px; cursor: pointer; background: var(--gray-100); color: var(--gray-600); border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
   .toggle-btn.on { background: var(--blue); color: white; font-weight: 600; }
@@ -246,12 +246,28 @@
       <div class="dropdown-menu" id="dd-city">
         <div class="dropdown-item selected" onclick="setCityFilter('all','City',event)">All Cities</div>
         <div class="dropdown-item" onclick="setCityFilter('Alpharetta','Alpharetta',event)">Alpharetta</div>
-        <div class="dropdown-item" onclick="setCityFilter('Sandy Springs','Sandy Springs',event)">Sandy Springs</div>
-        <div class="dropdown-item" onclick="setCityFilter('Dunwoody','Dunwoody',event)">Dunwoody</div>
-        <div class="dropdown-item" onclick="setCityFilter('Roswell','Roswell',event)">Roswell</div>
-        <div class="dropdown-item" onclick="setCityFilter('Johns Creek','Johns Creek',event)">Johns Creek</div>
-        <div class="dropdown-item" onclick="setCityFilter('Brookhaven','Brookhaven',event)">Brookhaven</div>
         <div class="dropdown-item" onclick="setCityFilter('Atlanta','Atlanta',event)">Atlanta</div>
+        <div class="dropdown-item" onclick="setCityFilter('Brookhaven','Brookhaven',event)">Brookhaven</div>
+        <div class="dropdown-item" onclick="setCityFilter('Buckhead','Buckhead',event)">Buckhead</div>
+        <div class="dropdown-item" onclick="setCityFilter('Canton','Canton',event)">Canton</div>
+        <div class="dropdown-item" onclick="setCityFilter('Cumming','Cumming',event)">Cumming</div>
+        <div class="dropdown-item" onclick="setCityFilter('Decatur','Decatur',event)">Decatur</div>
+        <div class="dropdown-item" onclick="setCityFilter('Duluth','Duluth',event)">Duluth</div>
+        <div class="dropdown-item" onclick="setCityFilter('Dunwoody','Dunwoody',event)">Dunwoody</div>
+        <div class="dropdown-item" onclick="setCityFilter('East Cobb','East Cobb',event)">East Cobb</div>
+        <div class="dropdown-item" onclick="setCityFilter('Johns Creek','Johns Creek',event)">Johns Creek</div>
+        <div class="dropdown-item" onclick="setCityFilter('Kennesaw','Kennesaw',event)">Kennesaw</div>
+        <div class="dropdown-item" onclick="setCityFilter('Lawrenceville','Lawrenceville',event)">Lawrenceville</div>
+        <div class="dropdown-item" onclick="setCityFilter('Marietta','Marietta',event)">Marietta</div>
+        <div class="dropdown-item" onclick="setCityFilter('Milton','Milton',event)">Milton</div>
+        <div class="dropdown-item" onclick="setCityFilter('Norcross','Norcross',event)">Norcross</div>
+        <div class="dropdown-item" onclick="setCityFilter('Peachtree City','Peachtree City',event)">Peachtree City</div>
+        <div class="dropdown-item" onclick="setCityFilter('Roswell','Roswell',event)">Roswell</div>
+        <div class="dropdown-item" onclick="setCityFilter('Sandy Springs','Sandy Springs',event)">Sandy Springs</div>
+        <div class="dropdown-item" onclick="setCityFilter('Smyrna','Smyrna',event)">Smyrna</div>
+        <div class="dropdown-item" onclick="setCityFilter('Suwanee','Suwanee',event)">Suwanee</div>
+        <div class="dropdown-item" onclick="setCityFilter('Tucker','Tucker',event)">Tucker</div>
+        <div class="dropdown-item" onclick="setCityFilter('Woodstock','Woodstock',event)">Woodstock</div>
         <div class="dropdown-item" onclick="setCityFilter('Other','Other',event)">Other</div>
       </div>
     </div>
@@ -499,9 +515,14 @@
         <label>City <span class="req">*</span></label>
         <select class="form-input" id="s-city">
           <option value="">Select city...</option>
-          <option>Alpharetta</option><option>Sandy Springs</option><option>Dunwoody</option>
-          <option>Roswell</option><option>Johns Creek</option><option>Brookhaven</option>
-          <option>Atlanta</option><option>Other</option>
+          <option>Alpharetta</option><option>Atlanta</option><option>Brookhaven</option>
+          <option>Buckhead</option><option>Canton</option><option>Cumming</option>
+          <option>Decatur</option><option>Duluth</option><option>Dunwoody</option>
+          <option>East Cobb</option><option>Johns Creek</option><option>Kennesaw</option>
+          <option>Lawrenceville</option><option>Marietta</option><option>Milton</option>
+          <option>Norcross</option><option>Peachtree City</option><option>Roswell</option>
+          <option>Sandy Springs</option><option>Smyrna</option><option>Suwanee</option>
+          <option>Tucker</option><option>Woodstock</option><option>Other</option>
         </select>
       </div>
       <div class="form-group">
@@ -806,9 +827,14 @@
       <div class="form-group">
         <label>City <span class="req">*</span></label>
         <select class="form-input" id="e-city">
-          <option>Alpharetta</option><option>Sandy Springs</option><option>Dunwoody</option>
-          <option>Roswell</option><option>Johns Creek</option><option>Brookhaven</option>
-          <option>Atlanta</option><option>Other</option>
+          <option>Alpharetta</option><option>Atlanta</option><option>Brookhaven</option>
+          <option>Buckhead</option><option>Canton</option><option>Cumming</option>
+          <option>Decatur</option><option>Duluth</option><option>Dunwoody</option>
+          <option>East Cobb</option><option>Johns Creek</option><option>Kennesaw</option>
+          <option>Lawrenceville</option><option>Marietta</option><option>Milton</option>
+          <option>Norcross</option><option>Peachtree City</option><option>Roswell</option>
+          <option>Sandy Springs</option><option>Smyrna</option><option>Suwanee</option>
+          <option>Tucker</option><option>Woodstock</option><option>Other</option>
         </select>
       </div>
       <div class="form-group">
@@ -1428,7 +1454,7 @@ async function submitEvent() {
   const organizer = document.getElementById('s-organizer').value.trim();
 
   if (!name || !date || !startTime || !type || !audience || !city || !organizer) {
-    errDiv.textContent = 'Please fill in all required fields. Make sure to select at least one audience.';
+    errDiv.textContent = 'Please fill in all required fields marked with *';
     errDiv.style.display = 'block';
     return;
   }
@@ -1577,7 +1603,7 @@ async function saveEvent() {
   const organizer = document.getElementById('e-organizer').value.trim();
 
   if (!name || !date || !startTime || !city || !organizer) {
-    errDiv.textContent = 'Please fill in all required fields.';
+    errDiv.textContent = 'Please fill in all required fields marked with *';
     errDiv.style.display = 'block';
     return;
   }
