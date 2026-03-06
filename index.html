@@ -287,13 +287,11 @@
       <span id="audience-label">For</span> ▾
       <div class="dropdown-menu" id="dd-audience">
         <div class="dropdown-item selected" onclick="setAudienceFilter('all','For',event)">Everyone</div>
-        <div class="dropdown-item" onclick="setAudienceFilter('all','Everyone',event)">Everyone</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Adults','Adults',event)">Adults</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Families','Families',event)">Families</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Kids','Kids',event)">Kids</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Teens','Teens',event)">Teens</div>
-        <div class="dropdown-item" onclick="setAudienceFilter('Parents','Parents',event)">Parents</div>
-        <div class="dropdown-item" onclick="setAudienceFilter('Parents','Parents',event)">Parents</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Seniors','Seniors',event)">Seniors</div>
       </div>
     </div>
   </div>
@@ -473,7 +471,7 @@
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="s-audience" value="Teens"> Teens</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Parents"> Parents</label>
+              <input type="checkbox" name="s-audience" value="Seniors"> Seniors</label>
           </div>
         </div>
       </div>
@@ -783,7 +781,7 @@
           </select>
         </div>
         <div class="form-group">
-          <label>For <span class="req">*</span></label>
+          <label>For <span class="optional-tag">(optional)</span></label>
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="e-audience" value="Adults"> Adults</label>
@@ -794,7 +792,7 @@
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="e-audience" value="Teens"> Teens</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Parents"> Parents</label>
+              <input type="checkbox" name="e-audience" value="Seniors"> Seniors</label>
           </div>
         </div>
       </div>
