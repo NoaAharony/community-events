@@ -1832,12 +1832,12 @@ function setEditContactOptIn(val, btn) { editFormState.contactOptIn = val; const
 
 function handleImageSelect(input) {
   const file = input.files[0];
-  if (file && !file.type.startsWith('image/')) {
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
     alert('Please upload an image file only (JPG, PNG, GIF, WebP). Videos are not supported.');
     input.value = '';
     return;
   }
-  const file = input.files[0]; if (!file) return;
   submitFormState.imageFile = file;
   const reader = new FileReader();
   reader.onload = e => { document.getElementById('upload-thumb-img').src = e.target.result; document.getElementById('upload-area').style.display = 'none'; document.getElementById('upload-preview').style.display = 'flex'; };
@@ -1847,12 +1847,12 @@ function removeImage() { submitFormState.imageFile = null; document.getElementBy
 
 function handleEditImageSelect(input) {
   const file = input.files[0];
-  if (file && !file.type.startsWith('image/')) {
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
     alert('Please upload an image file only (JPG, PNG, GIF, WebP). Videos are not supported.');
     input.value = '';
     return;
   }
-  const file = input.files[0]; if (!file) return;
   editFormState.imageFile = file; editFormState.removeImage = false;
   const reader = new FileReader();
   reader.onload = e => { document.getElementById('e-upload-thumb-img').src = e.target.result; document.getElementById('e-upload-area').style.display = 'none'; document.getElementById('e-upload-preview').style.display = 'flex'; };
