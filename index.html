@@ -217,6 +217,10 @@
     .admin-stats { grid-template-columns: 1fr 1fr; }
     .site-name { font-size: 15px; }
     .confirmation-actions { flex-direction: column; }
+    .contact-phone-desktop { display: none; }
+  }
+  @media (min-width: 601px) {
+    .contact-call-mobile { display: none; }
   }
 </style>
 </head>
@@ -1332,8 +1336,8 @@ function openEventModal(id) {
   let contactHtml = '';
   if (e.contact_opt_in && (e.contact_email || e.contact_phone)) {
     contactHtml = `<hr class="modal-divider"><div class="contact-section"><div class="contact-label">Contact Organizer</div>`;
-    if (e.contact_email) contactHtml += `<div class="contact-item"><div class="contact-item-info">✉ ${e.contact_email}</div><a href="mailto:${e.contact_email}" class="contact-btn">Send Email</a></div>`;
-    if (e.contact_phone) contactHtml += `<div class="contact-item"><div class="contact-item-info">📞 ${e.contact_phone}</div><a href="tel:${e.contact_phone}" class="contact-btn">Call</a></div>`;
+    if (e.contact_email) contactHtml += `<div class="contact-item"><a href="mailto:${e.contact_email}" class="contact-btn">Send Email</a></div>`;
+    if (e.contact_phone) contactHtml += `<div class="contact-item"><span class="contact-phone-desktop">${e.contact_phone}</span><a href="tel:${e.contact_phone}" class="contact-btn contact-call-mobile">Call</a></div>`;
     contactHtml += `</div>`;
   }
 
