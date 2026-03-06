@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Israeli Community Events – Metro Atlanta</title>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --blue: #1a3a5c; --blue-light: #2a5a8c; --gold: #c8963e; --gold-light: #e8b86a;
@@ -24,7 +24,7 @@
     --tag-teens: #f5ede8; --tag-teens-b: #c4a89090;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Nunito', sans-serif; background: var(--cream); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); color: var(--gray-800); min-height: 100vh; }
+  body { font-family: 'Nunito', 'Assistant', sans-serif; background: var(--cream); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); color: var(--gray-800); min-height: 100vh; }
 
   .topbar { background: linear-gradient(160deg, #1e4068 0%, #152d4a 60%, #0f2035 100%); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.3); }
   .site-name { font-family: 'Source Serif 4', serif; color: var(--white); font-size: 20px; font-weight: 600; letter-spacing: 0.3px; cursor: pointer; }
@@ -287,11 +287,12 @@
       <span id="audience-label">For</span> ▾
       <div class="dropdown-menu" id="dd-audience">
         <div class="dropdown-item selected" onclick="setAudienceFilter('all','For',event)">Everyone</div>
-        <div class="dropdown-item" onclick="setAudienceFilter('All Ages','All Ages',event)">All Ages</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('all','Everyone',event)">Everyone</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Adults','Adults',event)">Adults</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Families','Families',event)">Families</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Kids','Kids',event)">Kids</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Teens','Teens',event)">Teens</div>
-        <div class="dropdown-item" onclick="setAudienceFilter('Families','Families',event)">Families</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Seniors','Seniors',event)">Seniors</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Parents','Parents',event)">Parents</div>
       </div>
     </div>
@@ -461,20 +462,18 @@
           </select>
         </div>
         <div class="form-group">
-          <label>For <span class="req">*</span></label>
+          <label>For <span class="optional-tag">(optional)</span></label>
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="All Ages"> All Ages</label>
-            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="s-audience" value="Adults"> Adults</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="Families"> Families</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="s-audience" value="Kids"> Kids</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="s-audience" value="Teens"> Teens</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Families"> Families</label>
-            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Parents"> Parents</label>
+              <input type="checkbox" name="s-audience" value="Seniors"> Seniors</label>
           </div>
         </div>
       </div>
@@ -787,17 +786,15 @@
           <label>For <span class="req">*</span></label>
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="All Ages"> All Ages</label>
-            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="e-audience" value="Adults"> Adults</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="Families"> Families</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="e-audience" value="Kids"> Kids</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="e-audience" value="Teens"> Teens</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Families"> Families</label>
-            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Parents"> Parents</label>
+              <input type="checkbox" name="e-audience" value="Seniors"> Seniors</label>
           </div>
         </div>
       </div>
@@ -1289,7 +1286,7 @@ function getTagClass(type) {
 }
 
 function getAudienceTagClass(a) {
-  const map = { 'All Ages':'tag-all','Adults':'tag-adults','Kids':'tag-kids','Teens':'tag-teens' };
+  const map = { 'Adults':'tag-adults','Kids':'tag-kids','Teens':'tag-teens','Families':'tag-all','Seniors':'tag-all' };
   return map[a] || 'tag-all';
 }
 
@@ -1335,7 +1332,7 @@ function renderEventRow(e) {
         </div>
         <div class="row-tags">
           <span class="tag ${getTagClass(e.event_type)}">${e.event_type}</span>
-          <span class="tag ${getAudienceTagClass(e.audience)}">${e.audience}</span>
+          ${e.audience ? e.audience.split(',').map(a => a.trim()).filter(Boolean).map(a => `<span class="tag ${getAudienceTagClass(a)}">${a}</span>`).join('') : ''}
         </div>
       </div>
       <div class="row-arrow">${arrow}</div>
@@ -1525,7 +1522,7 @@ async function submitEvent() {
   const city = citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect;
   const organizer = document.getElementById('s-organizer').value.trim();
 
-  if (!name || !date || !startTime || !type || !audience || !city || !organizer) {
+  if (!name || !date || !startTime || !type || !city || !organizer) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
     errDiv.style.display = 'block';
     return;
