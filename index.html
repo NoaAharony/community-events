@@ -259,7 +259,6 @@
         <div class="dropdown-item" onclick="setCityFilter('Suwanee','Suwanee',event)">Suwanee</div>
       </div>
     </div>
-    </div>
     <div class="filter-chip" id="chip-type" onclick="toggleDropdown('dd-type', event)">
       🎉 <span id="type-label">Event Type</span> ▾
       <div class="dropdown-menu" id="dd-type">
@@ -580,7 +579,7 @@
         <div id="upload-area" class="upload-area" onclick="document.getElementById('s-image').click()">
           📷 Upload a flyer, logo, or any image<br>
           <span style="font-size:11px;">JPG, PNG · Max 5MB</span>
-          <input type="file" id="s-image" accept="image/jpeg,image/png" onchange="handleImageSelect(this)">
+          <input type="file" id="s-image" accept="image/jpeg,image/png,image/gif,image/webp" onchange="handleImageSelect(this)">
         </div>
         <div id="upload-preview" class="upload-preview" style="display:none;">
           <div class="upload-thumb"><img id="upload-thumb-img" src=""></div>
@@ -895,7 +894,7 @@
         <div id="e-upload-area" class="upload-area" onclick="document.getElementById('e-image').click()">
           📷 Upload a flyer, logo, or any image<br>
           <span style="font-size:11px;">JPG, PNG · Max 5MB</span>
-          <input type="file" id="e-image" accept="image/jpeg,image/png" onchange="handleEditImageSelect(this)">
+          <input type="file" id="e-image" accept="image/jpeg,image/png,image/gif,image/webp" onchange="handleEditImageSelect(this)">
         </div>
         <div id="e-upload-preview" class="upload-preview" style="display:none;">
           <div class="upload-thumb"><img id="e-upload-thumb-img" src=""></div>
@@ -1832,6 +1831,12 @@ function setEditOrgType(val, btn) { editFormState.orgType = val; const b=documen
 function setEditContactOptIn(val, btn) { editFormState.contactOptIn = val; const y=document.getElementById('e-contact-yes'), n=document.getElementById('e-contact-no'); if(y&&n){y.classList.toggle('on',val); n.classList.toggle('on',!val);} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 
 function handleImageSelect(input) {
+  const file = input.files[0];
+  if (file && !file.type.startsWith('image/')) {
+    alert('Please upload an image file only (JPG, PNG, GIF, WebP). Videos are not supported.');
+    input.value = '';
+    return;
+  }
   const file = input.files[0]; if (!file) return;
   submitFormState.imageFile = file;
   const reader = new FileReader();
@@ -1841,6 +1846,12 @@ function handleImageSelect(input) {
 function removeImage() { submitFormState.imageFile = null; document.getElementById('s-image').value = ''; document.getElementById('upload-area').style.display = 'block'; document.getElementById('upload-preview').style.display = 'none'; }
 
 function handleEditImageSelect(input) {
+  const file = input.files[0];
+  if (file && !file.type.startsWith('image/')) {
+    alert('Please upload an image file only (JPG, PNG, GIF, WebP). Videos are not supported.');
+    input.value = '';
+    return;
+  }
   const file = input.files[0]; if (!file) return;
   editFormState.imageFile = file; editFormState.removeImage = false;
   const reader = new FileReader();
@@ -1852,7 +1863,7 @@ function removeEditImage() { editFormState.imageFile = null; editFormState.remov
 // ═══════════════════════════════════════════════════════════
 // MODALS & PAGE NAV
 // ═══════════════════════════════════════════════════════════
-function showPage(id) { document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+function showPage(id) { document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo({top:0, behavior:'instant'}); document.body.scrollTop = 0; document.documentElement.scrollTop = 0; }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
 
