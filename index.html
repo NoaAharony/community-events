@@ -1180,6 +1180,7 @@ async function loadEvents() {
   container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><br>Loading events...</div>';
   try {
     allEvents = await sbFetch('events?order=event_date.asc,start_time.asc&select=*');
+    populateCityFilter();
     renderEvents();
   } catch (e) {
     container.innerHTML = '<div class="empty-box"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load events</div><div class="empty-desc">' + e.message + '</div></div>';
@@ -1432,6 +1433,21 @@ function prefillTimePicker(timeStr, hourId, minId, ampmId) {
   const closest = [0,15,30,45].reduce((a,b) => Math.abs(b-mInt) < Math.abs(a-mInt) ? b : a);
   minSel.value = String(closest).padStart(2,'0');
   document.getElementById(ampmId).value = ampm;
+}
+
+function populateCityFilter() {
+  const knownCities = ['Alpharetta','Atlanta','Brookhaven','Cumming','Duluth','Dunwoody','East Cobb','Johns Creek','Peachtree Corners','Roswell','Sandy Springs','Suwanee'];
+  const dd = document.getElementById('dd-city');
+  // Remove any previously added extra cities
+  dd.querySelectorAll('.extra-city').forEach(el => el.remove());
+  const extraCities = [...new Set(allEvents.map(e => e.city).filter(c => c && !knownCities.includes(c)))].sort();
+  extraCities.forEach(city => {
+    const div = document.createElement('div');
+    div.className = 'dropdown-item extra-city';
+    div.textContent = city;
+    div.onclick = (ev) => setCityFilter(city, city, ev);
+    dd.appendChild(div);
+  });
 }
 
 function populateYearDropdowns() {
