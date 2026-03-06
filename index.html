@@ -939,6 +939,19 @@
   </div>
 </div>
 
+<div id="page-cancelled" class="page-view">
+  <div class="topbar"><div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div></div>
+  <div class="error-box">
+    <div class="error-icon">🚫</div>
+    <div class="error-title">This event has been cancelled</div>
+    <div class="error-desc">This event was cancelled and can no longer be edited.<br>If you'd like to post a new event, click below.</div>
+    <div class="error-actions">
+      <button class="btn-primary" onclick="showPage('page-home')">← Back to Events</button>
+      <button class="btn-secondary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add a New Event</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ═══ PAGE: ABOUT ═══ -->
 <div id="page-about" class="page-view">
@@ -1593,6 +1606,7 @@ async function loadEditPage(editKey) {
     const results = await sbFetch(`events?edit_key=eq.${editKey}&select=*`);
     if (!results || results.length === 0) { showPage('page-invalid'); return; }
     const e = results[0];
+    if (e.status === 'cancelled') { showPage('page-cancelled'); return; }
     currentEditEventId = e.id;
     editFormState = {
       cost: e.cost, addressPublic: e.address_public,
