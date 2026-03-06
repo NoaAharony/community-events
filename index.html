@@ -226,7 +226,7 @@
 <div id="page-home" class="page-view active">
   <div class="topbar">
     <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
-    <button class="btn-submit-top" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Event</button>
+    <button class="btn-submit-top" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</button>
   </div>
 
   <div class="filter-bar">
@@ -313,7 +313,7 @@
   <footer class="site-footer">
     <div class="footer-links">
       <span class="footer-link" onclick="showPage('page-about')">About</span>
-      <span class="footer-link" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Event</span>
+      <span class="footer-link" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</span>
     </div>
     <span style="font-size:11px; color:rgba(255,255,255,0.3); font-style:italic;">Community links coming soon</span>
   </footer>
@@ -346,7 +346,7 @@
           <div style="display:flex; gap:4px;">
             <select class="form-input" id="s-month" style="flex:2;"><option value="">Month</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
             <select class="form-input" id="s-day" style="flex:1;"><option value="">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
-            <select class="form-input" id="s-year" style="flex:1.5;"><option value="">Year</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option></select>
+            <select class="form-input" id="s-year" style="flex:1.5;"><option value="">Year</option></select>
           </div>
           <input type="hidden" id="s-date">
         </div>
@@ -514,17 +514,23 @@
       <div class="form-section-title">2 · Location</div>
       <div class="form-group">
         <label>City <span class="req">*</span></label>
-        <select class="form-input" id="s-city">
-          <option value="">Select city...</option>
-          <option>Alpharetta</option><option>Atlanta</option><option>Brookhaven</option>
-          <option>Buckhead</option><option>Canton</option><option>Cumming</option>
-          <option>Decatur</option><option>Duluth</option><option>Dunwoody</option>
-          <option>East Cobb</option><option>Johns Creek</option><option>Kennesaw</option>
-          <option>Lawrenceville</option><option>Marietta</option><option>Milton</option>
-          <option>Norcross</option><option>Peachtree City</option><option>Roswell</option>
-          <option>Sandy Springs</option><option>Smyrna</option><option>Suwanee</option>
-          <option>Tucker</option><option>Woodstock</option><option>Other</option>
-        </select>
+        <select class="form-input" id="s-city" onchange="handleCityOther('s-city','s-city-other')">
+            <option value="">Select city...</option>
+            <option>Alpharetta</option>
+            <option>Atlanta</option>
+            <option>Brookhaven</option>
+            <option>Cumming</option>
+            <option>Duluth</option>
+            <option>Dunwoody</option>
+            <option>East Cobb</option>
+            <option>Johns Creek</option>
+            <option>Peachtree Corners</option>
+            <option>Roswell</option>
+            <option>Sandy Springs</option>
+            <option>Suwanee</option>
+            <option value="other">Other...</option>
+          </select>
+          <input class="form-input" id="s-city-other" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
       </div>
       <div class="form-group">
         <label>Full Address <span class="optional-tag">(optional)</span></label>
@@ -601,7 +607,7 @@
       <button class="btn-secondary" onclick="showPage('page-home')">Cancel</button>
       <div style="display:flex; align-items:center; gap:12px;">
         <span style="font-size:11px; color:var(--gray-400);">By submitting you confirm all details are accurate</span>
-        <button class="btn-primary" id="submit-btn" onclick="submitEvent()">Submit Event →</button>
+        <button class="btn-primary" id="submit-btn" onclick="submitEvent()">Add Event →</button>
       </div>
     </div>
   </div>
@@ -631,7 +637,7 @@
         <button class="btn-secondary" style="width:100%;" onclick="copyConfirmLink()">📋 Copy Link</button>
         <div class="confirmation-actions">
           <button class="btn-secondary" onclick="showPage('page-home'); loadEvents()">← Back to Events</button>
-          <button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Another Event</button>
+          <button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Another Event</button>
         </div>
       </div>
     </div>
@@ -664,7 +670,7 @@
           <div style="display:flex; gap:4px;">
             <select class="form-input" id="e-month" style="flex:2;"><option value="">Month</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
             <select class="form-input" id="e-day" style="flex:1;"><option value="">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
-            <select class="form-input" id="e-year" style="flex:1.5;"><option value="">Year</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option></select>
+            <select class="form-input" id="e-year" style="flex:1.5;"><option value="">Year</option></select>
           </div>
           <input type="hidden" id="e-date">
         </div>
@@ -828,16 +834,23 @@
       <div class="form-section-title">2 · Location</div>
       <div class="form-group">
         <label>City <span class="req">*</span></label>
-        <select class="form-input" id="e-city">
-          <option>Alpharetta</option><option>Atlanta</option><option>Brookhaven</option>
-          <option>Buckhead</option><option>Canton</option><option>Cumming</option>
-          <option>Decatur</option><option>Duluth</option><option>Dunwoody</option>
-          <option>East Cobb</option><option>Johns Creek</option><option>Kennesaw</option>
-          <option>Lawrenceville</option><option>Marietta</option><option>Milton</option>
-          <option>Norcross</option><option>Peachtree City</option><option>Roswell</option>
-          <option>Sandy Springs</option><option>Smyrna</option><option>Suwanee</option>
-          <option>Tucker</option><option>Woodstock</option><option>Other</option>
-        </select>
+        <select class="form-input" id="e-city" onchange="handleCityOther('e-city','e-city-other')">
+            <option value="">Select city...</option>
+            <option>Alpharetta</option>
+            <option>Atlanta</option>
+            <option>Brookhaven</option>
+            <option>Cumming</option>
+            <option>Duluth</option>
+            <option>Dunwoody</option>
+            <option>East Cobb</option>
+            <option>Johns Creek</option>
+            <option>Peachtree Corners</option>
+            <option>Roswell</option>
+            <option>Sandy Springs</option>
+            <option>Suwanee</option>
+            <option value="other">Other...</option>
+          </select>
+          <input class="form-input" id="e-city-other" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
       </div>
       <div class="form-group">
         <label>Full Address <span class="optional-tag">(optional)</span></label>
@@ -935,7 +948,7 @@
 <div id="page-about" class="page-view">
   <div class="topbar">
     <div class="site-name" onclick="showPage('page-home')">Israeli Events <span>Atlanta</span></div>
-    <button class="btn-submit-top" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Event</button>
+    <button class="btn-submit-top" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</button>
   </div>
   <div class="about-body">
     <span class="footer-link" onclick="showPage('page-home')" style="color:var(--blue); font-size:13px; cursor:pointer; display:inline-block; margin-bottom:20px;">← Back to Events</span>
@@ -948,7 +961,7 @@
   <footer class="site-footer">
     <div class="footer-links">
       <span class="footer-link" onclick="showPage('page-about')">About</span>
-      <span class="footer-link" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit Event</span>
+      <span class="footer-link" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</span>
     </div>
     <span style="font-size:11px; color:rgba(255,255,255,0.3); font-style:italic;">Community links coming soon</span>
   </footer>
@@ -1104,7 +1117,7 @@ async function sbFetch(path, options = {}) {
 // STATE
 // ═══════════════════════════════════════════════════════════
 let allEvents = [];
-let filters = { date: 'this-week', city: 'all', type: 'all', cost: 'all', audience: 'all' };
+let filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'all' };
 let submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', contactOptIn: false, imageFile: null };
 let editFormState = { cost: 'Free', addressPublic: true, orgType: 'Business', contactOptIn: false, imageFile: null, removeImage: false, eventId: null, editKey: null };
 let adminDeleteId = null;
@@ -1224,7 +1237,7 @@ function renderEvents() {
   if (events.length === 0) {
     const hasAnyEvents = allEvents.filter(e => !isPast(e.event_date) && e.status !== 'cancelled').length > 0;
     if (!hasAnyEvents) {
-      container.innerHTML = `<div class="empty-box"><div class="empty-icon">📭</div><div class="empty-title">No events yet</div><div class="empty-desc">There are no upcoming events right now.<br>Be the first to add one!</div><button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Submit an Event</button></div>`;
+      container.innerHTML = `<div class="empty-box"><div class="empty-icon">📭</div><div class="empty-title">No events yet</div><div class="empty-desc">There are no upcoming events right now.<br>Be the first to add one!</div><button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</button></div>`;
     } else {
       container.innerHTML = `<div class="empty-box"><div class="empty-icon">🔍</div><div class="empty-title">No events match your filters</div><div class="empty-desc">Try adjusting or clearing your filters.</div><button class="btn-secondary" onclick="clearFilters()">✕ Clear Filters</button></div>`;
     }
@@ -1426,6 +1439,23 @@ function prefillTimePicker(timeStr, hourId, minId, ampmId) {
   document.getElementById(ampmId).value = ampm;
 }
 
+function populateYearDropdowns() {
+  const currentYear = new Date().getFullYear();
+  const years = [currentYear, currentYear+1, currentYear+2];
+  document.querySelectorAll('[id$="-year"]').forEach(sel => {
+    const current = sel.value;
+    while (sel.options.length > 1) sel.remove(1);
+    years.forEach(y => {
+      const opt = document.createElement('option');
+      opt.value = String(y);
+      opt.textContent = String(y);
+      if (y === currentYear) opt.selected = !current;
+      sel.appendChild(opt);
+    });
+    if (current) sel.value = current;
+  });
+}
+
 function buildDateValue(mid) {
   const m = document.getElementById(mid+'-month') ? document.getElementById(mid+'-month').value : '';
   const d = document.getElementById(mid+'-day') ? document.getElementById(mid+'-day').value : '';
@@ -1447,6 +1477,14 @@ function getAudienceValues() {
   return Array.from(checked).map(c => c.value).join(', ');
 }
 
+function handleCityOther(selectId, otherId) {
+  const sel = document.getElementById(selectId);
+  const other = document.getElementById(otherId);
+  if (sel && other) {
+    other.style.display = sel.value === 'other' ? 'block' : 'none';
+  }
+}
+
 async function submitEvent() {
   const btn = document.getElementById('submit-btn');
   const errDiv = document.getElementById('submit-error');
@@ -1459,7 +1497,8 @@ async function submitEvent() {
   const endTime = document.getElementById('s-end-time').value;
   const type = document.getElementById('s-type').value;
   const audience = getAudienceValues();
-  const city = document.getElementById('s-city').value;
+  const citySelect = document.getElementById('s-city').value;
+  const city = citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect;
   const organizer = document.getElementById('s-organizer').value.trim();
 
   if (!name || !date || !startTime || !type || !audience || !city || !organizer) {
@@ -1512,11 +1551,12 @@ async function submitEvent() {
     errDiv.style.display = 'block';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Submit Event →';
+    btn.textContent = 'Add Event →';
   }
 }
 
 function resetSubmitForm() {
+  populateYearDropdowns();
   ['s-name','s-date','s-amount','s-desc','s-reg-link','s-address','s-email','s-phone'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
@@ -1608,7 +1648,8 @@ async function saveEvent() {
   const name = document.getElementById('e-name').value.trim();
   const date = buildDateValue('e');
   const startTime = document.getElementById('e-start-time').value;
-  const city = document.getElementById('e-city').value;
+  const eCitySelect = document.getElementById('e-city').value;
+  const city = eCitySelect === 'other' ? document.getElementById('e-city-other').value.trim() : eCitySelect;
   const organizer = document.getElementById('e-organizer').value.trim();
 
   if (!name || !date || !startTime || !city || !organizer) {
@@ -1654,6 +1695,7 @@ async function saveEvent() {
       method: 'PATCH', body: JSON.stringify(payload), prefer: 'return=minimal'
     });
     await loadEvents();
+  populateYearDropdowns();
     showPage('page-home');
   } catch (e) {
     errDiv.textContent = 'Error saving: ' + e.message;
@@ -1679,6 +1721,7 @@ async function confirmCancelEvent(action) {
     }
     closeModal('overlay-cancel');
     await loadEvents();
+  populateYearDropdowns();
     showPage('page-home');
   } catch (e) {
     alert('Error cancelling event: ' + e.message);
@@ -1762,7 +1805,7 @@ function setAudienceFilter(value, label, e) { e.stopPropagation(); filters.audie
 function updateFilterChip(id, active) { document.getElementById(id).classList.toggle('active', active); }
 function updateDropdownSelected(ddId, label) { document.querySelectorAll(`#${ddId} .dropdown-item`).forEach(i => i.classList.toggle('selected', i.textContent.trim() === label)); }
 function closeAllDropdowns() { document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open')); }
-function clearFilters() { filters = { date: 'this-week', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'This Week'; document.getElementById('city-label').textContent = 'City'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.add('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); renderEvents(); }
+function clearFilters() { filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'Date'; document.getElementById('city-label').textContent = 'City'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.remove('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); renderEvents(); }
 
 function toggleDropdown(id, e) {
   e.stopPropagation();
@@ -1840,6 +1883,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   await loadEvents();
+  populateYearDropdowns();
 });
 </script>
 </body>
