@@ -142,8 +142,8 @@
   .page-header h1 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; margin-bottom: 4px; }
   .page-header p { font-size: 13px; color: rgba(255,255,255,0.7); }
   .form-body { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
-  .form-section { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--gray-200); }
-  .form-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--white); background: var(--blue); margin: -20px -20px 20px -20px; padding: 10px 20px; border-radius: 8px 8px 0 0; }
+  .form-section { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 24px; border: 2px solid var(--blue); box-shadow: 0 2px 8px rgba(26,58,92,0.08); }
+  .form-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--white); background: var(--blue); margin: -20px -20px 20px -20px; padding: 12px 20px; border-radius: 6px 6px 0 0; }
   .toggle-group { display: flex; border: 1px solid var(--gray-200); border-radius: 4px; overflow: hidden; }
   .toggle-btn { flex: 1; padding: 9px; text-align: center; font-size: 13px; cursor: pointer; background: var(--gray-100); color: var(--gray-600); border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
   .toggle-btn.on { background: var(--blue); color: white; font-weight: 600; }
@@ -407,7 +407,7 @@
       <div class="form-group">
         <label>End Time <span class="optional-tag">(optional)</span></label>
         <select class="form-input" id="s-end-time">
-            <option value="">— No end time —</option>
+            <option value="">- No end time -</option>
             <option value="00:00:00">12:00 AM</option>
             <option value="00:30:00">12:30 AM</option>
             <option value="01:00:00">1:00 AM</option>
@@ -532,10 +532,10 @@
       <div class="form-group">
         <label>Show address publicly? <span class="req">*</span></label>
         <div class="toggle-group">
-          <button class="toggle-btn" onclick="setAddressVisibility(true,this)">Yes — show publicly</button>
-          <button class="toggle-btn on" onclick="setAddressVisibility(false,this)">No — keep private</button>
+          <button class="toggle-btn" onclick="setAddressVisibility(true,this)">Yes - show publicly</button>
+          <button class="toggle-btn on" onclick="setAddressVisibility(false,this)">No - keep private</button>
         </div>
-        <div class="field-hint">If No — visitors will see city only and can request the address</div>
+        <div class="field-hint">If No - visitors will see city only and can request the address</div>
       </div>
     </div>
 
@@ -572,7 +572,7 @@
           <button class="toggle-btn" onclick="setContactOptIn(true,this)">Yes</button>
           <button class="toggle-btn on" onclick="setContactOptIn(false,this)">No</button>
         </div>
-        <div class="field-hint">If Yes — your email/phone will appear on your event for visitors to contact you</div>
+        <div class="field-hint">If Yes - your email/phone will appear on your event for visitors to contact you</div>
       </div>
     </div>
 
@@ -724,7 +724,7 @@
       <div class="form-group">
         <label>End Time <span class="optional-tag">(optional)</span></label>
         <select class="form-input" id="e-end-time">
-            <option value="">— No end time —</option>
+            <option value="">- No end time -</option>
             <option value="00:00:00">12:00 AM</option>
             <option value="00:30:00">12:30 AM</option>
             <option value="01:00:00">1:00 AM</option>
@@ -844,8 +844,8 @@
       <div class="form-group">
         <label>Show address publicly?</label>
         <div class="toggle-group">
-          <button class="toggle-btn" id="e-addr-yes" onclick="setEditAddressVisibility(true,this)">Yes — show publicly</button>
-          <button class="toggle-btn" id="e-addr-no" onclick="setEditAddressVisibility(false,this)">No — keep private</button>
+          <button class="toggle-btn" id="e-addr-yes" onclick="setEditAddressVisibility(true,this)">Yes - show publicly</button>
+          <button class="toggle-btn" id="e-addr-no" onclick="setEditAddressVisibility(false,this)">No - keep private</button>
         </div>
       </div>
     </div>
