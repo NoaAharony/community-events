@@ -1199,6 +1199,24 @@
 const SUPABASE_URL = 'https://pscedpbjswyajgledixu.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzY2VkcGJqc3d5YWpnbGVkaXh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NDYwMTMsImV4cCI6MjA4ODMyMjAxM30.gnxxN1E3_UVFE-HKplmHOLfovy8FDz50TDG0Xs37q3I';
 
+const SEND_EMAIL_URL = 'https://pscedpbjswyajgledixu.supabase.co/functions/v1/send-email';
+
+async function sendEmail(payload) {
+  try {
+    await fetch(SEND_EMAIL_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    console.warn('Email send failed:', e.message);
+  }
+}
+
 async function sbFetch(path, options = {}) {
   const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
     ...options,
@@ -1494,21 +1512,40 @@ function openEventModal(id) {
   document.getElementById('overlay-event').classList.add('open');
 }
 
+let currentAddressRequestEventId = null;
+
 function openAddressRequest(eventId) {
+  currentAddressRequestEventId = eventId;
   closeModal('overlay-event');
   document.getElementById('address-form').style.display = 'block';
   document.getElementById('address-success').classList.remove('show');
   document.getElementById('overlay-address').classList.add('open');
 }
 
-function submitAddressRequest() {
+async function submitAddressRequest() {
   const fname = document.getElementById('req-fname').value.trim();
   const lname = document.getElementById('req-lname').value.trim();
   const email = document.getElementById('req-email').value.trim();
   const phone = document.getElementById('req-phone').value.trim();
+  const message = document.getElementById('req-message').value.trim();
   if (!fname || !lname || !email || !phone) { alert('Please fill in all required fields.'); return; }
   document.getElementById('address-form').style.display = 'none';
   document.getElementById('address-success').classList.add('show');
+
+  // Send email to organizer
+  const event = allEvents.find(ev => ev.id === currentAddressRequestEventId);
+  if (event && event.contact_email) {
+    await sendEmail({
+      type: 'address_request',
+      organizer_email: event.contact_email,
+      event_name: event.name,
+      requester_fname: fname,
+      requester_lname: lname,
+      requester_email: email,
+      requester_phone: phone,
+      requester_message: message || null,
+    });
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1693,6 +1730,17 @@ async function submitEvent() {
     const newId = result[0].id;
     const editLink = `${window.location.origin}${window.location.pathname}?edit=${editKey}`;
     document.getElementById('confirm-link').textContent = editLink;
+
+    // Send confirmation email to organizer
+    await sendEmail({
+      type: 'submission',
+      organizer_name: organizer,
+      organizer_email: email,
+      event_name: name,
+      event_date: formatDate(date),
+      edit_link: editLink,
+    });
+
     showPage('page-confirm');
   } catch (e) {
     errDiv.textContent = 'Error submitting event: ' + e.message;
