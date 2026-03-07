@@ -108,6 +108,34 @@
   .modal-header h3 { font-family: 'Source Serif 4', serif; font-size: 16px; font-weight: 400; }
   .modal-close-btn { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 20px; cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 3px; transition: color 0.15s; }
   .modal-close-btn:hover { color: white; }
+
+  /* Share button on card */
+  .share-card-btn { position: absolute; top: 10px; right: 52px; width: 28px; height: 28px; border-radius: 50%; background: white; border: 1.5px solid var(--gray-200); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.1); transition: all 0.15s; color: var(--gray-400); z-index: 2; }
+  .share-card-btn:hover { background: var(--gold); border-color: var(--gold); color: white; }
+  .share-card-btn svg { width: 13px; height: 13px; }
+  .event-row { position: relative; }
+
+  /* Share button in modal */
+  .share-modal-btn { width: 100%; background: transparent; color: var(--blue); border: 1.5px solid rgba(30,64,104,0.25); padding: 9px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 6px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 7px; transition: all 0.15s; }
+  .share-modal-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+  .share-modal-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Share toast */
+  .share-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--green); color: white; font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 30px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.2s; white-space: nowrap; }
+  .share-toast.show { opacity: 1; }
+
+  /* Modal image — clickable */
+  .modal-event-img { cursor: zoom-in; }
+  .modal-img-hint { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.55); color: white; font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 20px; display: flex; align-items: center; gap: 4px; pointer-events: none; }
+  .modal-img-hint svg { width: 10px; height: 10px; }
+  .modal-event-img-wrap { position: relative; margin-bottom: 16px; }
+
+  /* Lightbox */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9000; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 6px; object-fit: contain; box-shadow: 0 8px 60px rgba(0,0,0,0.6); }
+  .lightbox-close { position: fixed; top: 20px; right: 24px; background: rgba(255,255,255,0.15); border: none; color: white; font-size: 22px; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); transition: background 0.15s; }
+  .lightbox-close:hover { background: rgba(255,255,255,0.3); }
   .modal-body { padding: 20px; }
   .modal-event-img { width: 100%; height: 140px; background: var(--gray-100); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 16px; overflow: hidden; }
   .modal-event-img img { width: 100%; height: 100%; object-fit: cover; }
@@ -1067,6 +1095,15 @@
   </div>
 </div>
 
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="Full flyer">
+</div>
+
+<!-- Share Toast -->
+<div class="share-toast" id="share-toast">✓ Link copied to clipboard!</div>
+
 <!-- Cancel Event Confirmation Modal -->
 <div class="overlay" id="overlay-cancel" onclick="closeModalOnBg(event,'overlay-cancel')">
   <div class="modal cancel-modal">
@@ -1357,6 +1394,7 @@ function renderEventRow(e) {
         </div>
       </div>
       <div class="row-arrow">${arrow}</div>
+      ${!cancelled ? `<button class="share-card-btn" title="Share event" onclick="shareEvent(event,'${e.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>` : ''}
     </div>`;
 }
 
@@ -1371,7 +1409,7 @@ function openEventModal(id) {
   const costStr = e.cost === 'Paid' && e.amount ? e.amount : e.cost;
 
   const imgHtml = e.image_url
-    ? `<div class="modal-event-img"><img src="${e.image_url}" alt=""></div>`
+    ? `<div class="modal-event-img-wrap"><div class="modal-event-img" onclick="openLightbox('${e.image_url}')" style="cursor:zoom-in;"><img src="${e.image_url}" alt=""></div><div class="modal-img-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>View full flyer</div></div>`
     : `<div class="modal-event-img" style="background:var(--blue); display:flex; align-items:center; justify-content:center;"><span style="font-family:'Source Serif 4',serif; font-style:italic; font-size:18px; color:var(--gold-light); letter-spacing:1px;">Event</span></div>`;
 
   let addressHtml = '';
@@ -1407,6 +1445,7 @@ function openEventModal(id) {
     </div>
     ${e.description ? `<div class="modal-desc" dir="auto">${e.description}</div>` : ''}
     ${regBtn}
+    <button class="share-modal-btn" onclick="shareEvent(null,'${e.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share Event</button>
     ${contactHtml}
   `;
   document.getElementById('overlay-event').classList.add('open');
@@ -2020,6 +2059,30 @@ function removeEditImage() { editFormState.imageFile = null; editFormState.remov
 // ═══════════════════════════════════════════════════════════
 function showPage(id) { document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo({top:0, behavior:'instant'}); document.body.scrollTop = 0; document.documentElement.scrollTop = 0; }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function shareEvent(e, id) {
+  if (e) e.stopPropagation();
+  const url = `${window.location.origin}${window.location.pathname}?event=${id}`;
+  if (navigator.share) {
+    navigator.share({ url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => {
+      const t = document.getElementById('share-toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    });
+  }
+}
+
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src = '';
+}
 function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
 
 // ═══════════════════════════════════════════════════════════
@@ -2039,6 +2102,12 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   await loadEvents();
   populateYearDropdowns();
+
+  if (params.has('event')) {
+    const eventId = params.get('event');
+    const found = allEvents.find(ev => ev.id === eventId);
+    if (found) openEventModal(eventId);
+  }
 });
 </script>
 </body>
