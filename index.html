@@ -6,6 +6,14 @@
 <title>Israeli Community Events – Metro Atlanta</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* Use Assistant for Hebrew characters, Nunito for everything else */
+  @font-face {
+    font-family: 'Nunito';
+    src: local('Assistant');
+    unicode-range: U+0590-05FF, U+FB1D-FB4F;
+  }
+</style>
+<style>
   :root {
     --blue: #1a3a5c; --blue-light: #2a5a8c; --gold: #c8963e; --gold-light: #e8b86a;
     --cream: #f9f5ef; --white: #ffffff; --gray-100: #f4f1ec; --gray-200: #e8e2d8;
