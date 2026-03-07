@@ -144,7 +144,7 @@
   .modal-field label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); font-weight: 600; display: block; margin-bottom: 2px; }
   .modal-field span { font-size: 14px; color: var(--gray-800); }
   .modal-field.full { grid-column: span 2; }
-  .modal-desc { background: var(--gray-100); border-radius: 6px; padding: 14px 16px; font-size: 16px; color: var(--gray-800); line-height: 1.75; margin-bottom: 16px; font-weight: 500; border-left: 3px solid var(--gold); }
+  .modal-desc { background: var(--gray-100); border-radius: 6px; padding: 14px 16px; font-size: 16px; color: var(--gray-800); line-height: 1.75; margin-bottom: 16px; font-weight: 500; border-left: 3px solid var(--gold); word-break: break-word; overflow-wrap: break-word; white-space: pre-wrap; }
   .modal-divider { border: none; border-top: 1px solid var(--gray-200); margin: 16px 0; }
   .modal-action-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 6px; margin-bottom: 10px; transition: background 0.2s; text-decoration: none; display: block; text-align: center; }
   .modal-action-btn:hover { background: var(--blue-light); }
@@ -647,13 +647,17 @@
           <div class="privacy-note" id="s-phone-note">🔒 Not shown publicly</div>
         </div>
       </div>
-      <div class="form-group">
-        <label>Allow visitors to contact you? <span class="req">*</span></label>
-        <div class="toggle-group">
-          <button class="toggle-btn" onclick="setContactOptIn(true,this)">Yes</button>
-          <button class="toggle-btn on" onclick="setContactOptIn(false,this)">No</button>
+      <div class="form-group" id="s-contact-details-group" style="display:none;">
+        <label>Show your contact details on the event page?</label>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px;">
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
+            <input type="checkbox" id="s-show-email" onchange="updateContactHint('s')"> Show my email
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
+            <input type="checkbox" id="s-show-phone" onchange="updateContactHint('s')"> Show my phone
+          </label>
         </div>
-        <div class="field-hint contact-important" id="contact-hint">Visitors will be able to reach you privately through a form — your details won't be shown publicly</div>
+        <div class="field-hint" id="s-contact-hint">Your email and phone won't be shown on the event page.</div>
       </div>
     </div>
 
@@ -972,13 +976,17 @@
           <div class="privacy-note" id="e-phone-note">🔒 Not shown publicly</div>
         </div>
       </div>
-      <div class="form-group">
-        <label>Allow visitors to contact you? <span class="req">*</span></label>
-        <div class="toggle-group">
-          <button class="toggle-btn" id="e-contact-yes" onclick="setEditContactOptIn(true,this)">Yes</button>
-          <button class="toggle-btn" id="e-contact-no" onclick="setEditContactOptIn(false,this)">No</button>
+      <div class="form-group" id="e-contact-details-group" style="display:none;">
+        <label>Show your contact details on the event page?</label>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px;">
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
+            <input type="checkbox" id="e-show-email" onchange="updateContactHint('e')"> Show my email
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
+            <input type="checkbox" id="e-show-phone" onchange="updateContactHint('e')"> Show my phone
+          </label>
         </div>
-        <div class="field-hint contact-important" id="e-contact-hint">Visitors will be able to reach you privately through a form — your details won't be shown publicly</div>
+        <div class="field-hint" id="e-contact-hint">Your email and phone won't be shown on the event page.</div>
       </div>
     </div>
 
@@ -1484,10 +1492,10 @@ function openEventModal(id) {
   }
 
   let contactHtml = '';
-  if (e.contact_opt_in && (e.contact_email || e.contact_phone)) {
+  if ((e.show_email && e.contact_email) || (e.show_phone && e.contact_phone)) {
     contactHtml = `<hr class="modal-divider"><div class="contact-section"><div class="contact-label">Contact Organizer</div>`;
-    if (e.contact_email) contactHtml += `<div class="contact-item"><a href="mailto:${e.contact_email}" class="contact-btn">Send Email</a></div>`;
-    if (e.contact_phone) contactHtml += `<div class="contact-item"><span class="contact-phone-desktop">📞 ${e.contact_phone}</span><a href="tel:${e.contact_phone}" class="contact-btn contact-call-mobile">Call</a></div>`;
+    if (e.show_email && e.contact_email) contactHtml += `<div class="contact-item"><a href="mailto:${e.contact_email}" class="contact-btn">Send Email</a></div>`;
+    if (e.show_phone && e.contact_phone) contactHtml += `<div class="contact-item"><span class="contact-phone-desktop">📞 ${e.contact_phone}</span><a href="tel:${e.contact_phone}" class="contact-btn contact-call-mobile">Call</a></div>`;
     contactHtml += `</div>`;
   }
 
@@ -1694,6 +1702,20 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
+  if (endTime && endTime <= startTime) {
+    errDiv.textContent = 'End time must be later than start time';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  // Warning if public address but no contact details shown
+  if (submitFormState.addressPublic) {
+    const showEmail = document.getElementById('s-show-email') ? document.getElementById('s-show-email').checked : false;
+    const showPhone = document.getElementById('s-show-phone') ? document.getElementById('s-show-phone').checked : false;
+    if (!showEmail && !showPhone) {
+      if (!confirm("You chose not to show any contact details. Visitors won't be able to reach you. Continue anyway?")) return;
+    }
+  }
 
   btn.disabled = true;
   btn.textContent = 'Submitting...';
@@ -1723,7 +1745,9 @@ async function submitEvent() {
       org_type: submitFormState.orgType,
       contact_email: document.getElementById('s-email').value.trim() || null,
       contact_phone: document.getElementById('s-phone').value.trim() || null,
-      contact_opt_in: submitFormState.contactOptIn,
+      show_email: submitFormState.addressPublic ? (document.getElementById('s-show-email') ? document.getElementById('s-show-email').checked : false) : false,
+      show_phone: submitFormState.addressPublic ? (document.getElementById('s-show-phone') ? document.getElementById('s-show-phone').checked : false) : false,
+      contact_opt_in: false,
       image_url: imageUrl,
       edit_key: editKey,
       status: 'active'
@@ -1763,7 +1787,10 @@ function resetSubmitForm() {
   document.getElementById('s-type').value = '';
   document.querySelectorAll('input[name="s-audience"]').forEach(c => c.checked = false);
   document.getElementById('s-city').value = '';
-  submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', contactOptIn: false, imageFile: null };
+  submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', imageFile: null };
+  const sShowEmail = document.getElementById('s-show-email'); if(sShowEmail) sShowEmail.checked = false;
+  const sShowPhone = document.getElementById('s-show-phone'); if(sShowPhone) sShowPhone.checked = false;
+  const sCG = document.getElementById('s-contact-details-group'); if(sCG) sCG.style.display = 'none';
   document.getElementById('cost-free-btn').classList.add('on');
   document.getElementById('cost-paid-btn').classList.remove('on');
   document.getElementById('amount-field').classList.remove('show');
@@ -1837,7 +1864,14 @@ async function loadEditPage(editKey) {
     setEditCost(e.cost);
     setEditAddressVisibility(e.address_public);
     setEditOrgType(e.org_type);
-    setEditContactOptIn(e.contact_opt_in);
+    // Prefill contact checkboxes
+    const eShowEmail = document.getElementById('e-show-email');
+    const eShowPhone = document.getElementById('e-show-phone');
+    if(eShowEmail) eShowEmail.checked = e.show_email || false;
+    if(eShowPhone) eShowPhone.checked = e.show_phone || false;
+    const eCG = document.getElementById('e-contact-details-group');
+    if(eCG) eCG.style.display = e.address_public ? 'block' : 'none';
+    updateContactHint('e');
 
     if (e.image_url) {
       document.getElementById('e-upload-area').style.display = 'none';
@@ -1876,6 +1910,12 @@ async function saveEvent() {
     errDiv.style.display = 'block';
     return;
   }
+  const editEndTime = document.getElementById('e-end-time').value;
+  if (editEndTime && editEndTime <= startTime) {
+    errDiv.textContent = 'End time must be later than start time';
+    errDiv.style.display = 'block';
+    return;
+  }
 
   btn.disabled = true;
   btn.textContent = 'Saving...';
@@ -1906,7 +1946,9 @@ async function saveEvent() {
       org_type: editFormState.orgType,
       contact_email: document.getElementById('e-email').value.trim() || null,
       contact_phone: document.getElementById('e-phone').value.trim() || null,
-      contact_opt_in: editFormState.contactOptIn,
+      show_email: editFormState.addressPublic ? (document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false) : false,
+      show_phone: editFormState.addressPublic ? (document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false) : false,
+      contact_opt_in: false,
     };
     if (imageUrl !== undefined) payload.image_url = imageUrl;
 
@@ -2065,23 +2107,35 @@ function setAddressVisibility(val, btn) {
   if(hint) hint.textContent = val
     ? 'The full address will be visible to everyone on your event page'
     : 'Visitors will see city only and can request the address from you privately';
+  // Show contact details checkboxes only if address is public
+  const cg = document.getElementById('s-contact-details-group');
+  if(cg) cg.style.display = val ? 'block' : 'none';
+  updateContactHint('s');
 }
 function toggleAddressVisibility(val, groupId) { document.getElementById(groupId).style.display = val.trim() ? 'block' : 'none'; }
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
-function setContactOptIn(val, btn) {
-  submitFormState.contactOptIn = val;
-  if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');}
-  const hint = document.getElementById('contact-hint');
-  const emailNote = document.getElementById('s-email-note');
-  const phoneNote = document.getElementById('s-phone-note');
-  if(val) {
-    if(hint) hint.textContent = '⚠️ Your email and phone will appear publicly on your event so visitors can contact you directly';
-    if(emailNote) { emailNote.textContent = '👁 Will appear on your event page'; emailNote.classList.add('visible'); }
-    if(phoneNote) { phoneNote.textContent = '👁 Will appear on your event page'; phoneNote.classList.add('visible'); }
+function updateContactHint(prefix) {
+  const showEmail = document.getElementById(prefix+'-show-email') ? document.getElementById(prefix+'-show-email').checked : false;
+  const showPhone = document.getElementById(prefix+'-show-phone') ? document.getElementById(prefix+'-show-phone').checked : false;
+  const hint = document.getElementById(prefix+'-contact-hint');
+  const emailNote = document.getElementById(prefix === 's' ? 's-email-note' : 'e-email-note');
+  const phoneNote = document.getElementById(prefix === 's' ? 's-phone-note' : 'e-phone-note');
+  if(showEmail && showPhone) {
+    if(hint) hint.textContent = 'Your email and phone will be shown on the event page.';
+    if(emailNote) emailNote.textContent = '👁 Will appear on your event page';
+    if(phoneNote) phoneNote.textContent = '👁 Will appear on your event page';
+  } else if(showEmail) {
+    if(hint) hint.textContent = 'Your email will be shown. Phone will stay private.';
+    if(emailNote) emailNote.textContent = '👁 Will appear on your event page';
+    if(phoneNote) phoneNote.textContent = '🔒 Not shown publicly';
+  } else if(showPhone) {
+    if(hint) hint.textContent = 'Your phone will be shown. Email will stay private.';
+    if(emailNote) emailNote.textContent = '🔒 Not shown publicly';
+    if(phoneNote) phoneNote.textContent = '👁 Will appear on your event page';
   } else {
-    if(hint) hint.textContent = "Visitors will be able to reach you privately through a form — your details won't be shown publicly";
-    if(emailNote) { emailNote.textContent = '🔒 Not shown publicly'; emailNote.classList.remove('visible'); }
-    if(phoneNote) { phoneNote.textContent = '🔒 Not shown publicly'; phoneNote.classList.remove('visible'); }
+    if(hint) hint.textContent = "Your email and phone won't be shown on the event page.";
+    if(emailNote) emailNote.textContent = '🔒 Not shown publicly';
+    if(phoneNote) phoneNote.textContent = '🔒 Not shown publicly';
   }
 }
 
@@ -2101,25 +2155,12 @@ function setEditAddressVisibility(val, btn) {
   if(hint) hint.textContent = val
     ? 'The full address will be visible to everyone on your event page'
     : 'Visitors will see city only and can request the address from you privately';
+  // Show contact details checkboxes only if address is public
+  const cg = document.getElementById('e-contact-details-group');
+  if(cg) cg.style.display = val ? 'block' : 'none';
+  updateContactHint('e');
 }
 function setEditOrgType(val, btn) { editFormState.orgType = val; const b=document.getElementById('e-org-business'), i=document.getElementById('e-org-individual'); if(b&&i){b.classList.toggle('on',val==='Business'); i.classList.toggle('on',val==='Individual');} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
-function setEditContactOptIn(val, btn) {
-  editFormState.contactOptIn = val;
-  const y=document.getElementById('e-contact-yes'), n=document.getElementById('e-contact-no');
-  if(y&&n){y.classList.toggle('on',val); n.classList.toggle('on',!val);}
-  const hint = document.getElementById('e-contact-hint');
-  const emailNote = document.getElementById('e-email-note');
-  const phoneNote = document.getElementById('e-phone-note');
-  if(val) {
-    if(hint) hint.textContent = '⚠️ Your email and phone will appear publicly on your event so visitors can contact you directly';
-    if(emailNote){emailNote.textContent='👁 Will appear on your event page'; emailNote.classList.add('visible');}
-    if(phoneNote){phoneNote.textContent='👁 Will appear on your event page'; phoneNote.classList.add('visible');}
-  } else {
-    if(hint) hint.textContent = "Visitors will be able to reach you privately through a form — your details won't be shown publicly";
-    if(emailNote){emailNote.textContent='🔒 Not shown publicly'; emailNote.classList.remove('visible');}
-    if(phoneNote){phoneNote.textContent='🔒 Not shown publicly'; phoneNote.classList.remove('visible');}
-  }
-}
 
 function formatPhoneInput(input) {
   let v = input.value.replace(/\D/g, '');
