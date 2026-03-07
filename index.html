@@ -44,7 +44,7 @@
   .filter-chip { background: white; border: 1.5px solid #ccc8be; padding: 6px 14px; font-size: 12px; font-family: 'Nunito', sans-serif; border-radius: 20px; cursor: pointer; transition: all 0.15s; color: #3a3028; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.07), 0 1px 3px rgba(255,255,255,0.9); white-space: nowrap; position: relative; }
   .filter-chip:hover { border-color: var(--blue-light); color: var(--blue); }
   .filter-chip.active { background: linear-gradient(135deg, #1e4068, #1a3a5c); color: white; border-color: #1a3a5c; box-shadow: 0 3px 10px rgba(26,58,92,0.35), inset 0 1px 0 rgba(255,255,255,0.12); }
-  .dropdown-menu { display: none; position: absolute; top: calc(100% + 6px); left: 0; background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 200; min-width: 160px; overflow: hidden; }
+  .dropdown-menu { display: none; position: fixed; background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 500; min-width: 160px; overflow: hidden; }
   .filter-chip.open .dropdown-menu { display: block; }
   .dropdown-item { padding: 9px 16px; font-size: 13px; cursor: pointer; color: var(--gray-800); transition: background 0.1s; }
   .dropdown-item:hover { background: var(--gray-100); }
@@ -1978,8 +1978,20 @@ function clearFilters() { filters = { date: 'all', city: 'all', type: 'all', cos
 function toggleDropdown(id, e) {
   e.stopPropagation();
   const chipId = 'chip-' + id.replace('dd-','');
-  document.querySelectorAll('.filter-chip').forEach(c => { if (c.id !== chipId) c.classList.remove('open'); });
-  document.getElementById(chipId).classList.toggle('open');
+  const chip = document.getElementById(chipId);
+  const isOpen = chip.classList.contains('open');
+
+  // Close all first
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open'));
+
+  if (!isOpen) {
+    // Position the dropdown using fixed coords from chip's bounding rect
+    const rect = chip.getBoundingClientRect();
+    const menu = document.getElementById(id);
+    menu.style.top = (rect.bottom + 6) + 'px';
+    menu.style.left = rect.left + 'px';
+    chip.classList.add('open');
+  }
 }
 document.addEventListener('click', closeAllDropdowns);
 
