@@ -161,9 +161,14 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - Audience tag colors fixed (All Ages, Parents added)
 - Syntax check added to pre-push routine after a syntax error broke the site
 
----
-
-## Known Issues / Watch Points
+### Session 6 (Mar 7, 2026) — Share, Lightbox, Mobile Fixes
+- **Share event feature:** Share button added to every event card (icon) and inside event modal (full button)
+- **Deep link:** `?event=ID` URL param — opens specific event modal on page load
+- **Share behavior:** Native share sheet on mobile, clipboard copy + toast on desktop
+- **Lightbox:** Clicking event image in modal opens full flyer on black overlay, X to close
+- **Mobile layout audit:** Expanded media query with fixes for filter bar (horizontal scroll), cards, forms, topbar, confirmation page, edit/cancel bar
+- **Default flyer placeholder:** Decided to design a branded default image for events without an uploaded flyer (pending — next session)
+- **projectTracking.md updated** to reflect session history
 - Supabase free tier auto-pauses after 1 week of inactivity — must disable before go-live
 - Agent cannot test the live site directly — owner must verify after each deploy
 - GitHub token must be reshared at the start of every new session

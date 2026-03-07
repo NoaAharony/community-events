@@ -125,7 +125,7 @@
   .share-toast.show { opacity: 1; }
 
   /* Modal image — clickable */
-  .modal-event-img { cursor: zoom-in; }
+  .modal-event-img { cursor: default; }
   .modal-img-hint { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.55); color: white; font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 20px; display: flex; align-items: center; gap: 4px; pointer-events: none; }
   .modal-img-hint svg { width: 10px; height: 10px; }
   .modal-event-img-wrap { position: relative; margin-bottom: 16px; }
@@ -246,13 +246,56 @@
   .inline-error { background: #fef0f0; border: 1px solid #f0c0c0; border-radius: 4px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 12px; }
 
   @media (max-width: 600px) {
+    /* Modal */
     .modal-fields { grid-template-columns: 1fr; }
     .modal-field.full { grid-column: span 1; }
+
+    /* Forms */
     .form-row { grid-template-columns: 1fr; }
+    .form-body { padding: 16px 12px; }
+    .form-section { padding: 16px; }
+    .form-section-title { margin: -16px -16px 16px -16px; }
+    .form-actions { padding: 12px; gap: 8px; flex-wrap: wrap; }
+    .form-actions .btn-secondary, .form-actions .btn-primary { flex: 1; text-align: center; }
+    .edit-cancel-bar { flex-direction: column; gap: 10px; }
+    .edit-cancel-bar .btn-right { width: 100%; }
+    .edit-cancel-bar .btn-right button { flex: 1; }
+    .edit-cancel-bar .btn-secondary { width: 100%; text-align: center; }
+
+    /* Filter bar — horizontal scroll on mobile */
+    .filter-bar { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 10px 16px; gap: 6px; scrollbar-width: none; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-label { display: none; }
+    .filter-chip { white-space: nowrap; flex-shrink: 0; font-size: 12px; padding: 6px 12px; }
+
+    /* Cards */
+    .row-thumb { width: 80px; min-width: 80px; }
+    .row-main { padding: 10px 12px; }
+    .row-title { font-size: 13.5px; }
+    .row-arrow { padding: 0 10px; min-width: 36px; font-size: 18px; }
+    .share-card-btn { right: 38px; width: 26px; height: 26px; top: 8px; }
+
+    /* Topbar */
     .admin-stats { grid-template-columns: 1fr 1fr; }
     .site-name { font-size: 15px; }
+    .btn-submit-top { font-size: 12px; padding: 7px 12px; }
+
+    /* Confirmation */
     .confirmation-actions { flex-direction: column; }
+    .confirmation-box { margin: 20px auto; }
+
+    /* Page header */
+    .page-header { padding: 16px; }
+    .page-header h1 { font-size: 20px; }
+
+    /* Modal image */
+    .modal-event-img { height: 120px; }
+
+    /* Contact */
     .contact-phone-desktop { display: none; }
+
+    /* About */
+    .about-body { padding: 24px 16px; }
   }
   @media (min-width: 601px) {
     .contact-call-mobile { display: none; }
