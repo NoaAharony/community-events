@@ -1198,7 +1198,7 @@
       <p style="font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:16px;">How would you like to handle it?</p>
       <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px;">
         <button class="btn-danger" style="padding:13px; text-align:left; display:flex; flex-direction:column; gap:3px;" onclick="confirmCancelEvent('keep')">
-          <span style="font-size:13px; font-weight:700;">Mark as Cancelled — keep visible</span>
+          <span style="font-size:13px; font-weight:700;">Mark as Cancelled - keep visible</span>
           <span style="font-size:11px; font-weight:400; opacity:0.85;">The event stays on the site with a "Cancelled" badge so people know it's off</span>
         </button>
         <button style="background:#6b6355; color:white; border:none; padding:13px; border-radius:4px; cursor:pointer; text-align:left; display:flex; flex-direction:column; gap:3px; font-family:'Nunito',sans-serif;" onclick="confirmCancelEvent('remove')">
@@ -1832,7 +1832,7 @@ function resetSubmitForm() {
   // default start time to 5:00 PM
   const sStart = document.getElementById('s-start-time'); if(sStart) sStart.value = '17:00:00';
   const sEnd = document.getElementById('s-end-time'); if(sEnd) sEnd.value = '';
-  const hint = document.getElementById('contact-hint'); if(hint) hint.textContent = "Visitors will be able to reach you privately through a form — your details won't be shown publicly";
+  const hint = document.getElementById('contact-hint'); if(hint) hint.textContent = "Visitors will be able to reach you privately through a form - your details won't be shown publicly";
   const en = document.getElementById('s-email-note'); if(en){en.textContent='🔒 Not shown publicly'; en.classList.remove('visible');}
   const pn = document.getElementById('s-phone-note'); if(pn){pn.textContent='🔒 Not shown publicly'; pn.classList.remove('visible');}
   removeImage();
