@@ -1203,7 +1203,8 @@ const SEND_EMAIL_URL = 'https://pscedpbjswyajgledixu.supabase.co/functions/v1/se
 
 async function sendEmail(payload) {
   try {
-    await fetch(SEND_EMAIL_URL, {
+    console.log('Sending email:', payload.type, 'to', payload.organizer_email);
+    const res = await fetch(SEND_EMAIL_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1212,6 +1213,8 @@ async function sendEmail(payload) {
       },
       body: JSON.stringify(payload),
     });
+    const data = await res.json();
+    console.log('Email result:', res.status, JSON.stringify(data));
   } catch (e) {
     console.warn('Email send failed:', e.message);
   }
