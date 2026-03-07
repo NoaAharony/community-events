@@ -9,7 +9,7 @@
 
 ## Priority 2 — Soon After Launch
 - [ ] **Custom domain / URL** — replace `community-events.naharony.workers.dev` with a real domain.
-- [ ] **Share event + deep link** — share button on event cards, URL like `?event=ID` so a specific event opens directly when link is shared.
+- [x] **Share event + deep link** — share button on event cards, URL like `?event=ID` so a specific event opens directly when link is shared. Also added lightbox to view full flyer image. *(Session 6, Mar 7 2026)*
 - [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form.
 - [ ] **Hebrew language toggle** — full UI toggle between Hebrew and English.
 
