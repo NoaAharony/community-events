@@ -1,5 +1,20 @@
 # Agent Rules — Israeli Events Atlanta
 
+## How to Start Every New Session
+1. Ask the owner for the **GitHub token** — it must be provided fresh each session.
+2. Clone the repo:
+   ```
+   git clone https://<TOKEN>@github.com/NoaAharony/community-events.git /home/claude/repo
+   ```
+3. Read these files **before doing anything else**:
+   - `agentRules.md` — working rules (this file)
+   - `projectTracking.md` — full project history, tech stack, design decisions
+   - `backlog.md` — all pending tasks
+4. Confirm to the owner that you've read them and summarize what's pending.
+5. Only then start working.
+
+---
+
 ## About the Owner
 - **Not a developer. Not technical.** Do not use technical jargon without explaining it.
 - Communicate in **English only** in responses, even if the owner writes in Hebrew.
