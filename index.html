@@ -137,7 +137,9 @@
   .form-input:focus { outline: none; border-color: var(--blue-light); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .privacy-note { font-size: 11px; color: var(--gray-400); margin-top: 6px; }
+  .privacy-note.visible { font-size: 12px; color: #b06820; font-weight: 700; }
   .field-hint { font-size: 11px; color: var(--gray-400); margin-top: 4px; font-style: italic; }
+  .field-hint.contact-important { font-size: 13px; color: #7a4010; font-weight: 700; font-style: normal; margin-top: 10px; background: #fff8ee; border: 1.5px solid #e8c87a; border-radius: 6px; padding: 9px 13px; line-height: 1.5; }
 
   .page-view { display: none; }
   .page-view.active { display: block; }
@@ -566,12 +568,12 @@
         <div class="form-group">
           <label>Email <span class="req">*</span></label>
           <input class="form-input" id="s-email" type="email" placeholder="your@email.com">
-          <div class="privacy-note">🔒 Not shown publicly</div>
+          <div class="privacy-note" id="s-email-note">🔒 Not shown publicly</div>
         </div>
         <div class="form-group">
           <label>Phone <span class="optional-tag">(optional)</span></label>
           <input class="form-input" id="s-phone" type="tel" placeholder="+1 (404) 555-0000">
-          <div class="privacy-note">🔒 Not shown publicly</div>
+          <div class="privacy-note" id="s-phone-note">🔒 Not shown publicly</div>
         </div>
       </div>
       <div class="form-group">
@@ -580,7 +582,7 @@
           <button class="toggle-btn" onclick="setContactOptIn(true,this)">Yes</button>
           <button class="toggle-btn on" onclick="setContactOptIn(false,this)">No</button>
         </div>
-        <div class="field-hint" id="contact-hint" style="font-size:13px; margin-top:8px; color:var(--gray-600); line-height:1.5;">Visitors will be able to reach you privately through a form — your details won't be shown publicly</div>
+        <div class="field-hint contact-important" id="contact-hint">Visitors will be able to reach you privately through a form — your details won't be shown publicly</div>
       </div>
     </div>
 
@@ -888,20 +890,23 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Email</label>
+          <label>Email <span class="req">*</span></label>
           <input class="form-input" id="e-email" type="email">
+          <div class="privacy-note" id="e-email-note">🔒 Not shown publicly</div>
         </div>
         <div class="form-group">
-          <label>Phone</label>
+          <label>Phone <span class="optional-tag">(optional)</span></label>
           <input class="form-input" id="e-phone" type="tel">
+          <div class="privacy-note" id="e-phone-note">🔒 Not shown publicly</div>
         </div>
       </div>
       <div class="form-group">
-        <label>Allow visitors to contact you?</label>
+        <label>Allow visitors to contact you? <span class="req">*</span></label>
         <div class="toggle-group">
           <button class="toggle-btn" id="e-contact-yes" onclick="setEditContactOptIn(true,this)">Yes</button>
           <button class="toggle-btn" id="e-contact-no" onclick="setEditContactOptIn(false,this)">No</button>
         </div>
+        <div class="field-hint contact-important" id="e-contact-hint">Visitors will be able to reach you privately through a form — your details won't be shown publicly</div>
       </div>
     </div>
 
@@ -1637,6 +1642,8 @@ function resetSubmitForm() {
   const sStart = document.getElementById('s-start-time'); if(sStart) sStart.value = '17:00:00';
   const sEnd = document.getElementById('s-end-time'); if(sEnd) sEnd.value = '';
   const hint = document.getElementById('contact-hint'); if(hint) hint.textContent = "Visitors will be able to reach you privately through a form — your details won't be shown publicly";
+  const en = document.getElementById('s-email-note'); if(en){en.textContent='🔒 Not shown publicly'; en.classList.remove('visible');}
+  const pn = document.getElementById('s-phone-note'); if(pn){pn.textContent='🔒 Not shown publicly'; pn.classList.remove('visible');}
   removeImage();
 }
 
@@ -1726,8 +1733,9 @@ async function saveEvent() {
   const eCitySelect = document.getElementById('e-city').value;
   const city = eCitySelect === 'other' ? document.getElementById('e-city-other').value.trim() : eCitySelect;
   const organizer = document.getElementById('e-organizer').value.trim();
+  const editEmail = document.getElementById('e-email').value.trim();
 
-  if (!name || !date || !startTime || !city || !organizer) {
+  if (!name || !date || !startTime || !city || !organizer || !editEmail) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
     errDiv.style.display = 'block';
     return;
@@ -1909,9 +1917,17 @@ function setContactOptIn(val, btn) {
   submitFormState.contactOptIn = val;
   if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');}
   const hint = document.getElementById('contact-hint');
-  if(hint) hint.textContent = val
-    ? 'Your email and phone will appear publicly on your event so visitors can contact you directly'
-    : 'Visitors will be able to reach you privately through a form — your details won\'t be shown publicly';
+  const emailNote = document.getElementById('s-email-note');
+  const phoneNote = document.getElementById('s-phone-note');
+  if(val) {
+    if(hint) hint.textContent = '⚠️ Your email and phone will appear publicly on your event so visitors can contact you directly';
+    if(emailNote) { emailNote.textContent = '👁 Will appear on your event page'; emailNote.classList.add('visible'); }
+    if(phoneNote) { phoneNote.textContent = '👁 Will appear on your event page'; phoneNote.classList.add('visible'); }
+  } else {
+    if(hint) hint.textContent = "Visitors will be able to reach you privately through a form — your details won't be shown publicly";
+    if(emailNote) { emailNote.textContent = '🔒 Not shown publicly'; emailNote.classList.remove('visible'); }
+    if(phoneNote) { phoneNote.textContent = '🔒 Not shown publicly'; phoneNote.classList.remove('visible'); }
+  }
 }
 
 function setEditCost(type, btn) {
@@ -1923,7 +1939,23 @@ function setEditCost(type, btn) {
 }
 function setEditAddressVisibility(val, btn) { editFormState.addressPublic = val; const yes=document.getElementById('e-addr-yes'), no=document.getElementById('e-addr-no'); if(yes&&no){yes.classList.toggle('on',val); no.classList.toggle('on',!val);} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function setEditOrgType(val, btn) { editFormState.orgType = val; const b=document.getElementById('e-org-business'), i=document.getElementById('e-org-individual'); if(b&&i){b.classList.toggle('on',val==='Business'); i.classList.toggle('on',val==='Individual');} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
-function setEditContactOptIn(val, btn) { editFormState.contactOptIn = val; const y=document.getElementById('e-contact-yes'), n=document.getElementById('e-contact-no'); if(y&&n){y.classList.toggle('on',val); n.classList.toggle('on',!val);} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+function setEditContactOptIn(val, btn) {
+  editFormState.contactOptIn = val;
+  const y=document.getElementById('e-contact-yes'), n=document.getElementById('e-contact-no');
+  if(y&&n){y.classList.toggle('on',val); n.classList.toggle('on',!val);}
+  const hint = document.getElementById('e-contact-hint');
+  const emailNote = document.getElementById('e-email-note');
+  const phoneNote = document.getElementById('e-phone-note');
+  if(val) {
+    if(hint) hint.textContent = '⚠️ Your email and phone will appear publicly on your event so visitors can contact you directly';
+    if(emailNote){emailNote.textContent='👁 Will appear on your event page'; emailNote.classList.add('visible');}
+    if(phoneNote){phoneNote.textContent='👁 Will appear on your event page'; phoneNote.classList.add('visible');}
+  } else {
+    if(hint) hint.textContent = "Visitors will be able to reach you privately through a form — your details won't be shown publicly";
+    if(emailNote){emailNote.textContent='🔒 Not shown publicly'; emailNote.classList.remove('visible');}
+    if(phoneNote){phoneNote.textContent='🔒 Not shown publicly'; phoneNote.classList.remove('visible');}
+  }
+}
 
 function handleImageSelect(input) {
   const file = input.files[0];
