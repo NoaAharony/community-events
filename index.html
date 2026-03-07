@@ -1967,6 +1967,8 @@ function formatPhoneInput(input) {
   else if (v.length > 0) v = '(' + v;
   input.value = v;
 }
+
+function handleImageSelect(input) {
   const file = input.files[0];
   if (!file) return;
   if (!file.type.startsWith('image/')) {
