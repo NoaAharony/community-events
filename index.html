@@ -286,12 +286,12 @@
     <div class="filter-chip" id="chip-audience" onclick="toggleDropdown('dd-audience', event)">
       <span id="audience-label">For</span> ▾
       <div class="dropdown-menu" id="dd-audience">
-        <div class="dropdown-item selected" onclick="setAudienceFilter('all','For',event)">Everyone</div>
+        <div class="dropdown-item selected" onclick="setAudienceFilter('all','For',event)">All</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Adults','Adults',event)">Adults</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Parents','Parents',event)">Parents</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Families','Families',event)">Families</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Kids','Kids',event)">Kids</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Teens','Teens',event)">Teens</div>
-        <div class="dropdown-item" onclick="setAudienceFilter('Seniors','Seniors',event)">Seniors</div>
       </div>
     </div>
   </div>
@@ -460,18 +460,20 @@
           </select>
         </div>
         <div class="form-group">
-          <label>For <span class="optional-tag">(optional)</span></label>
+          <label>For <span class="req">*</span></label>
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Adults"> Adults</label>
+              <input type="checkbox" name="s-audience" value="All Ages" onchange="handleAllAges(this,'s')"> All Ages</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Families"> Families</label>
+              <input type="checkbox" name="s-audience" value="Adults" onchange="handleSpecificAudience(this,'s')"> Adults</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Kids"> Kids</label>
+              <input type="checkbox" name="s-audience" value="Parents" onchange="handleSpecificAudience(this,'s')"> Parents</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Teens"> Teens</label>
+              <input type="checkbox" name="s-audience" value="Families" onchange="handleSpecificAudience(this,'s')"> Families</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Seniors"> Seniors</label>
+              <input type="checkbox" name="s-audience" value="Kids" onchange="handleSpecificAudience(this,'s')"> Kids</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="Teens" onchange="handleSpecificAudience(this,'s')"> Teens</label>
           </div>
         </div>
       </div>
@@ -781,18 +783,20 @@
           </select>
         </div>
         <div class="form-group">
-          <label>For <span class="optional-tag">(optional)</span></label>
+          <label>For <span class="req">*</span></label>
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;">
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Adults"> Adults</label>
+              <input type="checkbox" name="e-audience" value="All Ages" onchange="handleAllAges(this,'e')"> All Ages</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Families"> Families</label>
+              <input type="checkbox" name="e-audience" value="Adults" onchange="handleSpecificAudience(this,'e')"> Adults</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Kids"> Kids</label>
+              <input type="checkbox" name="e-audience" value="Parents" onchange="handleSpecificAudience(this,'e')"> Parents</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Teens"> Teens</label>
+              <input type="checkbox" name="e-audience" value="Families" onchange="handleSpecificAudience(this,'e')"> Families</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Seniors"> Seniors</label>
+              <input type="checkbox" name="e-audience" value="Kids" onchange="handleSpecificAudience(this,'e')"> Kids</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="Teens" onchange="handleSpecificAudience(this,'e')"> Teens</label>
           </div>
         </div>
       </div>
@@ -1211,7 +1215,7 @@ function renderEvents() {
     if (filters.cost !== 'all' && e.cost !== filters.cost) return false;
     if (filters.audience !== 'all') {
       const audiences = (e.audience || '').split(',').map(a => a.trim());
-      if (!audiences.includes(filters.audience)) return false;
+      if (!audiences.includes('All Ages') && !audiences.includes(filters.audience)) return false;
     }
     return true;
   }
@@ -1496,6 +1500,23 @@ function getAudienceValues() {
   return Array.from(checked).map(c => c.value).join(', ');
 }
 
+function handleAllAges(cb, prefix) {
+  if (cb.checked) {
+    // Uncheck all specific options
+    document.querySelectorAll(`input[name="${prefix}-audience"]`).forEach(c => {
+      if (c.value !== 'All Ages') c.checked = false;
+    });
+  }
+}
+
+function handleSpecificAudience(cb, prefix) {
+  if (cb.checked) {
+    // Uncheck All Ages if a specific option is picked
+    const allAges = document.querySelector(`input[name="${prefix}-audience"][value="All Ages"]`);
+    if (allAges) allAges.checked = false;
+  }
+}
+
 function handleCityOther(selectId, otherId) {
   const sel = document.getElementById(selectId);
   const other = document.getElementById(otherId);
@@ -1520,7 +1541,7 @@ async function submitEvent() {
   const city = citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect;
   const organizer = document.getElementById('s-organizer').value.trim();
 
-  if (!name || !date || !startTime || !type || !city || !organizer) {
+  if (!name || !date || !startTime || !type || !audience || !city || !organizer) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
     errDiv.style.display = 'block';
     return;
