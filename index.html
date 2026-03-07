@@ -544,7 +544,7 @@
           <button class="toggle-btn" onclick="setAddressVisibility(true,this)">Yes - show publicly</button>
           <button class="toggle-btn on" onclick="setAddressVisibility(false,this)">No - keep private</button>
         </div>
-        <div class="field-hint">If No - visitors will see city only and can request the address</div>
+        <div class="field-hint" id="s-address-hint">Visitors will see city only and can request the address from you privately</div>
       </div>
     </div>
 
@@ -869,6 +869,7 @@
           <button class="toggle-btn" id="e-addr-yes" onclick="setEditAddressVisibility(true,this)">Yes - show publicly</button>
           <button class="toggle-btn" id="e-addr-no" onclick="setEditAddressVisibility(false,this)">No - keep private</button>
         </div>
+        <div class="field-hint" id="e-address-hint">Visitors will see city only and can request the address from you privately</div>
       </div>
     </div>
 
@@ -1912,7 +1913,14 @@ function setCost(type, btn) {
     ? "Describe your event. If accepting payment via Venmo, Zelle, or other method, include payment instructions here."
     : "Describe your event...";
 }
-function setAddressVisibility(val, btn) { submitFormState.addressPublic = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+function setAddressVisibility(val, btn) {
+  submitFormState.addressPublic = val;
+  if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');}
+  const hint = document.getElementById('s-address-hint');
+  if(hint) hint.textContent = val
+    ? 'The full address will be visible to everyone on your event page'
+    : 'Visitors will see city only and can request the address from you privately';
+}
 function toggleAddressVisibility(val, groupId) { document.getElementById(groupId).style.display = val.trim() ? 'block' : 'none'; }
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function setContactOptIn(val, btn) {
@@ -1939,7 +1947,16 @@ function setEditCost(type, btn) {
   document.getElementById('e-amount-field').classList.toggle('show', type === 'Paid');
   if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');}
 }
-function setEditAddressVisibility(val, btn) { editFormState.addressPublic = val; const yes=document.getElementById('e-addr-yes'), no=document.getElementById('e-addr-no'); if(yes&&no){yes.classList.toggle('on',val); no.classList.toggle('on',!val);} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+function setEditAddressVisibility(val, btn) {
+  editFormState.addressPublic = val;
+  const yes=document.getElementById('e-addr-yes'), no=document.getElementById('e-addr-no');
+  if(yes&&no){yes.classList.toggle('on',val); no.classList.toggle('on',!val);}
+  if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');}
+  const hint = document.getElementById('e-address-hint');
+  if(hint) hint.textContent = val
+    ? 'The full address will be visible to everyone on your event page'
+    : 'Visitors will see city only and can request the address from you privately';
+}
 function setEditOrgType(val, btn) { editFormState.orgType = val; const b=document.getElementById('e-org-business'), i=document.getElementById('e-org-individual'); if(b&&i){b.classList.toggle('on',val==='Business'); i.classList.toggle('on',val==='Individual');} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function setEditContactOptIn(val, btn) {
   editFormState.contactOptIn = val;
