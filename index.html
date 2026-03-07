@@ -6,11 +6,10 @@
 <title>Israeli Community Events – Metro Atlanta</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* Use Assistant for Hebrew characters, Nunito for everything else */
-  @font-face {
-    font-family: 'Nunito';
-    src: local('Assistant');
-    unicode-range: U+0590-05FF, U+FB1D-FB4F;
+  /* Elements that can contain Hebrew text: Assistant first so Hebrew glyphs render correctly */
+  .row-title, .modal-event-title, .row-meta, .modal-field,
+  .form-input, textarea, .form-body, .modal-body {
+    font-family: 'Assistant', 'Nunito', sans-serif;
   }
 </style>
 <style>
@@ -535,9 +534,9 @@
       </div>
       <div class="form-group">
         <label>Full Address <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="s-address" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA">
+        <input class="form-input" id="s-address" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA" oninput="toggleAddressVisibility(this.value, 'addr-visibility-submit')">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="addr-visibility-submit" style="display:none;">
         <label>Show address publicly? <span class="req">*</span></label>
         <div class="toggle-group">
           <button class="toggle-btn" onclick="setAddressVisibility(true,this)">Yes - show publicly</button>
@@ -860,9 +859,9 @@
       </div>
       <div class="form-group">
         <label>Full Address <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="e-address" type="text">
+        <input class="form-input" id="e-address" type="text" oninput="toggleAddressVisibility(this.value, 'addr-visibility-edit')">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="addr-visibility-edit" style="display:none;">
         <label>Show address publicly?</label>
         <div class="toggle-group">
           <button class="toggle-btn" id="e-addr-yes" onclick="setEditAddressVisibility(true,this)">Yes - show publicly</button>
@@ -1678,6 +1677,7 @@ async function loadEditPage(editKey) {
       document.getElementById('e-city-other').style.display = 'block';
     }
     document.getElementById('e-address').value = e.full_address || '';
+    if (e.full_address) toggleAddressVisibility(e.full_address, 'addr-visibility-edit');
     document.getElementById('e-organizer').value = e.organizer_name || '';
     document.getElementById('e-email').value = e.contact_email || '';
     document.getElementById('e-phone').value = e.contact_phone || '';
@@ -1895,6 +1895,7 @@ function setCost(type, btn) {
     : "Describe your event...";
 }
 function setAddressVisibility(val, btn) { submitFormState.addressPublic = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
+function toggleAddressVisibility(val, groupId) { document.getElementById(groupId).style.display = val.trim() ? 'block' : 'none'; }
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function setContactOptIn(val, btn) { submitFormState.contactOptIn = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 
