@@ -377,6 +377,7 @@
         <div class="dropdown-item" onclick="setCityFilter('Roswell','Roswell',event)">Roswell</div>
         <div class="dropdown-item" onclick="setCityFilter('Sandy Springs','Sandy Springs',event)">Sandy Springs</div>
         <div class="dropdown-item" onclick="setCityFilter('Suwanee','Suwanee',event)">Suwanee</div>
+        <div class="dropdown-item" onclick="setCityFilter('Online Event','Online Event',event)">Online Event</div>
         <div class="dropdown-item" id="city-filter-other" style="display:none" onclick="setCityFilter('other','Other',event)">Other</div>
       </div>
     </div>
@@ -625,7 +626,7 @@
       <div class="form-section-title">2 · Location</div>
       <div class="form-group">
         <label>City <span class="req">*</span></label>
-        <select class="form-input" id="s-city" onchange="handleCityOther('s-city','s-city-other')">
+        <select class="form-input" id="s-city" onchange="handleCityOther('s-city','s-city-other'); handleOnlineCity('s')">
             <option value="">Select city...</option>
             <option>Alpharetta</option>
             <option>Atlanta</option>
@@ -639,22 +640,31 @@
             <option>Roswell</option>
             <option>Sandy Springs</option>
             <option>Suwanee</option>
+            <option value="Online Event">Online Event</option>
             <option value="other">Other...</option>
           </select>
           <input class="form-input" id="s-city-other" autocomplete="off" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
       </div>
-      <div class="form-group">
-        <label>Full Address <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="s-address" autocomplete="off" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA" oninput="toggleAddressVisibility(this.value, 'addr-visibility-submit')">
-      </div>
-      <div class="form-group" id="addr-visibility-submit" style="display:none;">
-        <label>Show address publicly? <span class="req">*</span></label>
-        <div class="toggle-group">
-          <button class="toggle-btn" onclick="setAddressVisibility(true,this)">Yes - show publicly</button>
-          <button class="toggle-btn on" onclick="setAddressVisibility(false,this)">No - keep private</button>
+      <!-- Address section - hidden when Online Event selected -->
+      <div id="s-address-section">
+        <div class="form-group">
+          <label>Address <span class="req">*</span></label>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
+            <label style="border:1.5px solid var(--gray-200); border-radius:6px; padding:13px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; transition:all 0.15s;" id="s-addr-radio-public" onclick="setAddressVisibility(true, 's')">
+              <span id="s-radio-public" style="width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;"></span>
+              <span><strong style="font-size:14px;color:var(--gray-800);">Show full address publicly</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see the exact address on the event page</span></span>
+            </label>
+            <label style="border:1.5px solid var(--blue); border-radius:6px; padding:13px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; background:#f0f5fb; transition:all 0.15s;" id="s-addr-radio-private" onclick="setAddressVisibility(false, 's')">
+              <span id="s-radio-private" style="width:18px;height:18px;border-radius:50%;border:2px solid var(--blue);background:var(--blue);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="width:6px;height:6px;border-radius:50%;background:white;display:block;"></span></span>
+              <span><strong style="font-size:14px;color:var(--gray-800);">Keep address private</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see city only and can request the address from you</span></span>
+            </label>
+          </div>
+          <input class="form-input" id="s-address" autocomplete="off" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA">
+          <div id="s-address-hint" style="font-size:12px; color:#5c3d10; font-weight:700; margin-top:10px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; display:none;"></div>
         </div>
-        <div id="s-address-hint" style="font-size:12px; color:#5c3d10; font-weight:700; margin-top:10px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5;">Visitors will see city only. When someone requests your address, your reply email will be pre-filled with the full address.</div>
       </div>
+      <!-- Online event hint -->
+      <div id="s-online-hint" style="display:none; font-size:12px; color:#5c3d10; font-weight:700; margin-top:4px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5;">This is an online event. No address needed - make sure to add a registration link or show your contact details so visitors can contact you.</div>
     </div>
 
     <div class="form-section">
@@ -686,7 +696,7 @@
         </div>
       </div>
       <div class="form-group" id="s-contact-details-group" style="display:none;">
-        <label>Show your contact details on the event page?</label>
+        <label id="s-contact-label">Show your contact details on the event page?</label>
         <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px;">
           <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
             <input type="checkbox" id="s-show-email" autocomplete="off" onchange="updateContactHint('s')"> Show my email
@@ -696,6 +706,7 @@
           </label>
         </div>
         <div class="field-hint" id="s-contact-hint">Your email and phone won't be shown on the event page.</div>
+        <div id="s-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Please show at least your email or phone.</div>
       </div>
     </div>
 
@@ -955,7 +966,7 @@
       <div class="form-section-title">2 · Location</div>
       <div class="form-group">
         <label>City <span class="req">*</span></label>
-        <select class="form-input" id="e-city" onchange="handleCityOther('e-city','e-city-other')">
+        <select class="form-input" id="e-city" onchange="handleCityOther('e-city','e-city-other'); handleOnlineCity('e')">
             <option value="">Select city...</option>
             <option>Alpharetta</option>
             <option>Atlanta</option>
@@ -969,22 +980,31 @@
             <option>Roswell</option>
             <option>Sandy Springs</option>
             <option>Suwanee</option>
+            <option value="Online Event">Online Event</option>
             <option value="other">Other...</option>
           </select>
           <input class="form-input" id="e-city-other" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
       </div>
-      <div class="form-group">
-        <label>Full Address <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="e-address" type="text" oninput="toggleAddressVisibility(this.value, 'addr-visibility-edit')">
-      </div>
-      <div class="form-group" id="addr-visibility-edit" style="display:none;">
-        <label>Show address publicly?</label>
-        <div class="toggle-group">
-          <button class="toggle-btn" id="e-addr-yes" onclick="setEditAddressVisibility(true,this)">Yes - show publicly</button>
-          <button class="toggle-btn" id="e-addr-no" onclick="setEditAddressVisibility(false,this)">No - keep private</button>
+      <!-- Address section - hidden when Online Event selected -->
+      <div id="e-address-section">
+        <div class="form-group">
+          <label>Address <span class="req">*</span></label>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
+            <label style="border:1.5px solid var(--gray-200); border-radius:6px; padding:13px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; transition:all 0.15s;" id="e-addr-radio-public" onclick="setEditAddressVisibility(true)">
+              <span id="e-radio-public" style="width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;"></span>
+              <span><strong style="font-size:14px;color:var(--gray-800);">Show full address publicly</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see the exact address on the event page</span></span>
+            </label>
+            <label style="border:1.5px solid var(--gray-200); border-radius:6px; padding:13px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; transition:all 0.15s;" id="e-addr-radio-private" onclick="setEditAddressVisibility(false)">
+              <span id="e-radio-private" style="width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;"></span>
+              <span><strong style="font-size:14px;color:var(--gray-800);">Keep address private</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see city only and can request the address from you</span></span>
+            </label>
+          </div>
+          <input class="form-input" id="e-address" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA">
+          <div id="e-address-hint" style="font-size:12px; color:#5c3d10; font-weight:700; margin-top:10px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; display:none;"></div>
         </div>
-        <div id="e-address-hint" style="font-size:12px; color:#5c3d10; font-weight:700; margin-top:10px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5;">Visitors will see city only. When someone requests your address, your reply email will be pre-filled with the full address.</div>
       </div>
+      <!-- Online event hint -->
+      <div id="e-online-hint" style="display:none; font-size:12px; color:#5c3d10; font-weight:700; margin-top:4px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5;">This is an online event. No address needed - make sure to add a registration link or show your contact details so visitors can contact you.</div>
     </div>
 
     <div class="form-section">
@@ -1016,7 +1036,7 @@
         </div>
       </div>
       <div class="form-group" id="e-contact-details-group" style="display:none;">
-        <label>Show your contact details on the event page?</label>
+        <label id="e-contact-label">Show your contact details on the event page?</label>
         <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px;">
           <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
             <input type="checkbox" id="e-show-email" onchange="updateContactHint('e')"> Show my email
@@ -1026,6 +1046,7 @@
           </label>
         </div>
         <div class="field-hint" id="e-contact-hint">Your email and phone won't be shown on the event page.</div>
+        <div id="e-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Please show at least your email or phone.</div>
       </div>
     </div>
 
@@ -1596,9 +1617,14 @@ function openEventModal(id) {
 
   let addressHtml = '';
   if (e.address_public && e.full_address) {
+    // Type 2: public address - show it
     addressHtml = `<div class="modal-field full"><label>Address</label><span>${e.full_address}</span></div>`;
+  } else if (!e.address_public && e.full_address) {
+    // Type 3: private address - show request button
+    addressHtml = `<div class="modal-field full"><label>City</label><span>${e.city} <button onclick="openAddressRequest('${e.id}')" style="margin-left:10px; background:var(--blue); color:white; border:none; padding:5px 12px; border-radius:4px; font-size:12px; cursor:pointer; font-family:'Nunito',sans-serif;">Request Address</button></span></div>`;
   } else {
-    addressHtml = `<div class="modal-field full"><label>City</label><span>${e.city} <button onclick="openAddressRequest('${e.id}')" style="margin-left:10px; background:var(--blue); color:white; border:none; padding:5px 12px; border-radius:4px; font-size:12px; cursor:pointer; font-family:'Nunito',sans-serif;">📍 Request Address</button></span></div>`;
+    // No address (online event or reg link only) - just show city
+    addressHtml = `<div class="modal-field full"><label>City</label><span>${e.city}</span></div>`;
   }
 
   let contactHtml = '';
@@ -1803,9 +1829,11 @@ async function submitEvent() {
   const audience = getAudienceValues();
   const citySelect = document.getElementById('s-city').value;
   const city = citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect;
+  const isOnline = citySelect === 'Online Event';
   const organizer = document.getElementById('s-organizer').value.trim();
-
   const email = document.getElementById('s-email').value.trim();
+  const regLink = document.getElementById('s-reg-link').value.trim();
+  const address = document.getElementById('s-address').value.trim();
 
   if (!name || !date || !startTime || !type || !audience || !city || !organizer || !email) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
@@ -1822,14 +1850,19 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
-
-  // Warning if public address but no contact details shown
-  if (submitFormState.addressPublic) {
-    const showEmail = document.getElementById('s-show-email') ? document.getElementById('s-show-email').checked : false;
-    const showPhone = document.getElementById('s-show-phone') ? document.getElementById('s-show-phone').checked : false;
-    if (!showEmail && !showPhone) {
-      if (!confirm("You chose not to show any contact details. Visitors won't be able to reach you. Continue anyway?")) return;
-    }
+  // Validation: if not online and no reg link, address is required
+  if (!isOnline && !regLink && !address) {
+    errDiv.textContent = 'Please enter the event address, or add a registration link';
+    errDiv.style.display = 'block';
+    return;
+  }
+  // Validation: online event must have at least email or phone shown
+  const showEmail = document.getElementById('s-show-email') ? document.getElementById('s-show-email').checked : false;
+  const showPhone = document.getElementById('s-show-phone') ? document.getElementById('s-show-phone').checked : false;
+  if (isOnline && !regLink && !showEmail && !showPhone) {
+    errDiv.textContent = 'For online events without a registration link, please show at least your email or phone so visitors can contact you';
+    errDiv.style.display = 'block';
+    return;
   }
 
   btn.disabled = true;
@@ -1860,8 +1893,8 @@ async function submitEvent() {
       org_type: submitFormState.orgType,
       contact_email: document.getElementById('s-email').value.trim() || null,
       contact_phone: document.getElementById('s-phone').value.trim() || null,
-      show_email: submitFormState.addressPublic ? (document.getElementById('s-show-email') ? document.getElementById('s-show-email').checked : false) : false,
-      show_phone: submitFormState.addressPublic ? (document.getElementById('s-show-phone') ? document.getElementById('s-show-phone').checked : false) : false,
+      show_email: showEmail,
+      show_phone: showPhone,
       contact_opt_in: false,
       image_url: imageUrl,
       edit_key: editKey,
@@ -1903,6 +1936,13 @@ function resetSubmitForm() {
   document.querySelectorAll('input[name="s-audience"]').forEach(c => c.checked = false);
   document.getElementById('s-city').value = '';
   submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', imageFile: null };
+  // Reset address radio to "private" default
+  setAddressVisibility(false, 's');
+  // Reset online hint
+  const onlineHint = document.getElementById('s-online-hint');
+  if (onlineHint) onlineHint.style.display = 'none';
+  const addrSection = document.getElementById('s-address-section');
+  if (addrSection) addrSection.style.display = 'block';
   const sShowEmail = document.getElementById('s-show-email'); if(sShowEmail) sShowEmail.checked = false;
   const sShowPhone = document.getElementById('s-show-phone'); if(sShowPhone) sShowPhone.checked = false;
   const sCG = document.getElementById('s-contact-details-group'); if(sCG) sCG.style.display = 'none';
@@ -1963,6 +2003,8 @@ async function loadEditPage(editKey, fromAdmin = false) {
     });
     document.getElementById('e-desc').value = e.description || '';
     document.getElementById('e-reg-link').value = e.registration_link || '';
+    document.getElementById('e-address').value = e.full_address || '';
+    // Handle city - including Online Event
     const eCityEl = document.getElementById('e-city');
     eCityEl.value = e.city || '';
     if (e.city && eCityEl.value !== e.city) {
@@ -1970,9 +2012,8 @@ async function loadEditPage(editKey, fromAdmin = false) {
       document.getElementById('e-city-other').value = e.city;
       document.getElementById('e-city-other').style.display = 'block';
     }
-    document.getElementById('e-address').value = e.full_address || '';
-    if (e.full_address) toggleAddressVisibility(e.full_address, 'addr-visibility-edit');
-    document.getElementById('e-organizer').value = e.organizer_name || '';
+    // Trigger online city handler to show/hide address section
+    handleOnlineCity('e');
     document.getElementById('e-email').value = e.contact_email || '';
     document.getElementById('e-phone').value = e.contact_phone || '';
     const ePhone = document.getElementById('e-phone');
@@ -2064,8 +2105,8 @@ async function saveEvent() {
       org_type: editFormState.orgType,
       contact_email: document.getElementById('e-email').value.trim() || null,
       contact_phone: document.getElementById('e-phone').value.trim() || null,
-      show_email: editFormState.addressPublic ? (document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false) : false,
-      show_phone: editFormState.addressPublic ? (document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false) : false,
+      show_email: document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false,
+      show_phone: document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false,
       contact_opt_in: false,
     };
     if (imageUrl !== undefined) payload.image_url = imageUrl;
@@ -2220,19 +2261,70 @@ function setCost(type, btn) {
     ? "Describe your event. If accepting payment via Venmo, Zelle, or other method, include payment instructions here."
     : "Describe your event...";
 }
-function setAddressVisibility(val, btn) {
+function setAddressVisibility(val, prefix) {
   submitFormState.addressPublic = val;
-  if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');}
+  // Update radio UI
+  const pubRadio = document.getElementById('s-radio-public');
+  const privRadio = document.getElementById('s-radio-private');
+  const pubCard = document.getElementById('s-addr-radio-public');
+  const privCard = document.getElementById('s-addr-radio-private');
+  if (val) {
+    pubRadio.style.borderColor = 'var(--blue)'; pubRadio.style.background = 'var(--blue)';
+    pubRadio.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:white;display:block;"></span>';
+    privRadio.style.borderColor = 'var(--gray-200)'; privRadio.style.background = 'transparent'; privRadio.innerHTML = '';
+    pubCard.style.borderColor = 'var(--blue)'; pubCard.style.background = '#f0f5fb';
+    privCard.style.borderColor = 'var(--gray-200)'; privCard.style.background = 'transparent';
+  } else {
+    privRadio.style.borderColor = 'var(--blue)'; privRadio.style.background = 'var(--blue)';
+    privRadio.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:white;display:block;"></span>';
+    pubRadio.style.borderColor = 'var(--gray-200)'; pubRadio.style.background = 'transparent'; pubRadio.innerHTML = '';
+    privCard.style.borderColor = 'var(--blue)'; privCard.style.background = '#f0f5fb';
+    pubCard.style.borderColor = 'var(--gray-200)'; pubCard.style.background = 'transparent';
+  }
   const hint = document.getElementById('s-address-hint');
-  if(hint) hint.textContent = val
-    ? 'The full address will be visible to everyone on your event page'
-    : 'Visitors will see city only. When someone requests your address, your reply email will be pre-filled with the full address.';
-  // Show contact details checkboxes only if address is public
+  if (hint) {
+    if (val) {
+      hint.textContent = 'The full address will be visible to everyone on your event page';
+      hint.style.display = 'block';
+    } else {
+      hint.textContent = 'Visitors see city only. To receive the address, the visitor will fill out a request form which will be sent to you.';
+      hint.style.display = 'block';
+    }
+  }
+  // Show contact section only for public address (not private - request form handles it)
   const cg = document.getElementById('s-contact-details-group');
-  if(cg) cg.style.display = val ? 'block' : 'none';
+  const cl = document.getElementById('s-contact-label');
+  if (cg) {
+    if (val) {
+      cg.style.display = 'block';
+      if (cl) cl.textContent = 'Show your contact details on the event page?';
+    } else {
+      cg.style.display = 'none';
+    }
+  }
   updateContactHint('s');
 }
 function toggleAddressVisibility(val, groupId) { document.getElementById(groupId).style.display = val.trim() ? 'block' : 'none'; }
+
+function handleOnlineCity(prefix) {
+  const cityVal = document.getElementById(prefix + '-city').value;
+  const isOnline = cityVal === 'Online Event';
+  const addrSection = document.getElementById(prefix + '-address-section');
+  const onlineHint = document.getElementById(prefix + '-online-hint');
+  const contactGroup = document.getElementById(prefix + '-contact-details-group');
+  const contactLabel = document.getElementById(prefix + '-contact-label');
+  if (addrSection) addrSection.style.display = isOnline ? 'none' : 'block';
+  if (onlineHint) onlineHint.style.display = isOnline ? 'block' : 'none';
+  if (contactGroup && isOnline) {
+    contactGroup.style.display = 'block';
+    if (contactLabel) contactLabel.textContent = 'How can visitors contact you? (at least one required)';
+  } else if (contactGroup && !isOnline) {
+    // restore based on address visibility
+    const isPublic = prefix === 's' ? submitFormState.addressPublic : editFormState.addressPublic;
+    contactGroup.style.display = isPublic ? 'block' : 'none';
+    if (contactLabel) contactLabel.textContent = 'Show your contact details on the event page?';
+  }
+}
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function updateContactHint(prefix) {
   const showEmail = document.getElementById(prefix+'-show-email') ? document.getElementById(prefix+'-show-email').checked : false;
@@ -2268,16 +2360,47 @@ function setEditCost(type, btn) {
 }
 function setEditAddressVisibility(val, btn) {
   editFormState.addressPublic = val;
-  const yes=document.getElementById('e-addr-yes'), no=document.getElementById('e-addr-no');
-  if(yes&&no){yes.classList.toggle('on',val); no.classList.toggle('on',!val);}
-  if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');}
+  // Update radio UI
+  const pubRadio = document.getElementById('e-radio-public');
+  const privRadio = document.getElementById('e-radio-private');
+  const pubCard = document.getElementById('e-addr-radio-public');
+  const privCard = document.getElementById('e-addr-radio-private');
+  if (pubRadio && privRadio) {
+    if (val) {
+      pubRadio.style.borderColor = 'var(--blue)'; pubRadio.style.background = 'var(--blue)';
+      pubRadio.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:white;display:block;"></span>';
+      privRadio.style.borderColor = 'var(--gray-200)'; privRadio.style.background = 'transparent'; privRadio.innerHTML = '';
+      pubCard.style.borderColor = 'var(--blue)'; pubCard.style.background = '#f0f5fb';
+      privCard.style.borderColor = 'var(--gray-200)'; privCard.style.background = 'transparent';
+    } else {
+      privRadio.style.borderColor = 'var(--blue)'; privRadio.style.background = 'var(--blue)';
+      privRadio.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:white;display:block;"></span>';
+      pubRadio.style.borderColor = 'var(--gray-200)'; pubRadio.style.background = 'transparent'; pubRadio.innerHTML = '';
+      privCard.style.borderColor = 'var(--blue)'; privCard.style.background = '#f0f5fb';
+      pubCard.style.borderColor = 'var(--gray-200)'; pubCard.style.background = 'transparent';
+    }
+  }
   const hint = document.getElementById('e-address-hint');
-  if(hint) hint.textContent = val
-    ? 'The full address will be visible to everyone on your event page'
-    : 'Visitors will see city only. When someone requests your address, your reply email will be pre-filled with the full address.';
-  // Show contact details checkboxes only if address is public
+  if (hint) {
+    if (val) {
+      hint.textContent = 'The full address will be visible to everyone on your event page';
+      hint.style.display = 'block';
+    } else {
+      hint.textContent = 'Visitors see city only. To receive the address, the visitor will fill out a request form which will be sent to you.';
+      hint.style.display = 'block';
+    }
+  }
+  // Show contact section only for public address
   const cg = document.getElementById('e-contact-details-group');
-  if(cg) cg.style.display = val ? 'block' : 'none';
+  const cl = document.getElementById('e-contact-label');
+  if (cg) {
+    if (val) {
+      cg.style.display = 'block';
+      if (cl) cl.textContent = 'Show your contact details on the event page?';
+    } else {
+      cg.style.display = 'none';
+    }
+  }
   updateContactHint('e');
 }
 function setEditOrgType(val, btn) { editFormState.orgType = val; const b=document.getElementById('e-org-business'), i=document.getElementById('e-org-individual'); if(b&&i){b.classList.toggle('on',val==='Business'); i.classList.toggle('on',val==='Individual');} if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
