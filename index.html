@@ -2080,13 +2080,13 @@ async function loadAdminPage() {
     let total = events.length, upcoming = 0, past = 0, cancelled = 0;
 
     let rows = '';
-    const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1);
+    const sevenDaysAgo = new Date(now); sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     events.forEach(e => {
       const [y,m,d] = e.event_date.split('-').map(Number);
       const eDate = new Date(y,m-1,d);
       const isCancelled = e.status === 'cancelled';
       const isPastEvent = !isCancelled && eDate < now;
-      if (isPastEvent) return; // skip past events in admin
+      if (isPastEvent && eDate < sevenDaysAgo) return; // hide past events older than 7 days
       if (isCancelled) cancelled++;
       else if (isPastEvent) past++;
       else upcoming++;
