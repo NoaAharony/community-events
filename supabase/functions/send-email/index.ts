@@ -93,7 +93,17 @@ serve(async (req) => {
             <div style="background: white; border-radius: 0 0 10px 10px; padding: 28px 32px;">
 
               <p style="font-family: Georgia, serif; font-size: 18px; color: #1a2028; margin: 0 0 6px;">Someone wants your address,</p>
-              <p style="font-size: 14px; color: #6a6058; margin: 0 0 28px; line-height: 1.6;">A visitor requested the address for <strong>${event_name}</strong>. Their details are below.</p>
+              <p style="font-size: 14px; color: #6a6058; margin: 0 0 20px; line-height: 1.6;">A visitor requested the address for <strong>${event_name}</strong>. Their details are below.</p>
+
+              ${event_address ? `
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;"><tr>
+                <td width="3" bgcolor="#c8963e" style="background: #c8963e; border-radius: 3px 0 0 3px;">&nbsp;</td>
+                <td bgcolor="#fff8ee" style="background: #fff8ee; padding: 14px 18px; border-radius: 0 8px 8px 0;">
+                  <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 8px;">Event Address</div>
+                  <div style="font-size: 15px; color: #1a3a5c; font-weight: 700; margin-bottom: 6px;">${event_address}</div>
+                  <div style="font-size: 12px; color: #a09880; font-style: italic;">Copy this and paste it into your reply</div>
+                </td>
+              </tr></table>` : ''}
 
               <div style="border-left: 3px solid #c8963e; padding: 14px 18px; background: #f9f5ef; border-radius: 0 8px 8px 0; margin-bottom: 28px;">
                 <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 12px;">Requester Details</div>
