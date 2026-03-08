@@ -1,0 +1,82 @@
+All 12 test areas complete. Here is the full report:
+
+---
+
+## Test Report — Atlanta IL Community Events
+**Date:** March 8, 2026 | **Environment:** Live — `community-events.naharony.workers.dev`
+
+---
+
+### Summary
+
+| Test | Result | Notes |
+|------|--------|-------|
+| T1 · Page Load | ✅ PASS | Loads, 6 events, no JS errors |
+| T2 · Event Cards | ✅ PASS | 2 issues (emoji icons in buttons) |
+| T3 · Filter Bar | ✅ PASS | All filters + "All Ages" logic correct |
+| T4 · Event Detail Modal | ✅ PASS | All fields, mailto, backdrop close |
+| T5 · Lightbox | ✅ PASS | Opens/closes, modal stays open |
+| T6 · Share & Deep Link | ✅ PASS | Toast, clipboard, `?event=ID` works |
+| T7 · Form Fields & Behavior | ✅ PASS | All dynamic behaviors work |
+| T8 · Form Validation | ❌ FAIL | **Critical: no email format validation** |
+| T9 · Navigation & About | ✅ PASS | All links/pages work |
+| T10 · Mobile Layout | ✅ PASS | Minor: "Add Event →" wraps at 375px |
+| T11 · Design Rules | ⚠️ WARN | 2 emoji violations in hidden buttons |
+| T12 · Console Errors | ✅ PASS | Clean load, single Supabase call |
+
+---
+
+### Bugs Found
+
+#### 🔴 Critical — Fix Before Go-Live
+
+**BUG-1: No email format validation on the Add Event form**
+- The form accepts any text as an email (e.g. `not-an-email`) and submits it to the database
+- Consequence: The event saves successfully, but the confirmation email fails silently with `500 {"error":"Invalid 'to' field"}` from the Supabase Edge Function — the organizer never receives their edit link
+- A test record with email `not-an-email` is now live in the database and on the public site — **needs to be deleted via admin panel**
+- Fix: Add a simple regex or `type="email"` check before allowing submission, e.g.:
+  ```js
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+  if (!emailValid) { showError("Please enter a valid email address"); return; }
+  ```
+
+---
+
+#### 🟡 Medium — Fix Soon
+
+**BUG-2: Share buttons on event cards have no `aria-label`**
+- 6 share buttons on the main page are `<button>` elements containing only an `<img>` with no text and no `aria-label`
+- Screen readers cannot identify these buttons
+- Fix: Add `aria-label="Share event"` to each share button
+
+**BUG-3: Form validation shows no per-field error highlighting**
+- When submission is blocked, only a global banner appears ("Please fill in all required fields marked with *") — no indication of which specific field failed
+- Users must hunt through the form to find the problem
+- Fix: Highlight the offending field(s) with a red border and scroll to the first error
+
+---
+
+#### 🟢 Minor — Design Rule Violations
+
+**BUG-4: `📋 Copy Edit Link` button uses an emoji icon**
+- Location: Confirmation page after submitting an event
+- Violates DESIGN_RULES.md: "No emoji icons anywhere in the UI — use SVG instead"
+- Fix: Replace `📋` with an SVG clipboard icon
+
+**BUG-5: `🗑 Cancel Event` button uses an emoji icon**
+- Location: Edit form (organizer's edit page)
+- Same violation as above
+- Fix: Replace `🗑` with the existing SVG trash icon already used in the admin delete modal
+
+---
+
+### Bonus Finding
+
+**Backlog item "Default placeholder flyer image" is already implemented** — the branded "Atlanta IL Community Events" placeholder card renders correctly for events without an uploaded image. The backlog can be marked done.
+
+---
+
+### Action Required
+
+1. **Delete the test event** "Test Event" (June 15, Alpharetta, organizer: Test Organizer) via the admin panel — it was created during testing with an invalid email
+2. **Fix BUG-1** (email validation) before go-live — this directly breaks the organizer's ability to receive their edit link
