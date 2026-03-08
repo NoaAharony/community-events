@@ -765,10 +765,10 @@
   <div class="topbar">
     <div class="site-name" onclick="showPage('page-home')">Atlanta <span>IL</span> Community Events</div>
   </div>
-  <div class="page-header">
-    <span class="back-link" onclick="showPage('page-home')">← Back to Events</span>
-    <h1>Edit Your Event</h1>
-    <p>Update any details below and click Save Changes. * Required fields</p>
+  <div class="page-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold); padding:20px 24px;">
+    <span class="back-link" id="edit-back-link" onclick="editFromAdmin ? loadAdminPage() : showPage('page-home')" style="font-size:12px; color:rgba(255,255,255,0.6); cursor:pointer; display:inline-block; margin-bottom:8px;">← Back to Admin</span>
+    <h1 style="font-family:'Source Serif 4',serif; font-size:22px; font-weight:400; color:white; margin-bottom:4px;">Edit Event</h1>
+    <p style="font-size:12px; color:rgba(255,255,255,0.55);">Update details below and click Save Changes. * Required fields</p>
   </div>
   <div class="form-body">
     <div id="edit-error" class="inline-error" style="display:none;"></div>
@@ -1050,7 +1050,7 @@
     <div class="edit-cancel-bar">
       <button class="btn-danger" onclick="openCancelConfirm()">🗑 Cancel Event</button>
       <div class="btn-right">
-        <button class="btn-secondary" onclick="showPage('page-home')">Discard Changes</button>
+        <button class="btn-secondary" onclick="editFromAdmin ? loadAdminPage() : showPage('page-home')">Discard Changes</button>
         <button class="btn-primary" id="save-btn" onclick="saveEvent()">Save Changes →</button>
       </div>
     </div>
