@@ -38,23 +38,27 @@ serve(async (req) => {
               <div style="font-family: Georgia, serif; font-size: 20px; color: white; font-weight: 400; margin-bottom: 4px;">Your event was added successfully!</div>
               <div style="font-size: 13px; color: rgba(255,255,255,0.6);">It will appear on the events page shortly</div>
             </td></tr></table>
-            <div style="background: white; border-radius: 0 0 10px 10px; padding: 32px;">
-              <p style="color: #6a6058; font-size: 14px; margin: 0 0 24px;">Hi <strong>${organizer_name}</strong>, thank you for adding your event to Atlanta IL Community Events.</p>
+            <div style="background: white; border-radius: 0 0 10px 10px; padding: 28px 32px;">
+              <p style="font-family: Georgia, serif; font-size: 18px; color: #1a2028; margin: 0 0 6px;">Hi <strong>${organizer_name}</strong>,</p>
+              <p style="font-size: 14px; color: #6a6058; margin: 0 0 28px; line-height: 1.6;">Thank you for adding your event to Atlanta IL Community Events. It will appear on the site shortly.</p>
 
-              <div style="background: #f5f0e8; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px;">
-                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 4px;">Event</div>
-                <div style="font-size: 17px; font-weight: 700; color: #1a2028;">${event_name}</div>
-                <div style="font-size: 13px; color: #6a6058; margin-top: 4px;">${event_date}</div>
+              <div style="border-left: 3px solid #c8963e; padding: 14px 18px; background: #f9f5ef; border-radius: 0 8px 8px 0; margin-bottom: 28px;">
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 8px;">Your Event</div>
+                <div style="font-family: Georgia, serif; font-size: 20px; font-weight: 400; color: #1a3a5c; margin-bottom: 4px;">${event_name}</div>
+                <div style="font-size: 13px; color: #6a6058;">${event_date}</div>
               </div>
 
-              <div style="background: #fff8ee; border: 1.5px solid #c8963e; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px;">
-                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 8px;">Your Edit Link - save this!</div>
-                <p style="font-size: 13px; color: #6a6058; margin: 0 0 12px;">Use this link to edit or cancel your event at any time. Keep it safe - it's the only way to make changes.</p>
-                <a href="${edit_link}" style="display: block; background: #1e4068; color: white; text-decoration: none; padding: 12px 20px; border-radius: 6px; font-size: 14px; font-weight: 700; text-align: center;">Edit My Event →</a>
-                <div style="margin-top: 10px; font-size: 11px; color: #a09880; word-break: break-all;">${edit_link}</div>
+              <div style="border: 1.5px solid #c8963e; border-radius: 8px; padding: 20px 24px; margin-bottom: 28px; text-align: center;">
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 8px;">Manage Your Event</div>
+                <p style="font-size: 13px; color: #6a6058; margin: 0 0 18px; line-height: 1.6;">Save this email to edit or cancel your event at any time.</p>
+                <table width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#1e4068" style="background: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
+                    <a href="${edit_link}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Edit My Event →</a>
+                  </td>
+                </tr></table>
               </div>
 
-              <p style="font-size: 12px; color: #a09880; text-align: center; margin: 0;">Atlanta IL Community Events</p>
+              <p style="font-size: 12px; color: #c8b89a; text-align: center; margin: 0; border-top: 1px solid #ede8e0; padding-top: 16px;">Atlanta IL Community Events</p>
             </div>
           </div>
         `,
