@@ -72,13 +72,13 @@ serve(async (req) => {
 
     // ── EMAIL TYPE 2: Address request to organizer ──
     else if (type === "address_request") {
-      const { organizer_email, event_name, requester_fname, requester_lname, requester_email, requester_phone, requester_message } = body;
+      const { organizer_email, organizer_name, event_name, event_date, event_time, event_address, requester_fname, requester_lname, requester_email, requester_phone, requester_message } = body;
 
       emailPayload = {
         from: FROM,
         to: [organizer_email],
         reply_to: requester_email,
-        subject: `📍 Address request for "${event_name}"`,
+        subject: `📍 Address request for "${event_name}"${event_date ? ' - ' + event_date : ''}`,
         html: `
           <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background: #d8d0c4; padding: 32px 16px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="max-width:560px; background:#f5f0e8;"><tr><td>
             <table width="100%" cellpadding="0" cellspacing="0" style="border-radius: 10px 10px 0 0;"><tr>
@@ -120,7 +120,7 @@ serve(async (req) => {
 
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;"><tr>
                 <td bgcolor="#1e4068" style="background: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
-                  <a href="mailto:${requester_email}?subject=Address for: ${event_name}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Reply to ${requester_fname} →</a>
+                  <a href="mailto:${requester_email}?subject=Address for: ${event_name}${event_date ? ' - ' + event_date + (event_time ? ', ' + event_time : '') : ''}&body=Hi ${requester_fname},%0A%0AThe address for ${event_name}${event_date ? ' (' + event_date + (event_time ? ', ' + event_time : '') + ')' : ''} is:%0A${event_address ? event_address : '[address]'}%0A%0ASee you there!%0A${organizer_name}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Reply to ${requester_fname} →</a>
                 </td>
               </tr></table>
 

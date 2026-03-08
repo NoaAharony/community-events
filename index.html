@@ -1627,7 +1627,11 @@ async function submitAddressRequest() {
     await sendEmail({
       type: 'address_request',
       organizer_email: event.contact_email,
+      organizer_name: event.organizer_name || '',
       event_name: event.name,
+      event_date: event.event_date || '',
+      event_time: event.start_time || '',
+      event_address: event.address || '',
       requester_fname: fname,
       requester_lname: lname,
       requester_email: email,
