@@ -1871,7 +1871,7 @@ async function submitEvent() {
     const result = await sbFetch('events', { method: 'POST', body: JSON.stringify(payload) });
     const newId = result[0].id;
     const editLink = `${window.location.origin}${window.location.pathname}?edit=${editKey}`;
-    document.getElementById('confirm-link').textContent = editLink;
+    window._confirmEditLink = editLink;
 
     // Send confirmation email to organizer
     await sendEmail({
@@ -1924,7 +1924,7 @@ function resetSubmitForm() {
 }
 
 function copyConfirmLink() {
-  const link = document.getElementById('confirm-link').textContent;
+  const link = window._confirmEditLink || '';
   navigator.clipboard.writeText(link).catch(() => {});
   const btn = document.getElementById('copy-confirm-btn');
   btn.textContent = '✓ Copied!';
