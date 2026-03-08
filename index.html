@@ -759,7 +759,7 @@
           A confirmation email has been sent to your inbox with a link to edit your event.
         </p>
         <div style="max-width:400px; margin:0 auto 20px;">
-          <button id="copy-confirm-btn" class="btn-secondary" style="width:100%; padding:13px 20px; font-size:14px;" onclick="copyConfirmLink()">📋 Copy Edit Link</button>
+          <button id="copy-confirm-btn" class="btn-secondary" style="width:100%; padding:13px 20px; font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="copyConfirmLink()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Edit Link</button>
           <div style="font-size:11px; color:var(--gray-600); margin-top:8px;">Save this link to edit or cancel your event at any time</div>
         </div>
         <div class="confirmation-actions">
@@ -1070,7 +1070,7 @@
     </div>
 
     <div class="edit-cancel-bar">
-      <button class="btn-danger" onclick="openCancelConfirm()">🗑 Cancel Event</button>
+      <button class="btn-danger" onclick="openCancelConfirm()" style="display:flex; align-items:center; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg> Cancel Event</button>
       <div class="btn-right">
         <button class="btn-secondary" onclick="editFromAdmin ? loadAdminPage() : showPage('page-home')">Discard Changes</button>
         <button class="btn-primary" id="save-btn" onclick="saveEvent()">Save Changes →</button>
@@ -1589,7 +1589,7 @@ function renderEventRow(e) {
         </div>
       </div>
       <div class="row-arrow">${arrow}</div>
-      ${!cancelled ? `<button class="share-card-btn" title="Share event" onclick="shareEvent(event,'${e.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>` : ''}
+      ${!cancelled ? `<button class="share-card-btn" aria-label="Share event" title="Share event" onclick="shareEvent(event,'${e.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>` : ''}
     </div>`;
 }
 
@@ -1840,6 +1840,11 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errDiv.textContent = 'Please enter a valid email address';
+    errDiv.style.display = 'block';
+    return;
+  }
   if (submitFormState.cost === 'Paid' && !document.getElementById('s-amount').value.trim()) {
     errDiv.textContent = 'Please enter the event cost amount';
     errDiv.style.display = 'block';
@@ -1968,7 +1973,7 @@ function copyConfirmLink() {
   navigator.clipboard.writeText(link).catch(() => {});
   const btn = document.getElementById('copy-confirm-btn');
   btn.textContent = '✓ Copied!';
-  setTimeout(() => { btn.textContent = '📋 Copy Edit Link'; }, 2000);
+  setTimeout(() => { btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Edit Link'; }, 2000);
 }
 
 // ═══════════════════════════════════════════════════════════
