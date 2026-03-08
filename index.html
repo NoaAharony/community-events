@@ -2095,8 +2095,8 @@ async function loadAdminPage() {
       else if (isPastEvent) past++;
       else upcoming++;
 
-      const status = isCancelled ? 'cancelled' : (isPastEvent ? 'past' : 'active');
-      const statusBadge = status === 'active' ? '<span class="status-badge status-active">Active</span>'
+      const status = isCancelled ? 'cancelled' : (isPastEvent ? 'past' : 'upcoming');
+      const statusBadge = status === 'upcoming' ? '<span class="status-badge status-active">Upcoming</span>'
         : status === 'cancelled' ? '<span class="status-badge status-cancelled">Cancelled</span>'
         : '<span class="status-badge status-past">Past</span>';
 
