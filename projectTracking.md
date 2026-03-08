@@ -203,3 +203,19 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - **Edit form validation bug fixed:** Year dropdown now includes event's actual year, preventing false validation errors on past-year events
 - **Organizer avatar:** Hebrew names now show single first letter using Assistant font; English names show 2 initials as before
 - **Address privacy hint:** Upgraded from small gray italic to gold-accented prominent box
+
+### Session 9 (Mar 8, 2026) — Email Polish + UX Logic
+- **Email 1 (submission confirmation):**
+  - Event box: fixed Outlook border-left using table instead of div
+  - "Manage Your Event" box: stronger styling, Georgia serif title, bold dark text
+- **Email 2 (address request):**
+  - Body redesigned to match email 1 - Georgia greeting, gold accent box, centered CTA
+  - "Reply to [name]" button: subject line pre-filled as `Address for: [event name]`
+  - Reply button: body pre-filled with address, date, time, and organizer name
+  - Event date/time/address/organizer_name added to payload from frontend
+- **Both emails:** Fixed full-width stretch on desktop with proper Outlook table centering (560px)
+- **Send Email button (event modal):** subject pre-filled as `Question about: [event name]`
+- **All helper texts sitewide:** color darkened from gray-400 to gray-600
+- **Address hint text updated:** explains the pre-filled reply benefit
+- **Confirmation page:** Removed raw edit link — replaced with clean "Copy Edit Link" button only
+- **Subject line:** address request email subject includes event date

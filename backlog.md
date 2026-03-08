@@ -18,6 +18,12 @@
 ---
 
 ## Completed
+- [x] **Email desktop width fix** - proper 560px centering via Outlook table. *(Session 9)*
+- [x] **Email 2 body redesign** - Georgia greeting, gold accent box, centered CTA. *(Session 9)*
+- [x] **Reply pre-fill** - address request reply email pre-filled with address, date, time, organizer. *(Session 9)*
+- [x] **Confirmation page** - removed raw link, clean Copy Edit Link button. *(Session 9)*
+- [x] **mailto subjects** - Send Email and Reply to buttons all have pre-filled subjects. *(Session 9)*
+- [x] **Helper texts** - all hint/privacy/optional texts darkened sitewide. *(Session 9)*
 - [x] **Email notifications** — submission confirmation + address request emails via Supabase Edge Function + Resend. *(Session 7, Mar 7 2026)*
 - [x] **Share event + deep link** — share button, `?event=ID` URL, lightbox for flyer. *(Session 6, Mar 7 2026)*
 - [x] **Mobile layout audit** — forms, cards, filters, modals, error pages. *(Sessions 6 + 8)*
