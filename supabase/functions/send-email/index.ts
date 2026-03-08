@@ -80,9 +80,6 @@ serve(async (req) => {
               <div style="font-size: 13px; color: rgba(255,255,255,0.6);">For: <strong style="color: rgba(255,255,255,0.85);">${event_name}</strong></div>
             </div>
             <div style="background: white; border-radius: 0 0 10px 10px; padding: 32px;">
-              <h2 style="display:none;">Someone requested your event address</h2>
-              <p style="color: #6a6058; font-size: 14px; margin: 0 0 24px;">For: <strong>${event_name}</strong></p>
-
               <div style="background: #f5f0e8; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
                 <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 14px;">Requester Details</div>
                 <table style="width: 100%; border-collapse: collapse;">
