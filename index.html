@@ -76,7 +76,7 @@
   .row-meta .meta-cost { color: #7a5020; }
   .row-meta .meta-free-badge { font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 20px; color: #9a6800; background: #fffbe8; border: 1.5px solid var(--gold); letter-spacing: 0.3px; }
   .row-organizer { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
-  .row-avatar { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, #1e4068, #3a6898); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; color: white; flex-shrink: 0; letter-spacing: 0.3px; font-family: 'Nunito', sans-serif; }
+  .row-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #1e4068, #3a6898); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; flex-shrink: 0; letter-spacing: 0; font-family: 'Assistant', 'Nunito', sans-serif; }
   .row-org-name { font-size: 11.5px; font-weight: 600; color: #5a5048; }
   .row-tags { display: flex; gap: 5px; flex-wrap: wrap; padding-top: 8px; border-top: 1px solid #f0ebe0; }
   .tag { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 20px; border: 1.5px solid #c8c0b0; background: transparent; color: #5a5048; font-family: 'Nunito', sans-serif; }
@@ -1511,7 +1511,11 @@ function renderEventRow(e) {
     ? `<span class="meta-free-badge">✦ Free</span>`
     : `<span class="meta-dot">·</span><span class="meta-cost">${costStr}</span>`;
 
-  const initials = (e.organizer_name || '?').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+  const orgName = e.organizer_name || '?';
+  const isHebrew = /[\u0590-\u05FF]/.test(orgName);
+  const initials = isHebrew
+    ? orgName.trim()[0]
+    : orgName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
 
   const titleHtml = cancelled
     ? `<div class="row-title cancelled-title">${e.name}</div><span class="cancelled-badge">CANCELLED</span>`
