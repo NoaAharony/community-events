@@ -1224,8 +1224,13 @@
 <!-- Cancel Event Confirmation Modal -->
 <div class="overlay" id="overlay-cancel" onclick="closeModalOnBg(event,'overlay-cancel')">
   <div class="modal cancel-modal">
-    <div class="modal-header">
-      <h3>⚠ Cancel Event</h3>
+    <div class="modal-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold); padding:16px 20px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(232,184,106,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        </div>
+        <div style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Cancel Event</div>
+      </div>
       <button class="modal-close-btn" onclick="closeModal('overlay-cancel')">✕</button>
     </div>
     <div class="modal-body">
@@ -1250,8 +1255,13 @@
 <!-- Admin Delete Modal -->
 <div class="overlay" id="overlay-admin-delete" onclick="closeModalOnBg(event,'overlay-admin-delete')">
   <div class="modal cancel-modal">
-    <div class="modal-header">
-      <h3>⚠ Delete Event</h3>
+    <div class="modal-header" style="background:linear-gradient(160deg,#5c1a1a,#3a0f0f); border-bottom:3px solid var(--red); padding:16px 20px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(184,48,48,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,140,140,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
+        </div>
+        <div style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Delete Event</div>
+      </div>
       <button class="modal-close-btn" onclick="closeModal('overlay-admin-delete')">✕</button>
     </div>
     <div class="modal-body">
@@ -1322,6 +1332,7 @@ let submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business',
 let editFormState = { cost: 'Free', addressPublic: true, orgType: 'Business', contactOptIn: false, imageFile: null, removeImage: false, eventId: null, editKey: null };
 let adminDeleteId = null;
 let currentEditEventId = null;
+let editFromAdmin = false;
 
 // ═══════════════════════════════════════════════════════════
 // DATE HELPERS
@@ -1884,7 +1895,8 @@ function copyConfirmLink() {
 // ═══════════════════════════════════════════════════════════
 // EDIT EVENT
 // ═══════════════════════════════════════════════════════════
-async function loadEditPage(editKey) {
+async function loadEditPage(editKey, fromAdmin = false) {
+  editFromAdmin = fromAdmin;
   try {
     const results = await sbFetch(`events?edit_key=eq.${editKey}&select=*`);
     if (!results || results.length === 0) { showPage('page-invalid'); return; }
@@ -2023,7 +2035,7 @@ async function saveEvent() {
     });
     await loadEvents();
   populateYearDropdowns();
-    showPage('page-home');
+    if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); }
   } catch (e) {
     errDiv.textContent = 'Error saving: ' + e.message;
     errDiv.style.display = 'block';
@@ -2049,7 +2061,7 @@ async function confirmCancelEvent(action) {
     closeModal('overlay-cancel');
     await loadEvents();
   populateYearDropdowns();
-    showPage('page-home');
+    if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); }
   } catch (e) {
     alert('Error cancelling event: ' + e.message);
   }
@@ -2081,7 +2093,7 @@ async function loadAdminPage() {
         : '<span class="status-badge status-past">Past</span>';
 
       const timeStr = e.end_time ? `${formatTime(e.start_time)} - ${formatTime(e.end_time)}` : formatTime(e.start_time);
-      const editBtn = !isCancelled ? `<button class="admin-btn-edit" onclick="loadEditPage('${e.edit_key}')">Edit</button>` : '';
+      const editBtn = !isCancelled ? `<button class="admin-btn-edit" onclick="loadEditPage('${e.edit_key}', true)">Edit</button>` : '';
 
       rows += `<tr class="${isCancelled ? 'cancelled-row' : ''}">
         <td><strong>${isCancelled ? '<s>' : ''}${e.name}${isCancelled ? '</s>' : ''}</strong></td>
