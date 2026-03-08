@@ -42,21 +42,26 @@ serve(async (req) => {
               <p style="font-family: Georgia, serif; font-size: 18px; color: #1a2028; margin: 0 0 6px;">Hi <strong>${organizer_name}</strong>,</p>
               <p style="font-size: 14px; color: #6a6058; margin: 0 0 28px; line-height: 1.6;">Thank you for adding your event to Atlanta IL Community Events. It will appear on the site shortly.</p>
 
-              <div style="border-left: 3px solid #c8963e; padding: 14px 18px; background: #f9f5ef; border-radius: 0 8px 8px 0; margin-bottom: 28px;">
-                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 8px;">Your Event</div>
-                <div style="font-family: Georgia, serif; font-size: 20px; font-weight: 400; color: #1a3a5c; margin-bottom: 4px;">${event_name}</div>
-                <div style="font-size: 13px; color: #6a6058;">${event_date}</div>
-              </div>
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border-radius: 0 8px 8px 0;"><tr>
+                <td width="3" bgcolor="#c8963e" style="background: #c8963e; border-radius: 3px 0 0 3px;">&nbsp;</td>
+                <td bgcolor="#f9f5ef" style="background: #f9f5ef; padding: 14px 18px; border-radius: 0 8px 8px 0;">
+                  <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 8px;">Your Event</div>
+                  <div style="font-family: Georgia, serif; font-size: 20px; font-weight: 400; color: #1a3a5c; margin-bottom: 4px;">${event_name}</div>
+                  <div style="font-size: 13px; color: #6a6058;">${event_date}</div>
+                </td>
+              </tr></table>
 
-              <div style="border: 1.5px solid #c8963e; border-radius: 8px; padding: 20px 24px; margin-bottom: 28px; text-align: center;">
-                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 8px;">Manage Your Event</div>
-                <p style="font-size: 13px; color: #6a6058; margin: 0 0 18px; line-height: 1.6;">Save this email to edit or cancel your event at any time.</p>
-                <table width="100%" cellpadding="0" cellspacing="0"><tr>
-                  <td bgcolor="#1e4068" style="background: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
-                    <a href="${edit_link}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Edit My Event →</a>
-                  </td>
-                </tr></table>
-              </div>
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;"><tr>
+                <td bgcolor="#fff8ee" style="background: #fff8ee; border: 2px solid #c8963e; border-radius: 8px; padding: 20px 24px; text-align: center;">
+                  <div style="font-family: Georgia, serif; font-size: 17px; color: #1a3a5c; font-weight: 400; margin-bottom: 8px;">Manage Your Event</div>
+                  <p style="font-size: 14px; color: #5c3d10; font-weight: 600; margin: 0 0 18px; line-height: 1.6;">Save this email - it's the only way to edit or cancel your event.</p>
+                  <table width="100%" cellpadding="0" cellspacing="0"><tr>
+                    <td bgcolor="#1e4068" style="background: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
+                      <a href="${edit_link}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Edit My Event →</a>
+                    </td>
+                  </tr></table>
+                </td>
+              </tr></table>
 
               <p style="font-size: 12px; color: #c8b89a; text-align: center; margin: 0; border-top: 1px solid #ede8e0; padding-top: 16px;">Atlanta IL Community Events</p>
             </div>
