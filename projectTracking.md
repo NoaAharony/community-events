@@ -172,3 +172,34 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - Supabase free tier auto-pauses after 1 week of inactivity — must disable before go-live
 - Agent cannot test the live site directly — owner must verify after each deploy
 - GitHub token must be reshared at the start of every new session
+
+### Session 7 (Mar 7, 2026) — Email System + Design Consistency
+- **Email system built and deployed:** Two emails via Supabase Edge Function + Resend API
+  - Email 1: Submission confirmation — edit link, event details, branding
+  - Email 2: Address request notification to organizer
+- **Email design:** Navy/gold gradient header, Source Serif 4 headings, Georgia serif fallback
+- **Edge Function:** `send-email` at Supabase — must be manually deployed (not auto from GitHub)
+- **Design consistency audit — text fixes:**
+  - "Submit" → "Add" throughout (button, header, success message)
+  - All em dashes (—) replaced with hyphens (-) sitewide
+- **Confirmation page redesigned:** Navy/gold header, SVG checkmark in gold circle, centered body
+- **Invalid link page redesigned:** Navy hero block, gold divider, info SVG icon
+- **Cancelled event page redesigned:** Same structure, gold circle with X icon
+- **DESIGN_RULES.md created** and pushed to GitHub — full font, color, icon, and text rules
+
+### Session 8 (Mar 8, 2026) — Admin, Modals, Flow, Mobile
+- **Address request modal redesigned:** Navy/gold header with location pin SVG, gold-accented intro box, lock SVG privacy note, refined success state
+- **Email Outlook fix:** Both emails updated with `bgcolor` fallback so header renders in Outlook
+- **Confirmation page:** Body text and buttons centered
+- **Mobile audit:** Fixed error pages, confirmation, address modal, overlay padding
+- **Admin flow fixes:**
+  - Edit from admin → returns to admin after save, discard, or cancel
+  - `editFromAdmin` flag added to distinguish admin vs personal edit link flow
+- **Cancel event modal redesigned:** Navy/gold header with info SVG icon
+- **Delete event modal redesigned:** Dark red header with trash SVG icon
+- **Edit page header redesigned:** Navy/gold gradient header matching site style; back link says "Back to Admin" when coming from admin
+- **Past events in admin:** Hidden after 7 days, visible for 7 days after passing
+- **Admin status badge:** Changed "Active" → "Upcoming"
+- **Edit form validation bug fixed:** Year dropdown now includes event's actual year, preventing false validation errors on past-year events
+- **Organizer avatar:** Hebrew names now show single first letter using Assistant font; English names show 2 initials as before
+- **Address privacy hint:** Upgraded from small gray italic to gold-accented prominent box
