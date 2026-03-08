@@ -115,7 +115,7 @@ serve(async (req) => {
 
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;"><tr>
                 <td bgcolor="#1e4068" style="background: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
-                  <a href="mailto:${requester_email}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Reply to ${requester_fname} →</a>
+                  <a href="mailto:${requester_email}?subject=Address for: ${event_name}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Reply to ${requester_fname} →</a>
                 </td>
               </tr></table>
 
