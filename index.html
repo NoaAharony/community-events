@@ -166,9 +166,9 @@
   .form-input { width: 100%; border: 1px solid var(--gray-200); border-radius: 4px; padding: 9px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; color: var(--gray-800); background: var(--white); transition: border-color 0.15s; }
   .form-input:focus { outline: none; border-color: var(--blue-light); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .privacy-note { font-size: 11px; color: var(--gray-400); margin-top: 6px; }
+  .privacy-note { font-size: 11px; color: var(--gray-600); margin-top: 6px; }
   .privacy-note.visible { font-size: 12px; color: #b06820; font-weight: 700; }
-  .field-hint { font-size: 11px; color: var(--gray-400); margin-top: 4px; font-style: italic; }
+  .field-hint { font-size: 11px; color: var(--gray-600); margin-top: 4px; font-style: italic; }
   .field-hint.contact-important { font-size: 13px; color: #7a4010; font-weight: 700; font-style: normal; margin-top: 10px; background: #fff8ee; border: 1.5px solid #e8c87a; border-radius: 6px; padding: 9px 13px; line-height: 1.5; }
 
   .page-view { display: none; }
@@ -184,7 +184,7 @@
   .toggle-group { display: flex; border: 1px solid var(--gray-200); border-radius: 4px; overflow: hidden; }
   .toggle-btn { flex: 1; padding: 9px; text-align: center; font-size: 13px; cursor: pointer; background: var(--gray-100); color: var(--gray-600); border: none; font-family: 'Nunito', sans-serif; transition: all 0.15s; }
   .toggle-btn.on { background: var(--blue); color: white; font-weight: 600; }
-  .optional-tag { font-size: 10px; color: var(--gray-400); font-weight: 400; font-style: italic; margin-left: 4px; }
+  .optional-tag { font-size: 10px; color: var(--gray-600); font-weight: 400; font-style: italic; margin-left: 4px; }
   .amount-field { display: none; }
   .amount-field.show { display: block; }
   .form-actions { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--white); border-top: 1px solid var(--gray-200); position: sticky; bottom: 0; max-width: 680px; margin: 0 auto; }
@@ -717,7 +717,7 @@
     <div class="form-actions">
       <button class="btn-secondary" onclick="showPage('page-home')">Cancel</button>
       <div style="display:flex; align-items:center; gap:12px;">
-        <span style="font-size:11px; color:var(--gray-400);">By submitting you confirm all details are accurate</span>
+        <span style="font-size:11px; color:var(--gray-600);">By submitting you confirm all details are accurate</span>
         <button class="btn-primary" id="submit-btn" onclick="submitEvent()">Add Event →</button>
       </div>
     </div>
@@ -1575,7 +1575,7 @@ function openEventModal(id) {
   let contactHtml = '';
   if ((e.show_email && e.contact_email) || (e.show_phone && e.contact_phone)) {
     contactHtml = `<hr class="modal-divider"><div class="contact-section"><div class="contact-label">Contact Organizer</div>`;
-    if (e.show_email && e.contact_email) contactHtml += `<div class="contact-item"><a href="mailto:${e.contact_email}" class="contact-btn">Send Email</a></div>`;
+    if (e.show_email && e.contact_email) contactHtml += `<div class="contact-item"><a href="mailto:${e.contact_email}?subject=Question about: ${e.name}" class="contact-btn">Send Email</a></div>`;
     if (e.show_phone && e.contact_phone) contactHtml += `<div class="contact-item"><span class="contact-phone-desktop">📞 ${e.contact_phone}</span><a href="tel:${e.contact_phone}" class="contact-btn contact-call-mobile">Call</a></div>`;
     contactHtml += `</div>`;
   }
