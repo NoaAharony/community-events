@@ -740,16 +740,13 @@
         <p class="conf-sub-text">It will appear on the events page shortly</p>
       </div>
       <div class="confirmation-body">
-        <p style="font-size:14px; color:var(--gray-600); line-height:1.7;">
-          Use the link below to <strong>edit or cancel</strong> your event at any time.<br>
-          Save it - this is the only way to manage your event.
+        <p style="font-size:14px; color:var(--gray-600); line-height:1.7; margin-bottom:20px;">
+          A confirmation email has been sent to your inbox with a link to edit your event.
         </p>
-        <div style="font-size:13px; color:var(--green); font-weight:600; background:#eef6f0; border-radius:6px; padding:9px 12px; margin:10px auto 0; display:flex; align-items:center; justify-content:center; gap:7px; max-width:540px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          A confirmation email with this link has been sent to your inbox.
+        <div style="max-width:400px; margin:0 auto 20px;">
+          <button id="copy-confirm-btn" class="btn-secondary" style="width:100%; padding:13px 20px; font-size:14px;" onclick="copyConfirmLink()">📋 Copy Edit Link</button>
+          <div style="font-size:11px; color:var(--gray-600); margin-top:8px;">Save this link to edit or cancel your event at any time</div>
         </div>
-        <div class="edit-link-box" id="confirm-link"></div>
-        <button class="btn-secondary" style="width:100%; max-width:540px;" onclick="copyConfirmLink()">📋 Copy Link</button>
         <div class="confirmation-actions">
           <button class="btn-secondary" onclick="showPage('page-home'); loadEvents()">← Back to Events</button>
           <button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Another Event</button>
@@ -1893,8 +1890,9 @@ function resetSubmitForm() {
 function copyConfirmLink() {
   const link = document.getElementById('confirm-link').textContent;
   navigator.clipboard.writeText(link).catch(() => {});
-  event.target.textContent = '✅ Copied!';
-  setTimeout(() => { event.target.textContent = '📋 Copy Link'; }, 2000);
+  const btn = document.getElementById('copy-confirm-btn');
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => { btn.textContent = '📋 Copy Edit Link'; }, 2000);
 }
 
 // ═══════════════════════════════════════════════════════════
