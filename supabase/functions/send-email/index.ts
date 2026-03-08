@@ -85,9 +85,13 @@ serve(async (req) => {
               <div style="font-family: Georgia, serif; font-size: 20px; color: white; font-weight: 400; margin-bottom: 4px;">Someone requested your event address</div>
               <div style="font-size: 13px; color: rgba(255,255,255,0.6);">For: <strong style="color: rgba(255,255,255,0.85);">${event_name}</strong></div>
             </td></tr></table>
-            <div style="background: white; border-radius: 0 0 10px 10px; padding: 32px;">
-              <div style="background: #f5f0e8; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 14px;">Requester Details</div>
+            <div style="background: white; border-radius: 0 0 10px 10px; padding: 28px 32px;">
+
+              <p style="font-family: Georgia, serif; font-size: 18px; color: #1a2028; margin: 0 0 6px;">Someone wants your address,</p>
+              <p style="font-size: 14px; color: #6a6058; margin: 0 0 28px; line-height: 1.6;">A visitor requested the address for <strong>${event_name}</strong>. Their details are below.</p>
+
+              <div style="border-left: 3px solid #c8963e; padding: 14px 18px; background: #f9f5ef; border-radius: 0 8px 8px 0; margin-bottom: 28px;">
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin-bottom: 12px;">Requester Details</div>
                 <table style="width: 100%; border-collapse: collapse;">
                   <tr>
                     <td style="font-size: 12px; color: #a09880; padding: 5px 0; width: 80px;">Name</td>
@@ -109,9 +113,13 @@ serve(async (req) => {
                 </table>
               </div>
 
-              <a href="mailto:${requester_email}" style="display: block; background: #1e4068; color: white; text-decoration: none; padding: 12px 20px; border-radius: 6px; font-size: 14px; font-weight: 700; text-align: center; margin-bottom: 24px;">Reply to ${requester_fname} →</a>
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;"><tr>
+                <td bgcolor="#1e4068" style="background: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
+                  <a href="mailto:${requester_email}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Reply to ${requester_fname} →</a>
+                </td>
+              </tr></table>
 
-              <p style="font-size: 12px; color: #a09880; text-align: center; margin: 0;">Atlanta IL Community Events</p>
+              <p style="font-size: 12px; color: #c8b89a; text-align: center; margin: 0; border-top: 1px solid #ede8e0; padding-top: 16px;">Atlanta IL Community Events</p>
             </div>
           </div>
         `,
