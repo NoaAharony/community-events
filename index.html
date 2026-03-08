@@ -445,7 +445,7 @@
       <div class="form-section-title">1 · Event Information</div>
       <div class="form-group">
         <label>Event Name <span class="req">*</span></label>
-        <input class="form-input" id="s-name" type="text" placeholder="e.g. Purim Party, Shabbat Dinner...">
+        <input class="form-input" id="s-name" autocomplete="off" type="text" placeholder="e.g. Purim Party, Shabbat Dinner...">
         <div class="field-hint">You can write in Hebrew or English</div>
       </div>
       <div class="form-row">
@@ -456,7 +456,7 @@
             <select class="form-input" id="s-day" style="flex:1;"><option value="">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
             <select class="form-input" id="s-year" style="flex:1.5;"></select>
           </div>
-          <input type="hidden" id="s-date">
+          <input type="hidden" id="s-date" autocomplete="off">
         </div>
         <div class="form-group">
           <label>Start Time <span class="req">*</span></label>
@@ -606,17 +606,17 @@
         <label>Amount</label>
         <div style="display:flex; align-items:center; gap:0;">
           <span style="background:var(--gray-100); border:1px solid var(--gray-200); border-right:none; padding:9px 12px; border-radius:4px 0 0 4px; font-size:13px; color:var(--gray-600); font-weight:600;">$</span>
-          <input class="form-input" id="s-amount" type="number" min="0" step="0.01" placeholder="25" style="border-radius:0 4px 4px 0;">
+          <input class="form-input" id="s-amount" autocomplete="off" type="number" min="0" step="0.01" placeholder="25" style="border-radius:0 4px 4px 0;">
         </div>
       </div>
       <div class="form-group">
         <label>Description <span class="optional-tag">(optional)</span></label>
-        <textarea class="form-input" id="s-desc" rows="4" dir="auto" placeholder="Describe your event..."></textarea>
+        <textarea class="form-input" id="s-desc" autocomplete="off" rows="4" dir="auto" placeholder="Describe your event..."></textarea>
         <div class="field-hint">You can write in Hebrew or English</div>
       </div>
       <div class="form-group">
         <label>Registration Link <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="s-reg-link" type="url" placeholder="https://">
+        <input class="form-input" id="s-reg-link" autocomplete="off" type="url" placeholder="https://">
         <div class="field-hint">If provided, visitors will be directed to this link to register</div>
       </div>
     </div>
@@ -641,11 +641,11 @@
             <option>Suwanee</option>
             <option value="other">Other...</option>
           </select>
-          <input class="form-input" id="s-city-other" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
+          <input class="form-input" id="s-city-other" autocomplete="off" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
       </div>
       <div class="form-group">
         <label>Full Address <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="s-address" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA" oninput="toggleAddressVisibility(this.value, 'addr-visibility-submit')">
+        <input class="form-input" id="s-address" autocomplete="off" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA" oninput="toggleAddressVisibility(this.value, 'addr-visibility-submit')">
       </div>
       <div class="form-group" id="addr-visibility-submit" style="display:none;">
         <label>Show address publicly? <span class="req">*</span></label>
@@ -662,7 +662,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Organizer / Business Name <span class="req">*</span></label>
-          <input class="form-input" id="s-organizer" type="text" placeholder="Your name or business name">
+          <input class="form-input" id="s-organizer" autocomplete="off" type="text" placeholder="Your name or business name">
           <div class="field-hint">You can write in Hebrew or English</div>
         </div>
         <div class="form-group">
@@ -676,12 +676,12 @@
       <div class="form-row">
         <div class="form-group">
           <label>Email <span class="req">*</span></label>
-          <input class="form-input" id="s-email" type="email" placeholder="your@email.com">
+          <input class="form-input" id="s-email" autocomplete="off" type="email" placeholder="your@email.com">
           <div class="privacy-note" id="s-email-note">🔒 Not shown publicly</div>
         </div>
         <div class="form-group">
           <label>Phone <span class="optional-tag">(optional)</span></label>
-          <input class="form-input" id="s-phone" type="tel" placeholder="(404) 555-0000" oninput="formatPhoneInput(this)" inputmode="numeric">
+          <input class="form-input" id="s-phone" autocomplete="off" type="tel" placeholder="(404) 555-0000" oninput="formatPhoneInput(this)" inputmode="numeric">
           <div class="privacy-note" id="s-phone-note">🔒 Not shown publicly</div>
         </div>
       </div>
@@ -689,10 +689,10 @@
         <label>Show your contact details on the event page?</label>
         <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px;">
           <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
-            <input type="checkbox" id="s-show-email" onchange="updateContactHint('s')"> Show my email
+            <input type="checkbox" id="s-show-email" autocomplete="off" onchange="updateContactHint('s')"> Show my email
           </label>
           <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
-            <input type="checkbox" id="s-show-phone" onchange="updateContactHint('s')"> Show my phone
+            <input type="checkbox" id="s-show-phone" autocomplete="off" onchange="updateContactHint('s')"> Show my phone
           </label>
         </div>
         <div class="field-hint" id="s-contact-hint">Your email and phone won't be shown on the event page.</div>
@@ -706,7 +706,7 @@
         <div id="upload-area" class="upload-area" onclick="document.getElementById('s-image').click()">
           📷 Upload a flyer, logo, or any image<br>
           <span style="font-size:11px;">JPG, PNG · Max 5MB</span>
-          <input type="file" id="s-image" accept="image/jpeg,image/png,image/gif,image/webp" onchange="handleImageSelect(this)">
+          <input type="file" id="s-image" autocomplete="off" accept="image/jpeg,image/png,image/gif,image/webp" onchange="handleImageSelect(this)">
         </div>
         <div id="upload-preview" class="upload-preview" style="display:none;">
           <div class="upload-thumb"><img id="upload-thumb-img" src=""></div>
