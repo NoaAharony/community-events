@@ -8,7 +8,6 @@
 ## Priority 2 — Soon After Launch
 - [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form.
 - [ ] **Hebrew language toggle** — full UI toggle between Hebrew and English.
-- [ ] **Default placeholder flyer image** — branded image for events without an uploaded flyer.
 
 ## Priority 3 — Nice to Have
 - [ ] **Accessibility audit** — WCAG color contrast, font sizes, keyboard navigation, screen reader support.
@@ -18,6 +17,7 @@
 ---
 
 ## Completed
+- [x] **Default placeholder flyer image** — branded navy/gold placeholder for events without an uploaded flyer. *(Session 9)*
 - [x] **Email desktop width fix** - proper 560px centering via Outlook table. *(Session 9)*
 - [x] **Email 2 body redesign** - Georgia greeting, gold accent box, centered CTA. *(Session 9)*
 - [x] **Reply pre-fill** - address request reply email pre-filled with address, date, time, organizer. *(Session 9)*

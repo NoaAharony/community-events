@@ -205,6 +205,7 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - **Address privacy hint:** Upgraded from small gray italic to gold-accented prominent box
 
 ### Session 9 (Mar 8, 2026) — Email Polish + UX Logic
+- **Default placeholder flyer:** Branded navy/gold placeholder (inline SVG-style HTML) used for events without an uploaded image - shown on both event cards and event modal
 - **Email 1 (submission confirmation):**
   - Event box: fixed Outlook border-left using table instead of div
   - "Manage Your Event" box: stronger styling, Georgia serif title, bold dark text
