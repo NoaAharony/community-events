@@ -1688,9 +1688,10 @@ function prefillTimePicker(timeStr, hourId, minId, ampmId) {
 
 
 
-function populateYearDropdowns() {
+function populateYearDropdowns(extraYear) {
   const currentYear = new Date().getFullYear();
   const years = [currentYear, currentYear+1, currentYear+2];
+  if (extraYear && !years.includes(Number(extraYear))) years.unshift(Number(extraYear));
   document.querySelectorAll('[id$="-year"]').forEach(sel => {
     const current = sel.value;
     sel.innerHTML = '';
@@ -1700,7 +1701,7 @@ function populateYearDropdowns() {
       opt.textContent = String(y);
       sel.appendChild(opt);
     });
-    if (current && years.includes(Number(current))) sel.value = current;
+    if (current && years.map(Number).includes(Number(current))) sel.value = current;
     else sel.value = String(currentYear);
   });
 }
@@ -1910,7 +1911,8 @@ async function loadEditPage(editKey, fromAdmin = false) {
     };
 
     document.getElementById('e-name').value = e.name || '';
-    populateYearDropdowns();
+    const eventYear = e.event_date ? e.event_date.split('-')[0] : null;
+    populateYearDropdowns(eventYear);
     prefillDatePicker(e.event_date, 'e');
     const normalizeTime = t => t ? t.substring(0,8).padEnd(8,'0') : '';
     document.getElementById('e-start-time').value = normalizeTime(e.start_time);
@@ -2078,11 +2080,13 @@ async function loadAdminPage() {
     let total = events.length, upcoming = 0, past = 0, cancelled = 0;
 
     let rows = '';
+    const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1);
     events.forEach(e => {
       const [y,m,d] = e.event_date.split('-').map(Number);
       const eDate = new Date(y,m-1,d);
       const isCancelled = e.status === 'cancelled';
       const isPastEvent = !isCancelled && eDate < now;
+      if (isPastEvent) return; // skip past events in admin
       if (isCancelled) cancelled++;
       else if (isPastEvent) past++;
       else upcoming++;
