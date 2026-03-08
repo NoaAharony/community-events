@@ -28,7 +28,7 @@ serve(async (req) => {
         to: [organizer_email],
         subject: `✓ Your event "${event_name}" was added`,
         html: `
-          <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 560px; margin: 0 auto; background: #f5f0e8; padding: 32px 16px;">
+          <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background: #d8d0c4; padding: 32px 16px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="max-width:560px; background:#f5f0e8;"><tr><td>
             <table width="100%" cellpadding="0" cellspacing="0" style="border-radius: 10px 10px 0 0;"><tr>
             <td bgcolor="#1e4068" style="background: linear-gradient(160deg, #1e4068, #0f2035); border-radius: 10px 10px 0 0; padding: 28px 32px; text-align: center; border-bottom: 3px solid #c8963e;">
               <div style="font-family: Georgia, serif; font-size: 20px; color: white; font-weight: 600; text-align: center; margin-bottom: 20px;">Atlanta <span style="color: #e8b86a; font-style: italic; font-weight: 400;">IL</span> Community Events</div>
@@ -65,7 +65,7 @@ serve(async (req) => {
 
               <p style="font-size: 12px; color: #c8b89a; text-align: center; margin: 0; border-top: 1px solid #ede8e0; padding-top: 16px;">Atlanta IL Community Events</p>
             </div>
-          </div>
+          </td></tr></table></td></tr></table></div>
         `,
       };
     }
@@ -80,7 +80,7 @@ serve(async (req) => {
         reply_to: requester_email,
         subject: `📍 Address request for "${event_name}"`,
         html: `
-          <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 560px; margin: 0 auto; background: #f5f0e8; padding: 32px 16px;">
+          <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background: #d8d0c4; padding: 32px 16px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="max-width:560px; background:#f5f0e8;"><tr><td>
             <table width="100%" cellpadding="0" cellspacing="0" style="border-radius: 10px 10px 0 0;"><tr>
             <td bgcolor="#1e4068" style="background: linear-gradient(160deg, #1e4068, #0f2035); border-radius: 10px 10px 0 0; padding: 28px 32px; text-align: center; border-bottom: 3px solid #c8963e;">
               <div style="font-family: Georgia, serif; font-size: 20px; color: white; font-weight: 600; text-align: center; margin-bottom: 20px;">Atlanta <span style="color: #e8b86a; font-style: italic; font-weight: 400;">IL</span> Community Events</div>
@@ -126,7 +126,7 @@ serve(async (req) => {
 
               <p style="font-size: 12px; color: #c8b89a; text-align: center; margin: 0; border-top: 1px solid #ede8e0; padding-top: 16px;">Atlanta IL Community Events</p>
             </div>
-          </div>
+          </td></tr></table></td></tr></table></div>
         `,
       };
     }
