@@ -84,10 +84,14 @@
   .row-arrow { display: flex; align-items: center; padding: 0 18px; font-size: 22px; color: var(--gold); border-left: 1px solid #f0ebe0; min-width: 52px; justify-content: center; }
 
   .notice-bar { background: #fef8e8; border: 1px solid #e8d880; border-radius: 6px; padding: 10px 16px; font-size: 13px; color: #7a6020; margin-bottom: 20px; }
-  .empty-box { text-align: center; padding: 60px 24px; background: var(--white); border: 1px dashed var(--gray-200); border-radius: 8px; }
-  .empty-icon { font-size: 40px; margin-bottom: 14px; }
-  .empty-title { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 8px; }
-  .empty-desc { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin-bottom: 20px; }
+  .empty-box { background: white; border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); overflow: hidden; border: 1px solid #ede8e0; }
+  .empty-box-header { background: linear-gradient(160deg,#1e4068,#0f2035); padding: 36px 24px; text-align: center; border-bottom: 3px solid #c8963e; position: relative; overflow: hidden; }
+  .empty-box-header::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,150,62,0.07) 1px, transparent 1px); background-size: 14px 14px; }
+  .empty-box-body { padding: 28px 24px; text-align: center; }
+  .empty-icon { width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(232,184,106,0.35); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; position: relative; z-index: 1; }
+  .empty-title { font-family: "Source Serif 4", serif; font-size: 21px; color: white; font-weight: 400; margin-bottom: 6px; position: relative; z-index: 1; }
+  .empty-desc-header { font-size: 13px; color: rgba(255,255,255,0.55); position: relative; z-index: 1; }
+  .empty-desc { font-size: 13px; color: var(--gray-600); line-height: 1.7; margin-bottom: 20px; }
 
   .btn-primary { background: var(--blue); color: white; border: none; padding: 10px 22px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: background 0.2s; }
   .btn-primary:hover { background: var(--blue-light); }
@@ -1450,7 +1454,19 @@ function renderEvents() {
   if (events.length === 0) {
     const hasAnyEvents = allEvents.filter(e => !isPast(e.event_date) && e.status !== 'cancelled').length > 0;
     if (!hasAnyEvents) {
-      container.innerHTML = `<div class="empty-box"><div class="empty-icon">📭</div><div class="empty-title">No events yet</div><div class="empty-desc">There are no upcoming events right now.<br>Be the first to add one!</div><button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</button></div>`;
+      container.innerHTML = `<div class="empty-box">
+        <div class="empty-box-header">
+          <div class="empty-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="empty-title">No events yet</div>
+          <div class="empty-desc-header">There are no upcoming events right now.</div>
+        </div>
+        <div class="empty-box-body">
+          <div class="empty-desc">Be the first to add one!</div>
+          <button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</button>
+        </div>
+      </div>`;
     } else {
       container.innerHTML = `<div class="empty-box"><div class="empty-icon">🔍</div><div class="empty-title">No events match your filters</div><div class="empty-desc">Try adjusting or clearing your filters.</div><button class="btn-secondary" onclick="clearFilters()">✕ Clear Filters</button></div>`;
     }
