@@ -7,10 +7,30 @@ export async function onRequest(context) {
   const { request, next } = context;
   const url = new URL(request.url);
   const eventId = url.searchParams.get('event');
+  const BANNER_URL = `${url.origin}/site_banner.png`;
 
-  // No event param - serve normally
+  // No event param - inject homepage OG tags with banner
   if (!eventId) {
-    return next();
+    const response = await next();
+    const html = await response.text();
+    const ogTags = `
+    <meta property="og:title" content="${SITE_NAME}" />
+    <meta property="og:description" content="${DEFAULT_DESCRIPTION}" />
+    <meta property="og:url" content="${request.url}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="${SITE_NAME}" />
+    <meta property="og:image" content="${BANNER_URL}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${SITE_NAME}" />
+    <meta name="twitter:description" content="${DEFAULT_DESCRIPTION}" />
+    <meta name="twitter:image" content="${BANNER_URL}" />`;
+    const newHtml = html.replace('</head>', `${ogTags}\n</head>`);
+    return new Response(newHtml, {
+      status: response.status,
+      headers: { ...Object.fromEntries(response.headers), 'content-type': 'text/html;charset=UTF-8' }
+    });
   }
 
   // Fetch event from Supabase
@@ -42,7 +62,7 @@ export async function onRequest(context) {
   const description = event.description
     ? event.description.slice(0, 200)
     : DEFAULT_DESCRIPTION;
-  const image = event.image_url || '';
+  const image = event.image_url || BANNER_URL;
   const pageUrl = request.url;
 
   const ogTags = `
@@ -51,11 +71,13 @@ export async function onRequest(context) {
     <meta property="og:url" content="${escapeHtml(pageUrl)}" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="${SITE_NAME}" />
-    ${image ? `<meta property="og:image" content="${escapeHtml(image)}" />` : ''}
-    <meta name="twitter:card" content="${image ? 'summary_large_image' : 'summary'}" />
+    <meta property="og:image" content="${escapeHtml(image)}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(title)}" />
     <meta name="twitter:description" content="${escapeHtml(description)}" />
-    ${image ? `<meta name="twitter:image" content="${escapeHtml(image)}" />` : ''}`;
+    <meta name="twitter:image" content="${escapeHtml(image)}" />`;
 
   // Inject before </head>
   const newHtml = html.replace('</head>', `${ogTags}\n</head>`);
