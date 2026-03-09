@@ -2,8 +2,7 @@
 
 ## Priority 1 — Before Go-Live
 - [ ] **Disable Supabase auto-pause** — free tier pauses after 1 week of inactivity. Must be disabled before the site goes public or events will stop loading.
-- [ ] **About page content** — currently placeholder text. Needs real copy written.
-- [ ] **Custom domain / URL** — replace `community-events.naharony.workers.dev` with a real domain.
+- [ ] **Disable Supabase auto-pause** — still pending, must do before go-live
 
 ## Priority 2 — Soon After Launch
 - [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form.
@@ -38,7 +37,9 @@
 - [x] **Edit form validation bug** — year dropdown includes event's actual year. *(Session 8)*
 - [x] **Organizer avatar Hebrew fix** — single letter, Assistant font. *(Session 8)*
 - [x] **Address privacy hint** — gold-accented prominent box. *(Session 8)*
-
+- [x] **Email fix** — FROM address updated to `noreply@ilcommunityevents.com`, emails now work for all users. *(Session 10)*
+- [x] **Custom domain** — `ilcommunityevents.com` purchased via Cloudflare, verified in Resend. *(Session 10)*
+- [x] **About page content** — Real content written, styled per DESIGN_RULES. *(Session 10)*
 ---
 
 ## Out of Scope (V1 — explicitly excluded)
