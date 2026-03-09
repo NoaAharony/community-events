@@ -220,3 +220,9 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - **Address hint text updated:** explains the pre-filled reply benefit
 - **Confirmation page:** Removed raw edit link — replaced with clean "Copy Edit Link" button only
 - **Subject line:** address request email subject includes event date
+- ### Session 10 (Mar 9, 2026) — Domain, Emails, About Page
+- **Domain:** `ilcommunityevents.com` purchased and configured via Cloudflare
+- **Resend domain verified:** `ilcommunityevents.com` added and verified in Resend
+- **Email fix:** Updated Edge Function `send-email` — FROM address changed from `onboarding@resend.dev` to `noreply@ilcommunityevents.com`. Emails now send to all users (not just account owner)
+- **About page:** Real content written and added — community story, Noa credit, business/individual/online mention
+- **Cloudflare:** Domain auto-connected to Cloudflare Pages (purchased directly via Cloudflare)
