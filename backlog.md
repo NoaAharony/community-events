@@ -48,3 +48,6 @@
 - Payment processing
 - Map view of events
 - Push notifications
+
+## Annual Reminders
+- [ ] **Domain renewal** — `ilcommunityevents.com` expires Mar 09, 2027. Auto renew is ON (Cloudflare will charge card 60 days before expiry - around Jan 2027). Verify card is still valid before then.
