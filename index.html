@@ -1752,6 +1752,44 @@ function prefillTimePicker(timeStr, hourId, minId, ampmId) {
   document.getElementById(ampmId).value = ampm;
 }
 
+function syncEndTimeOptions(prefix) {
+  const startEl = document.getElementById(`${prefix}-start-time`);
+  const endEl = document.getElementById(`${prefix}-end-time`);
+  if (!startEl || !endEl) return;
+
+  if (!endEl.dataset.defaultOptions) {
+    endEl.dataset.defaultOptions = endEl.innerHTML;
+  }
+
+  const currentEnd = endEl.value;
+  const startValue = startEl.value;
+  const options = endEl.dataset.defaultOptions;
+
+  endEl.innerHTML = options;
+  const timeOptions = Array.from(endEl.querySelectorAll('option'));
+  timeOptions.forEach(opt => {
+    if (opt.value && startValue && opt.value < startValue) {
+      opt.remove();
+    }
+  });
+
+  if (currentEnd && Array.from(endEl.options).some(opt => opt.value === currentEnd)) {
+    endEl.value = currentEnd;
+  } else {
+    endEl.value = '';
+  }
+}
+
+function setupTimeDropdownSync(prefix) {
+  const startEl = document.getElementById(`${prefix}-start-time`);
+  if (!startEl) return;
+  if (!startEl.dataset.timeSyncBound) {
+    startEl.addEventListener('change', () => syncEndTimeOptions(prefix));
+    startEl.dataset.timeSyncBound = '1';
+  }
+  syncEndTimeOptions(prefix);
+}
+
 
 
 function populateYearDropdowns(extraYear) {
@@ -1965,6 +2003,7 @@ function resetSubmitForm() {
   // default start time to 5:00 PM
   const sStart = document.getElementById('s-start-time'); if(sStart) sStart.value = '17:00:00';
   const sEnd = document.getElementById('s-end-time'); if(sEnd) sEnd.value = '';
+  syncEndTimeOptions('s');
   const hint = document.getElementById('s-contact-hint'); if(hint) hint.textContent = "Visitors will be able to reach you privately through a form - your details won't be shown publicly";
   const en = document.getElementById('s-email-note'); if(en){en.textContent='🔒 Not shown publicly'; en.classList.remove('visible');}
   const pn = document.getElementById('s-phone-note'); if(pn){pn.textContent='🔒 Not shown publicly'; pn.classList.remove('visible');}
@@ -2003,6 +2042,7 @@ async function loadEditPage(editKey, fromAdmin = false) {
     const normalizeTime = t => t ? t.substring(0,8).padEnd(8,'0') : '';
     document.getElementById('e-start-time').value = normalizeTime(e.start_time);
     document.getElementById('e-end-time').value = normalizeTime(e.end_time);
+    syncEndTimeOptions('e');
     document.getElementById('e-type').value = e.event_type || '';
     // prefill audience checkboxes
     const eAudiences = (e.audience || '').split(',').map(a => a.trim());
@@ -2488,6 +2528,8 @@ function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) c
 // ═══════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
+  setupTimeDropdownSync('s');
+  setupTimeDropdownSync('e');
 
   if (params.has('admin')) {
     await loadAdminPage();
@@ -2500,6 +2542,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   await loadEvents();
   populateYearDropdowns();
+  setupTimeDropdownSync('s');
+  setupTimeDropdownSync('e');
 
   if (params.has('event')) {
     const eventId = params.get('event');
