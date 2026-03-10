@@ -1901,8 +1901,8 @@ async function submitEvent() {
       org_type: submitFormState.orgType,
       contact_email: document.getElementById('s-email').value.trim() || null,
       contact_phone: document.getElementById('s-phone').value.trim() || null,
-      show_email: showEmail,
-      show_phone: showPhone,
+      show_email: submitFormState.addressPublic ? showEmail : false,
+      show_phone: submitFormState.addressPublic ? showPhone : false,
       contact_opt_in: false,
       image_url: imageUrl,
       edit_key: editKey,
@@ -2034,8 +2034,8 @@ async function loadEditPage(editKey, fromAdmin = false) {
     // Prefill contact checkboxes
     const eShowEmail = document.getElementById('e-show-email');
     const eShowPhone = document.getElementById('e-show-phone');
-    if(eShowEmail) eShowEmail.checked = e.show_email || false;
-    if(eShowPhone) eShowPhone.checked = e.show_phone || false;
+    if(eShowEmail) eShowEmail.checked = e.address_public ? (e.show_email || false) : false;
+    if(eShowPhone) eShowPhone.checked = e.address_public ? (e.show_phone || false) : false;
     const eCG = document.getElementById('e-contact-details-group');
     if(eCG) eCG.style.display = e.address_public ? 'block' : 'none';
     updateContactHint('e');
@@ -2113,8 +2113,8 @@ async function saveEvent() {
       org_type: editFormState.orgType,
       contact_email: document.getElementById('e-email').value.trim() || null,
       contact_phone: document.getElementById('e-phone').value.trim() || null,
-      show_email: document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false,
-      show_phone: document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false,
+      show_email: editFormState.addressPublic && document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false,
+      show_phone: editFormState.addressPublic && document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false,
       contact_opt_in: false,
     };
     if (imageUrl !== undefined) payload.image_url = imageUrl;
@@ -2308,6 +2308,10 @@ function setAddressVisibility(val, prefix) {
       if (cl) cl.textContent = 'Show your contact details on the event page?';
     } else {
       cg.style.display = 'none';
+      const showEmailEl = document.getElementById('s-show-email');
+      const showPhoneEl = document.getElementById('s-show-phone');
+      if (showEmailEl) showEmailEl.checked = false;
+      if (showPhoneEl) showPhoneEl.checked = false;
     }
   }
   updateContactHint('s');
@@ -2333,13 +2337,28 @@ function handleOnlineCity(prefix) {
     if (contactLabel) contactLabel.textContent = 'Show your contact details on the event page?';
   }
 }
+
+function canShowPublicContact(prefix) {
+  const cityEl = document.getElementById(prefix + '-city');
+  const cityVal = cityEl ? cityEl.value : '';
+  if (cityVal === 'Online Event') return true;
+  return prefix === 's' ? !!submitFormState.addressPublic : !!editFormState.addressPublic;
+}
+
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function updateContactHint(prefix) {
+  const canShow = canShowPublicContact(prefix);
   const showEmail = document.getElementById(prefix+'-show-email') ? document.getElementById(prefix+'-show-email').checked : false;
   const showPhone = document.getElementById(prefix+'-show-phone') ? document.getElementById(prefix+'-show-phone').checked : false;
   const hint = document.getElementById(prefix+'-contact-hint');
   const emailNote = document.getElementById(prefix === 's' ? 's-email-note' : 'e-email-note');
   const phoneNote = document.getElementById(prefix === 's' ? 's-phone-note' : 'e-phone-note');
+  if (!canShow) {
+    if(hint) hint.textContent = "Your email and phone won't be shown on the event page.";
+    if(emailNote) emailNote.textContent = '🔒 Not shown publicly';
+    if(phoneNote) phoneNote.textContent = '🔒 Not shown publicly';
+    return;
+  }
   if(showEmail && showPhone) {
     if(hint) hint.textContent = 'Your email and phone will be shown on the event page.';
     if(emailNote) emailNote.textContent = '👁 Will appear on your event page';
@@ -2407,6 +2426,10 @@ function setEditAddressVisibility(val, btn) {
       if (cl) cl.textContent = 'Show your contact details on the event page?';
     } else {
       cg.style.display = 'none';
+      const showEmailEl = document.getElementById('e-show-email');
+      const showPhoneEl = document.getElementById('e-show-phone');
+      if (showEmailEl) showEmailEl.checked = false;
+      if (showPhoneEl) showPhoneEl.checked = false;
     }
   }
   updateContactHint('e');
