@@ -93,6 +93,9 @@
   .empty-title { font-family: "Source Serif 4", serif; font-size: 21px; color: white; font-weight: 400; margin-bottom: 6px; position: relative; z-index: 1; }
   .empty-desc-header { font-size: 13px; color: rgba(255,255,255,0.55); position: relative; z-index: 1; }
   .empty-desc { font-size: 13px; color: var(--gray-600); line-height: 1.7; margin-bottom: 20px; }
+  .empty-filter-box { max-width: 640px; margin: 4px auto 0; background: white; border: 1px solid #ede8e0; border-radius: 10px; box-shadow: 0 8px 24px rgba(26,58,92,0.08), 0 2px 6px rgba(0,0,0,0.05); padding: 20px 18px 18px; text-align: center; }
+  .empty-filter-icon { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(232,184,106,0.6); display: inline-flex; align-items: center; justify-content: center; color: #1e4068; background: linear-gradient(to bottom, #fff, #f6f0e8); box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 10px; }
+  .empty-filter-desc { font-size: 13px; color: var(--gray-600); line-height: 1.7; margin-bottom: 14px; }
 
   .btn-primary { background: var(--blue); color: white; border: none; padding: 10px 22px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: background 0.2s; }
   .btn-primary:hover { background: var(--blue-light); }
@@ -1426,7 +1429,19 @@ async function loadEvents() {
     document.getElementById('city-filter-other').style.display = hasOther ? 'block' : 'none';
     renderEvents();
   } catch (e) {
-    container.innerHTML = '<div class="empty-box"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load events</div><div class="empty-desc">' + e.message + '</div></div>';
+    container.innerHTML = `<div class="empty-box">
+      <div class="empty-box-header">
+        <div class="empty-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.7" fill="rgba(232,184,106,0.85)"/></svg>
+        </div>
+        <div class="empty-title">Could not load events</div>
+        <div class="empty-desc-header">There was a problem loading the event feed.</div>
+      </div>
+      <div class="empty-box-body">
+        <div class="empty-desc">${e.message}</div>
+        <button class="btn-secondary" onclick="loadEvents()">↻ Try Again</button>
+      </div>
+    </div>`;
   }
 }
 
@@ -1492,7 +1507,13 @@ function renderEvents() {
         </div>
       </div>`;
     } else {
-      container.innerHTML = `<div class="empty-box"><div class="empty-icon">🔍</div><div class="empty-title">No events match your filters</div><div class="empty-desc">Try adjusting or clearing your filters.</div><button class="btn-secondary" onclick="clearFilters()">✕ Clear Filters</button></div>`;
+      container.innerHTML = `<div class="empty-filter-box">
+        <div class="empty-filter-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <div class="empty-filter-desc">No events match the filters you selected. Clear or change filters to view other events.</div>
+        <button class="btn-secondary" onclick="clearFilters()">✕ Clear Filters</button>
+      </div>`;
     }
     return;
   }
