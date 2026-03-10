@@ -619,8 +619,9 @@
       </div>
       <div class="form-group">
         <label>Registration Link <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="s-reg-link" autocomplete="off" type="url" placeholder="https://">
+        <input class="form-input" id="s-reg-link" autocomplete="off" type="url" placeholder="https://" oninput="handleRegistrationLinkChange('s')" onchange="handleRegistrationLinkChange('s')">
         <div class="field-hint">If provided, visitors will be directed to this link to register</div>
+        <div id="s-reg-mode-hint" style="display:none; font-size:12px; color:#5c3d10; font-weight:700; margin-top:8px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5;">Registration link provided. Address fields are hidden because visitors will get full location details from the official registration page.</div>
       </div>
     </div>
 
@@ -960,7 +961,8 @@
       </div>
       <div class="form-group">
         <label>Registration Link <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="e-reg-link" type="url" placeholder="https://">
+        <input class="form-input" id="e-reg-link" type="url" placeholder="https://" oninput="handleRegistrationLinkChange('e')" onchange="handleRegistrationLinkChange('e')">
+        <div id="e-reg-mode-hint" style="display:none; font-size:12px; color:#5c3d10; font-weight:700; margin-top:8px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5;">Registration link provided. Address fields are hidden because visitors will get full location details from the official registration page.</div>
       </div>
     </div>
 
@@ -1837,6 +1839,8 @@ async function submitEvent() {
   const email = document.getElementById('s-email').value.trim();
   const regLink = document.getElementById('s-reg-link').value.trim();
   const address = document.getElementById('s-address').value.trim();
+  const normalizedAddress = (!isOnline && regLink) ? null : (address || null);
+  const addressPublic = normalizedAddress ? submitFormState.addressPublic : false;
 
   if (!name || !date || !startTime || !type || !audience || !city || !organizer || !email) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
@@ -1893,10 +1897,10 @@ async function submitEvent() {
       cost: submitFormState.cost,
       amount: submitFormState.cost === 'Paid' ? ('$' + document.getElementById('s-amount').value.trim()) : null,
       description: document.getElementById('s-desc').value.trim() || null,
-      registration_link: document.getElementById('s-reg-link').value.trim() || null,
+      registration_link: regLink || null,
       city,
-      full_address: document.getElementById('s-address').value.trim() || null,
-      address_public: submitFormState.addressPublic,
+      full_address: normalizedAddress,
+      address_public: addressPublic,
       organizer_name: organizer,
       org_type: submitFormState.orgType,
       contact_email: document.getElementById('s-email').value.trim() || null,
@@ -1949,6 +1953,8 @@ function resetSubmitForm() {
   // Reset online hint
   const onlineHint = document.getElementById('s-online-hint');
   if (onlineHint) onlineHint.style.display = 'none';
+  const regModeHint = document.getElementById('s-reg-mode-hint');
+  if (regModeHint) regModeHint.style.display = 'none';
   const addrSection = document.getElementById('s-address-section');
   if (addrSection) addrSection.style.display = 'block';
   const sShowEmail = document.getElementById('s-show-email'); if(sShowEmail) sShowEmail.checked = false;
@@ -1968,6 +1974,7 @@ function resetSubmitForm() {
   const hint = document.getElementById('s-contact-hint'); if(hint) hint.textContent = "Visitors will be able to reach you privately through a form - your details won't be shown publicly";
   const en = document.getElementById('s-email-note'); if(en){en.textContent='🔒 Not shown publicly'; en.classList.remove('visible');}
   const pn = document.getElementById('s-phone-note'); if(pn){pn.textContent='🔒 Not shown publicly'; pn.classList.remove('visible');}
+  refreshLocationMode('s');
   removeImage();
 }
 
@@ -2020,8 +2027,6 @@ async function loadEditPage(editKey, fromAdmin = false) {
       document.getElementById('e-city-other').value = e.city;
       document.getElementById('e-city-other').style.display = 'block';
     }
-    // Trigger online city handler to show/hide address section
-    handleOnlineCity('e');
     document.getElementById('e-email').value = e.contact_email || '';
     document.getElementById('e-phone').value = e.contact_phone || '';
     const ePhone = document.getElementById('e-phone');
@@ -2031,13 +2036,12 @@ async function loadEditPage(editKey, fromAdmin = false) {
     setEditCost(e.cost);
     setEditAddressVisibility(e.address_public);
     setEditOrgType(e.org_type);
+    refreshLocationMode('e');
     // Prefill contact checkboxes
     const eShowEmail = document.getElementById('e-show-email');
     const eShowPhone = document.getElementById('e-show-phone');
     if(eShowEmail) eShowEmail.checked = e.show_email || false;
     if(eShowPhone) eShowPhone.checked = e.show_phone || false;
-    const eCG = document.getElementById('e-contact-details-group');
-    if(eCG) eCG.style.display = e.address_public ? 'block' : 'none';
     updateContactHint('e');
 
     if (e.image_url) {
@@ -2071,6 +2075,10 @@ async function saveEvent() {
   const city = eCitySelect === 'other' ? document.getElementById('e-city-other').value.trim() : eCitySelect;
   const organizer = document.getElementById('e-organizer').value.trim();
   const editEmail = document.getElementById('e-email').value.trim();
+  const editRegLink = document.getElementById('e-reg-link').value.trim();
+  const editAddress = document.getElementById('e-address').value.trim();
+  const isEditOnline = eCitySelect === 'Online Event';
+  const normalizedEditAddress = (!isEditOnline && editRegLink) ? null : (editAddress || null);
 
   if (!name || !date || !startTime || !city || !organizer || !editEmail) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
@@ -2080,6 +2088,18 @@ async function saveEvent() {
   const editEndTime = document.getElementById('e-end-time').value;
   if (editEndTime && editEndTime <= startTime) {
     errDiv.textContent = 'End time must be later than start time';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (!isEditOnline && !editRegLink && !editAddress) {
+    errDiv.textContent = 'Please enter the event address, or add a registration link';
+    errDiv.style.display = 'block';
+    return;
+  }
+  const eShowEmail = document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false;
+  const eShowPhone = document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false;
+  if (isEditOnline && !editRegLink && !eShowEmail && !eShowPhone) {
+    errDiv.textContent = 'For online events without a registration link, please show at least your email or phone so visitors can contact you';
     errDiv.style.display = 'block';
     return;
   }
@@ -2105,16 +2125,16 @@ async function saveEvent() {
       cost: editFormState.cost,
       amount: editFormState.cost === 'Paid' ? ('$' + document.getElementById('e-amount').value.trim()) : null,
       description: document.getElementById('e-desc').value.trim() || null,
-      registration_link: document.getElementById('e-reg-link').value.trim() || null,
+      registration_link: editRegLink || null,
       city,
-      full_address: document.getElementById('e-address').value.trim() || null,
-      address_public: editFormState.addressPublic,
+      full_address: normalizedEditAddress,
+      address_public: normalizedEditAddress ? editFormState.addressPublic : false,
       organizer_name: organizer,
       org_type: editFormState.orgType,
       contact_email: document.getElementById('e-email').value.trim() || null,
       contact_phone: document.getElementById('e-phone').value.trim() || null,
-      show_email: document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false,
-      show_phone: document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false,
+      show_email: eShowEmail,
+      show_phone: eShowPhone,
       contact_opt_in: false,
     };
     if (imageUrl !== undefined) payload.image_url = imageUrl;
@@ -2314,24 +2334,48 @@ function setAddressVisibility(val, prefix) {
 }
 function toggleAddressVisibility(val, groupId) { document.getElementById(groupId).style.display = val.trim() ? 'block' : 'none'; }
 
-function handleOnlineCity(prefix) {
-  const cityVal = document.getElementById(prefix + '-city').value;
-  const isOnline = cityVal === 'Online Event';
+function refreshLocationMode(prefix) {
+  const cityEl = document.getElementById(prefix + '-city');
+  const regLinkEl = document.getElementById(prefix + '-reg-link');
   const addrSection = document.getElementById(prefix + '-address-section');
   const onlineHint = document.getElementById(prefix + '-online-hint');
+  const regModeHint = document.getElementById(prefix + '-reg-mode-hint');
   const contactGroup = document.getElementById(prefix + '-contact-details-group');
   const contactLabel = document.getElementById(prefix + '-contact-label');
-  if (addrSection) addrSection.style.display = isOnline ? 'none' : 'block';
+  if (!cityEl || !regLinkEl) return;
+
+  const isOnline = cityEl.value === 'Online Event';
+  const hasRegLink = !!regLinkEl.value.trim();
+  const shouldHideAddress = !isOnline && hasRegLink;
+
+  if (addrSection) addrSection.style.display = (isOnline || shouldHideAddress) ? 'none' : 'block';
   if (onlineHint) onlineHint.style.display = isOnline ? 'block' : 'none';
-  if (contactGroup && isOnline) {
+  if (regModeHint) regModeHint.style.display = shouldHideAddress ? 'block' : 'none';
+
+  if (!contactGroup) return;
+
+  if (isOnline && !hasRegLink) {
     contactGroup.style.display = 'block';
     if (contactLabel) contactLabel.textContent = 'How can visitors contact you? (at least one required)';
-  } else if (contactGroup && !isOnline) {
-    // restore based on address visibility
+  } else if (isOnline && hasRegLink) {
+    contactGroup.style.display = 'none';
+    if (contactLabel) contactLabel.textContent = 'Show your contact details on the event page?';
+  } else if (shouldHideAddress) {
+    contactGroup.style.display = 'none';
+    if (contactLabel) contactLabel.textContent = 'Show your contact details on the event page?';
+  } else {
     const isPublic = prefix === 's' ? submitFormState.addressPublic : editFormState.addressPublic;
     contactGroup.style.display = isPublic ? 'block' : 'none';
     if (contactLabel) contactLabel.textContent = 'Show your contact details on the event page?';
   }
+}
+
+function handleOnlineCity(prefix) {
+  refreshLocationMode(prefix);
+}
+
+function handleRegistrationLinkChange(prefix) {
+  refreshLocationMode(prefix);
 }
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function updateContactHint(prefix) {
