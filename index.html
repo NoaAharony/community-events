@@ -159,9 +159,16 @@
   .modal-action-btn.gold:hover { background: var(--gold-light); }
   .contact-section { margin-top: 14px; }
   .contact-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); font-weight: 600; margin-bottom: 8px; }
-  .contact-item { display: flex; align-items: center; justify-content: space-between; background: var(--gray-100); border-radius: 6px; padding: 10px 14px; margin-bottom: 6px; }
+  .event-footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  .event-footer-grid > :only-child { grid-column: span 2; }
+  .event-footer-card { background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px 14px; }
+  .event-footer-card.contact { background: var(--gray-100); border-color: var(--gray-200); }
+  .event-footer-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); font-weight: 700; margin-bottom: 6px; }
+  .event-footer-text { font-size: 13px; color: var(--gray-800); line-height: 1.5; }
+  .contact-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-radius: 6px; margin-bottom: 6px; }
   .contact-item-info { font-size: 13px; color: var(--gray-600); }
-  .contact-btn { background: var(--blue); color: white; border: none; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 4px; font-family: 'Nunito', sans-serif; text-decoration: none; }
+  .contact-btn { background: var(--blue); color: white; border: none; padding: 7px 12px; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 4px; font-family: 'Nunito', sans-serif; text-decoration: none; text-align: center; }
+  .contact-btn:hover { background: var(--blue-light); }
 
   .form-success { display: none; background: #e8f5e8; border: 1px solid #90c490; border-radius: 6px; padding: 16px; text-align: center; margin-top: 14px; }
   .form-success.show { display: block; }
@@ -268,6 +275,7 @@
     /* Modal */
     .modal-fields { grid-template-columns: 1fr; }
     .modal-field.full { grid-column: span 1; }
+    .event-footer-grid { grid-template-columns: 1fr; }
     .modal { border-radius: 8px; }
     .modal-event-title { font-size: 18px; }
 
@@ -1618,25 +1626,27 @@ function openEventModal(id) {
         <span style="font-family:'Nunito',sans-serif; font-size:9px; color:rgba(255,255,255,0.35); letter-spacing:2px; text-transform:uppercase; text-align:center; line-height:2; font-weight:700;">COMMUNITY<br>EVENTS</span>
       </div>`;
 
-  let addressHtml = '';
+  let addressFooterHtml = '';
   if (e.address_public && e.full_address) {
     // Type 2: public address - show it
-    addressHtml = `<div class="modal-field full"><label>Address</label><span>${e.full_address}</span></div>`;
+    addressFooterHtml = `<div class="event-footer-card"><div class="event-footer-title">Address</div><div class="event-footer-text">${e.full_address}</div></div>`;
   } else if (!e.address_public && e.full_address) {
     // Type 3: private address - show request button
-    addressHtml = `<div class="modal-field full"><label>City</label><span>${e.city} <button onclick="openAddressRequest('${e.id}')" style="margin-left:10px; background:var(--blue); color:white; border:none; padding:5px 12px; border-radius:4px; font-size:12px; cursor:pointer; font-family:'Nunito',sans-serif;">Request Address</button></span></div>`;
+    addressFooterHtml = `<div class="event-footer-card"><div class="event-footer-title">City</div><div class="event-footer-text">${e.city}</div><button onclick="openAddressRequest('${e.id}')" style="margin-top:10px; background:var(--blue); color:white; border:none; padding:7px 12px; border-radius:5px; font-size:12px; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:700;">Request Address</button></div>`;
   } else {
     // No address (online event or reg link only) - just show city
-    addressHtml = `<div class="modal-field full"><label>City</label><span>${e.city}</span></div>`;
+    addressFooterHtml = `<div class="event-footer-card"><div class="event-footer-title">City</div><div class="event-footer-text">${e.city}</div></div>`;
   }
 
-  let contactHtml = '';
+  let contactFooterHtml = '';
   if ((e.show_email && e.contact_email) || (e.show_phone && e.contact_phone)) {
-    contactHtml = `<hr class="modal-divider"><div class="contact-section"><div class="contact-label">Contact Organizer</div>`;
-    if (e.show_email && e.contact_email) contactHtml += `<div class="contact-item"><a href="mailto:${e.contact_email}?subject=Question about: ${e.name}" class="contact-btn">Send Email</a></div>`;
-    if (e.show_phone && e.contact_phone) contactHtml += `<div class="contact-item"><span class="contact-phone-desktop">📞 ${e.contact_phone}</span><a href="tel:${e.contact_phone}" class="contact-btn contact-call-mobile">Call</a></div>`;
-    contactHtml += `</div>`;
+    contactFooterHtml = `<div class="event-footer-card contact"><div class="event-footer-title">Contact Organizer</div><div class="event-footer-text" style="margin-bottom:10px;">For questions, contact the organizer.</div>`;
+    if (e.show_email && e.contact_email) contactFooterHtml += `<div class="contact-item"><a href="mailto:${e.contact_email}?subject=Question about: ${e.name}" class="contact-btn">Send Email</a></div>`;
+    if (e.show_phone && e.contact_phone) contactFooterHtml += `<div class="contact-item"><span class="contact-phone-desktop">📞 ${e.contact_phone}</span><a href="tel:${e.contact_phone}" class="contact-btn contact-call-mobile">Call</a></div>`;
+    contactFooterHtml += `</div>`;
   }
+
+  const footerHtml = `<hr class="modal-divider"><div class="event-footer-grid">${addressFooterHtml}${contactFooterHtml}</div>`;
 
   const regBtn = e.registration_link
     ? `<a href="${e.registration_link}" target="_blank" class="modal-action-btn gold">Register Now ↗</a>`
@@ -1652,11 +1662,10 @@ function openEventModal(id) {
       <div class="modal-field"><label>Organizer</label><span>${e.organizer_name}</span></div>
       <div class="modal-field"><label>Type</label><span>${e.event_type}</span></div>
       <div class="modal-field"><label>Audience</label><span>${e.audience}</span></div>
-      ${addressHtml}
     </div>
     ${e.description ? `<div class="modal-desc" dir="auto">${e.description}</div>` : ''}
     ${regBtn}
-    ${contactHtml}
+    ${footerHtml}
     <button class="share-modal-btn" onclick="shareEvent(null,'${e.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share Event</button>
   `;
   document.getElementById('overlay-event').classList.add('open');
