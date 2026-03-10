@@ -1837,6 +1837,7 @@ async function submitEvent() {
   const email = document.getElementById('s-email').value.trim();
   const regLink = document.getElementById('s-reg-link').value.trim();
   const address = document.getElementById('s-address').value.trim();
+  const phone = document.getElementById('s-phone').value.trim();
 
   if (!name || !date || !startTime || !type || !audience || !city || !organizer || !email) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
@@ -1858,17 +1859,18 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
-  // Validation: if not online and no reg link, address is required
-  if (!isOnline && !regLink && !address) {
-    errDiv.textContent = 'Please enter the event address, or add a registration link';
+  // Validation: in-person events must include an address
+  if (!isOnline && !address) {
+    errDiv.textContent = 'For in-person events, please enter the event address';
     errDiv.style.display = 'block';
     return;
   }
-  // Validation: online event must have at least email or phone shown
+  // Validation: online event must include registration link or visible contact details
   const showEmail = document.getElementById('s-show-email') ? document.getElementById('s-show-email').checked : false;
   const showPhone = document.getElementById('s-show-phone') ? document.getElementById('s-show-phone').checked : false;
-  if (isOnline && !regLink && !showEmail && !showPhone) {
-    errDiv.textContent = 'For online events without a registration link, please show at least your email or phone so visitors can contact you';
+  const hasVisibleContact = showEmail || (showPhone && !!phone);
+  if (isOnline && !regLink && !hasVisibleContact) {
+    errDiv.textContent = 'For online events, add a registration link or show organizer contact details (email or phone)';
     errDiv.style.display = 'block';
     return;
   }
@@ -2069,8 +2071,12 @@ async function saveEvent() {
   const startTime = document.getElementById('e-start-time').value;
   const eCitySelect = document.getElementById('e-city').value;
   const city = eCitySelect === 'other' ? document.getElementById('e-city-other').value.trim() : eCitySelect;
+  const isOnline = eCitySelect === 'Online Event';
   const organizer = document.getElementById('e-organizer').value.trim();
   const editEmail = document.getElementById('e-email').value.trim();
+  const editRegLink = document.getElementById('e-reg-link').value.trim();
+  const editAddress = document.getElementById('e-address').value.trim();
+  const editPhone = document.getElementById('e-phone').value.trim();
 
   if (!name || !date || !startTime || !city || !organizer || !editEmail) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
@@ -2080,6 +2086,21 @@ async function saveEvent() {
   const editEndTime = document.getElementById('e-end-time').value;
   if (editEndTime && editEndTime <= startTime) {
     errDiv.textContent = 'End time must be later than start time';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  if (!isOnline && !editAddress) {
+    errDiv.textContent = 'For in-person events, please enter the event address';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  const editShowEmail = document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false;
+  const editShowPhone = document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false;
+  const hasVisibleEditContact = editShowEmail || (editShowPhone && !!editPhone);
+  if (isOnline && !editRegLink && !hasVisibleEditContact) {
+    errDiv.textContent = 'For online events, add a registration link or show organizer contact details (email or phone)';
     errDiv.style.display = 'block';
     return;
   }
