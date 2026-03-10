@@ -1790,6 +1790,62 @@ function prefillDatePicker(dateStr, mid) {
   if (document.getElementById(mid+'-month')) document.getElementById(mid+'-month').value = parts[1];
   if (document.getElementById(mid+'-day')) document.getElementById(mid+'-day').value = parts[2];
 }
+function isDateBeforeToday(dateStr) {
+  if (!dateStr) return false;
+  const [y,m,d] = dateStr.split('-').map(Number);
+  if (![y,m,d].every(n => Number.isFinite(n))) return false;
+  const candidate = new Date(y, m - 1, d);
+  candidate.setHours(0,0,0,0);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  return candidate < today;
+}
+
+function enforceFutureDayOptions(prefix) {
+  const yearEl = document.getElementById(`${prefix}-year`);
+  const monthEl = document.getElementById(`${prefix}-month`);
+  const dayEl = document.getElementById(`${prefix}-day`);
+  if (!yearEl || !monthEl || !dayEl) return;
+  const selectedYear = Number(yearEl.value);
+  const selectedMonth = Number(monthEl.value);
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+  const currentDay = today.getDate();
+  const sameMonth = selectedYear === currentYear && selectedMonth === currentMonth;
+  const monthChosen = !!monthEl.value && !!yearEl.value;
+  Array.from(dayEl.options).forEach(opt => {
+    if (!opt.value) {
+      opt.disabled = false;
+      opt.hidden = false;
+      return;
+    }
+    const day = Number(opt.value);
+    const disable = monthChosen && sameMonth && day < currentDay;
+    opt.disabled = disable;
+    opt.hidden = disable;
+  });
+  const selectedOption = Array.from(dayEl.options).find(opt => opt.value === dayEl.value);
+  if (selectedOption && selectedOption.disabled) {
+    dayEl.value = '';
+  }
+}
+
+function bindFutureDatePicker(prefix) {
+  const base = document.getElementById(`${prefix}-year`);
+  if (!base) return;
+  if (base.dataset.futureBound === 'true') {
+    enforceFutureDayOptions(prefix);
+    return;
+  }
+  ['year','month','day'].forEach(part => {
+    const el = document.getElementById(`${prefix}-${part}`);
+    if (el) el.addEventListener('change', () => enforceFutureDayOptions(prefix));
+  });
+  base.dataset.futureBound = 'true';
+  enforceFutureDayOptions(prefix);
+}
+
 
 function getAudienceValues() {
   const checked = document.querySelectorAll('input[name="s-audience"]:checked');
@@ -1877,6 +1933,11 @@ async function submitEvent() {
 
   if (!name || !date || !startTime || !type || !audience || !city || !organizer || !email) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (isDateBeforeToday(date)) {
+    errDiv.textContent = 'Please select today or a future date';
     errDiv.style.display = 'block';
     return;
   }
@@ -1973,6 +2034,7 @@ async function submitEvent() {
 
 function resetSubmitForm() {
   populateYearDropdowns();
+  bindFutureDatePicker('s');
   ['s-name','s-date','s-amount','s-desc','s-reg-link','s-address','s-email','s-phone'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
@@ -2539,6 +2601,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   await loadEvents();
   populateYearDropdowns();
+  bindFutureDatePicker('s');
   bindEndTimeFilter('s');
 
   if (params.has('event')) {
