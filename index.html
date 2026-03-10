@@ -1821,6 +1821,12 @@ function handleCityOther(selectId, otherId) {
   }
 }
 
+function resetUrlToHome() {
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState(null, '', window.location.pathname);
+  }
+}
+
 function filterEndTimeOptions(prefix) {
   const startEl = document.getElementById(`${prefix}-start-time`);
   const endEl = document.getElementById(`${prefix}-end-time`);
@@ -2157,7 +2163,7 @@ async function saveEvent() {
     });
     await loadEvents();
   populateYearDropdowns();
-    if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); }
+    if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); resetUrlToHome(); }
   } catch (e) {
     errDiv.textContent = 'Error saving: ' + e.message;
     errDiv.style.display = 'block';
@@ -2183,7 +2189,7 @@ async function confirmCancelEvent(action) {
     closeModal('overlay-cancel');
     await loadEvents();
   populateYearDropdowns();
-    if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); }
+    if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); resetUrlToHome(); }
   } catch (e) {
     alert('Error cancelling event: ' + e.message);
   }
