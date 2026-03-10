@@ -57,7 +57,7 @@ serve(async (req) => {
                   <p style="font-size: 14px; color: #5c3d10; font-weight: 600; margin: 0 0 18px; line-height: 1.6;">Save this email - it's the only way to edit or cancel your event.</p>
                   <table width="100%" cellpadding="0" cellspacing="0"><tr>
                     <td bgcolor="#1e4068" style="background: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
-                      <a href="${edit_link}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Edit My Event →</a>
+                      <a href="${edit_link}" style="display: block; font-size: 15px; font-weight: 700; color: #ffffff !important; text-decoration: none; -webkit-text-fill-color: #ffffff;">Edit My Event →</a>
                     </td>
                   </tr></table>
                 </td>
@@ -138,7 +138,7 @@ serve(async (req) => {
 
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;"><tr>
                 <td bgcolor="#1e4068" style="background: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
-                  <a href="mailto:${requester_email}?subject=Address for: ${event_name}${formattedDate ? ' - ' + formattedDate + (event_time ? ', ' + event_time : '') : ''}&body=Hi ${requester_fname},%0A%0AThe address for ${event_name}${formattedDate ? ' (' + formattedDate + (event_time ? ', ' + event_time : '') + ')' : ''} is:%0A${event_address ? event_address : '[address]'}%0A%0ASee you there!%0A${organizer_name}" style="font-size: 15px; font-weight: 700; color: white; text-decoration: none;">Reply to ${requester_fname} →</a>
+                  <a href="mailto:${requester_email}?subject=Address for: ${event_name}${formattedDate ? ' - ' + formattedDate + (event_time ? ', ' + event_time : '') : ''}&body=Hi ${requester_fname},%0A%0AThe address for ${event_name}${formattedDate ? ' (' + formattedDate + (event_time ? ', ' + event_time : '') + ')' : ''} is:%0A${event_address ? event_address : '[address]'}%0A%0ASee you there!%0A${organizer_name}" style="display: block; font-size: 15px; font-weight: 700; color: #ffffff !important; text-decoration: none; -webkit-text-fill-color: #ffffff;">Reply to ${requester_fname} →</a>
                 </td>
               </tr></table>
 
