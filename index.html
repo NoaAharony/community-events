@@ -2224,6 +2224,7 @@ async function saveEvent() {
       method: 'PATCH', body: JSON.stringify(payload), prefer: 'return=minimal'
     });
     await loadEvents();
+  setDateFilter('all','All Upcoming');
   populateYearDropdowns();
     if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); resetUrlToHome(); }
   } catch (e) {
@@ -2327,7 +2328,15 @@ async function confirmAdminDelete() {
 // ═══════════════════════════════════════════════════════════
 // FILTERS
 // ═══════════════════════════════════════════════════════════
-function setDateFilter(value, label, e) { e.stopPropagation(); filters.date = value; document.getElementById('date-label').textContent = label; updateFilterChip('chip-date', true); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-date', label); }
+function setDateFilter(value, label, e) {
+  if (e) e.stopPropagation();
+  filters.date = value;
+  document.getElementById('date-label').textContent = label;
+  updateFilterChip('chip-date', true);
+  closeAllDropdowns();
+  renderEvents();
+  updateDropdownSelected('dd-date', label);
+}
 function setCityFilter(value, label, e) { e.stopPropagation(); filters.city = value; document.getElementById('city-label').textContent = label; updateFilterChip('chip-city', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-city', label); }
 function setTypeFilter(value, label, e) { e.stopPropagation(); filters.type = value; document.getElementById('type-label').textContent = label; updateFilterChip('chip-type', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-type', label); }
 function setCostFilter(value, label, e) { e.stopPropagation(); filters.cost = value; document.getElementById('cost-label').textContent = label; updateFilterChip('chip-cost', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-cost', label); }
