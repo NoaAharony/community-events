@@ -1775,6 +1775,15 @@ function populateYearDropdowns(extraYear) {
   });
 }
 
+function scheduleYearDropdownRefresh() {
+  const now = new Date();
+  const nextYear = new Date(now.getFullYear() + 1, 0, 1);
+  const delay = nextYear - now + 1000;
+  setTimeout(() => {
+    populateYearDropdowns();
+    scheduleYearDropdownRefresh();
+  }, delay);
+}
 function buildDateValue(mid) {
   const m = document.getElementById(mid+'-month') ? document.getElementById(mid+'-month').value : '';
   const d = document.getElementById(mid+'-day') ? document.getElementById(mid+'-day').value : '';
@@ -2611,6 +2620,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadEvents();
   populateYearDropdowns();
   bindFutureDatePicker('s');
+  scheduleYearDropdownRefresh();
   bindEndTimeFilter('s');
 
   if (params.has('event')) {
