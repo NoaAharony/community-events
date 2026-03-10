@@ -1818,6 +1818,34 @@ function handleCityOther(selectId, otherId) {
   }
 }
 
+function filterEndTimeOptions(prefix) {
+  const startEl = document.getElementById(`${prefix}-start-time`);
+  const endEl = document.getElementById(`${prefix}-end-time`);
+  if (!startEl || !endEl) return;
+  const startVal = startEl.value;
+  const endVal = endEl.value;
+  Array.from(endEl.options).forEach(opt => {
+    if (!opt.value) { opt.disabled = false; opt.hidden = false; return; }
+    if (!startVal) { opt.disabled = false; opt.hidden = false; return; }
+    const disable = opt.value <= startVal;
+    opt.disabled = disable;
+    opt.hidden = disable;
+  });
+  if (endVal) {
+    const selected = endEl.querySelector(`option[value="${endVal}"]`);
+    if (selected && (selected.disabled || selected.hidden)) endEl.value = '';
+  }
+}
+
+function bindEndTimeFilter(prefix) {
+  const startEl = document.getElementById(`${prefix}-start-time`);
+  if (!startEl) return;
+  if (startEl.dataset.endTimeBound === 'true') { filterEndTimeOptions(prefix); return; }
+  startEl.dataset.endTimeBound = 'true';
+  startEl.addEventListener('change', () => filterEndTimeOptions(prefix));
+  filterEndTimeOptions(prefix);
+}
+
 async function submitEvent() {
   const btn = document.getElementById('submit-btn');
   const errDiv = document.getElementById('submit-error');
@@ -1965,6 +1993,7 @@ function resetSubmitForm() {
   // default start time to 5:00 PM
   const sStart = document.getElementById('s-start-time'); if(sStart) sStart.value = '17:00:00';
   const sEnd = document.getElementById('s-end-time'); if(sEnd) sEnd.value = '';
+  filterEndTimeOptions('s');
   const hint = document.getElementById('s-contact-hint'); if(hint) hint.textContent = "Visitors will be able to reach you privately through a form - your details won't be shown publicly";
   const en = document.getElementById('s-email-note'); if(en){en.textContent='🔒 Not shown publicly'; en.classList.remove('visible');}
   const pn = document.getElementById('s-phone-note'); if(pn){pn.textContent='🔒 Not shown publicly'; pn.classList.remove('visible');}
@@ -2003,6 +2032,7 @@ async function loadEditPage(editKey, fromAdmin = false) {
     const normalizeTime = t => t ? t.substring(0,8).padEnd(8,'0') : '';
     document.getElementById('e-start-time').value = normalizeTime(e.start_time);
     document.getElementById('e-end-time').value = normalizeTime(e.end_time);
+    bindEndTimeFilter('e');
     document.getElementById('e-type').value = e.event_type || '';
     // prefill audience checkboxes
     const eAudiences = (e.audience || '').split(',').map(a => a.trim());
@@ -2500,6 +2530,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   await loadEvents();
   populateYearDropdowns();
+  bindEndTimeFilter('s');
 
   if (params.has('event')) {
     const eventId = params.get('event');
