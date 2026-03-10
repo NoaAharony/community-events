@@ -1780,6 +1780,45 @@ function buildDateValue(mid) {
   return y + '-' + m + '-' + d;
 }
 
+function parseEventDate(dateStr) {
+  if (!dateStr) return null;
+  const [y, m, d] = dateStr.split('-').map(Number);
+  if (!y || !m || !d) return null;
+
+  const parsed = new Date(y, m - 1, d);
+  if (
+    parsed.getFullYear() !== y ||
+    parsed.getMonth() !== m - 1 ||
+    parsed.getDate() !== d
+  ) {
+    return null;
+  }
+  return parsed;
+}
+
+function isPastEventDate(dateStr) {
+  const eventDate = parseEventDate(dateStr);
+  if (!eventDate) return false;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return eventDate < today;
+}
+
+function validateEventDateAndTime(date, startTime, endTime) {
+  const parsedDate = parseEventDate(date);
+  if (!parsedDate) {
+    return 'Please select a valid calendar date';
+  }
+  if (isPastEventDate(date)) {
+    return 'Event date cannot be in the past';
+  }
+  if (endTime && endTime <= startTime) {
+    return 'End time must be later than start time';
+  }
+  return null;
+}
+
 function prefillDatePicker(dateStr, mid) {
   if (!dateStr) return;
   const parts = dateStr.split('-');
@@ -1853,8 +1892,9 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
-  if (endTime && endTime <= startTime) {
-    errDiv.textContent = 'End time must be later than start time';
+  const dateTimeError = validateEventDateAndTime(date, startTime, endTime);
+  if (dateTimeError) {
+    errDiv.textContent = dateTimeError;
     errDiv.style.display = 'block';
     return;
   }
@@ -2078,8 +2118,9 @@ async function saveEvent() {
     return;
   }
   const editEndTime = document.getElementById('e-end-time').value;
-  if (editEndTime && editEndTime <= startTime) {
-    errDiv.textContent = 'End time must be later than start time';
+  const editDateTimeError = validateEventDateAndTime(date, startTime, editEndTime);
+  if (editDateTimeError) {
+    errDiv.textContent = editDateTimeError;
     errDiv.style.display = 'block';
     return;
   }
