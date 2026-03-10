@@ -568,6 +568,7 @@
             <option value="22:30:00">10:30 PM</option>
             <option value="23:00:00">11:00 PM</option>
             <option value="23:30:00">11:30 PM</option>
+            <option value="24:00:00">12:00 AM (Midnight)</option>
           </select>
         <div class="field-hint">Leave empty if end time is not known</div>
       </div>
@@ -911,6 +912,7 @@
             <option value="22:30:00">10:30 PM</option>
             <option value="23:00:00">11:00 PM</option>
             <option value="23:30:00">11:30 PM</option>
+            <option value="24:00:00">12:00 AM (Midnight)</option>
           </select>
       </div>
       <div class="form-row">
@@ -1401,6 +1403,7 @@ function formatTime(timeStr) {
   const parts = timeStr.split(':');
   const h = parseInt(parts[0], 10);
   const m = parseInt(parts[1], 10);
+  if (h === 24) return `12:${String(m).padStart(2,'0')} AM`;
   const ampm = h >= 12 ? 'PM' : 'AM';
   const hour = h % 12 || 12;
   return `${hour}:${String(m).padStart(2,'0')} ${ampm}`;
