@@ -1082,7 +1082,7 @@
     <div class="edit-cancel-bar">
       <button class="btn-danger" onclick="openCancelConfirm()" style="display:flex; align-items:center; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg> Cancel Event</button>
       <div class="btn-right">
-        <button class="btn-secondary" onclick="editFromAdmin ? loadAdminPage() : (showPage('page-home'), resetUrlToHome())">Discard Changes</button>
+        <button class="btn-secondary" onclick="editFromAdmin ? loadAdminPage() : (loadEvents().then(() => { showPage('page-home'); resetUrlToHome(); }))">Discard Changes</button>
         <button class="btn-primary" id="save-btn" onclick="saveEvent()">Save Changes →</button>
       </div>
     </div>
@@ -2323,9 +2323,7 @@ async function saveEvent() {
       method: 'PATCH', body: JSON.stringify(payload), prefer: 'return=minimal'
     });
     await loadEvents();
-  setDateFilter('all','All Upcoming');
-  populateYearDropdowns();
-    if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); resetUrlToHome(); }
+    if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); resetUrlToHome(); setDateFilter('all','All Upcoming'); populateYearDropdowns(); }
   } catch (e) {
     errDiv.textContent = 'Error saving: ' + e.message;
     errDiv.style.display = 'block';
@@ -2350,7 +2348,7 @@ async function confirmCancelEvent(action) {
     }
     closeModal('overlay-cancel');
     await loadEvents();
-  populateYearDropdowns();
+    populateYearDropdowns();
     if (editFromAdmin) { loadAdminPage(); } else { showPage('page-home'); resetUrlToHome(); }
   } catch (e) {
     alert('Error cancelling event: ' + e.message);
