@@ -2197,6 +2197,7 @@ async function loadEditPage(editKey, fromAdmin = false) {
     };
 
     document.getElementById('e-name').value = e.name || '';
+    document.getElementById('e-organizer').value = e.organizer_name || '';
     const eventYear = e.event_date ? e.event_date.split('-')[0] : null;
     populateYearDropdowns(eventYear);
     prefillDatePicker(e.event_date, 'e');
