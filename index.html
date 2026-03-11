@@ -2285,6 +2285,23 @@ async function saveEvent() {
     return;
   }
 
+  const eShowEmail = document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false;
+  const eShowPhone = document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false;
+  const eRegLink = document.getElementById('e-reg-link').value.trim();
+  const eIsOnline = document.getElementById('e-city').value === 'Online Event';
+  const eIsPrivate = !editFormState.addressPublic;
+
+  if (eIsOnline && !eRegLink && !eShowEmail && !eShowPhone) {
+    errDiv.textContent = 'For online events without a registration link, please show at least your email or phone so visitors can contact you';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (!eIsOnline && eIsPrivate && !eRegLink && !eShowEmail && !eShowPhone) {
+    errDiv.textContent = 'The address is private - please show your email or phone so visitors have a way to contact you';
+    errDiv.style.display = 'block';
+    return;
+  }
+
   btn.disabled = true;
   btn.textContent = 'Saving...';
 
