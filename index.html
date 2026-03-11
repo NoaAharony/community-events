@@ -2104,8 +2104,8 @@ async function submitEvent() {
   const city = citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect;
   const isOnline = citySelect === 'Online Event';
   const organizer = document.getElementById('s-organizer').value.trim();
-  const email = regLink ? document.getElementById('s-email-reglink').value.trim() : document.getElementById('s-email').value.trim();
   const regLink = document.getElementById('s-reg-link').value.trim();
+  const email = regLink ? document.getElementById('s-email-reglink').value.trim() : document.getElementById('s-email').value.trim();
   const address = document.getElementById('s-address').value.trim();
 
   if (!name || !date || !startTime || !type || !audience || !city || !organizer) {
@@ -2179,7 +2179,7 @@ async function submitEvent() {
       address_public: submitFormState.addressPublic,
       organizer_name: organizer,
       org_type: submitFormState.orgType,
-      contact_email: document.getElementById('s-email').value.trim() || null,
+      contact_email: email || null,
       contact_phone: document.getElementById('s-phone').value.trim() || null,
       show_email: showEmail,
       show_phone: showPhone,
