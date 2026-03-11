@@ -624,20 +624,23 @@
           <input class="form-input" id="s-amount" autocomplete="off" type="number" min="0" step="0.01" placeholder="25" style="border-radius:0 4px 4px 0;">
         </div>
       </div>
+      <div class="form-group" style="margin-top:6px; padding-top:14px; border-top:1px solid var(--gray-200);">
+        <label>Registration / External Link <span class="optional-tag">(optional)</span></label>
+        <input class="form-input" id="s-reg-link" autocomplete="off" type="url" placeholder="https://" oninput="handleRegLink()">
+        <div id="s-reg-link-note" style="display:none; font-size:12px; color:#1a5c35; font-weight:700; margin-top:8px; background:#f0faf4; border-left:3px solid #2e7d4f; border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5;">Visitors will be sent directly to this link - address, description and contact fields are not needed.</div>
+      </div>
+    </div>
+
+    <div class="form-section" id="s-desc-section">
+      <div class="form-section-title">2 · Description <span class="optional-tag">(optional)</span></div>
       <div class="form-group">
-        <label>Description <span class="optional-tag">(optional)</span></label>
         <textarea class="form-input" id="s-desc" autocomplete="off" rows="4" dir="auto" placeholder="Describe your event..."></textarea>
         <div class="field-hint">You can write in Hebrew or English</div>
-      </div>
-      <div class="form-group">
-        <label>Registration Link <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="s-reg-link" autocomplete="off" type="url" placeholder="https://">
-        <div class="field-hint">If provided, visitors will be directed to this link to register</div>
       </div>
     </div>
 
     <div class="form-section">
-      <div class="form-section-title">2 · Location</div>
+      <div class="form-section-title">3 · Location</div>
       <div class="form-group">
         <label>City <span class="req">*</span></label>
         <select class="form-input" id="s-city" onchange="handleCityOther('s-city','s-city-other'); handleOnlineCity('s')">
@@ -682,7 +685,7 @@
     </div>
 
     <div class="form-section">
-      <div class="form-section-title">3 · Organizer Information</div>
+      <div class="form-section-title">4 · Organizer Information</div>
       <div class="form-row">
         <div class="form-group">
           <label>Organizer / Business Name <span class="req">*</span></label>
@@ -697,6 +700,7 @@
           </div>
         </div>
       </div>
+      <div id="s-contact-fields">
       <div class="field-hint" style="margin-bottom:10px;">Your contact details are private by default and will not appear on the event page. You can choose to make them visible below.</div>
       <div class="form-row">
         <div class="form-group">
@@ -720,10 +724,11 @@
         <div class="field-hint" id="s-contact-hint" style="display:none;"></div>
         <div id="s-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Please show at least your email or phone.</div>
       </div>
+      </div>
     </div>
 
     <div class="form-section">
-      <div class="form-section-title">4 · Media <span class="optional-tag">(optional)</span></div>
+      <div class="form-section-title">5 · Media <span class="optional-tag">(optional)</span></div>
       <div class="form-group">
         <label>Event Image <span class="optional-tag">(optional)</span></label>
         <div id="upload-area" class="upload-area" onclick="document.getElementById('s-image').click()">
@@ -2030,8 +2035,13 @@ async function submitEvent() {
   const regLink = document.getElementById('s-reg-link').value.trim();
   const address = document.getElementById('s-address').value.trim();
 
-  if (!name || !date || !startTime || !type || !audience || !city || !organizer || !email) {
+  if (!name || !date || !startTime || !type || !audience || !city || !organizer) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (!regLink && !email) {
+    errDiv.textContent = 'Please enter your email address';
     errDiv.style.display = 'block';
     return;
   }
@@ -2040,7 +2050,7 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!regLink && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     errDiv.textContent = 'Please enter a valid email address';
     errDiv.style.display = 'block';
     return;
@@ -2144,6 +2154,10 @@ function resetSubmitForm() {
   submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', imageFile: null };
   // Reset address radio to "private" default
   setAddressVisibility(false, 's');
+  // Reset reg link conditional sections
+  document.getElementById('s-reg-link-note').style.display = 'none';
+  document.getElementById('s-desc-section').style.display = 'block';
+  document.getElementById('s-contact-fields').style.display = 'block';
   // Reset online hint
   const onlineHint = document.getElementById('s-online-hint');
   if (onlineHint) onlineHint.style.display = 'none';
@@ -2535,6 +2549,21 @@ function setAddressVisibility(val, prefix) {
   }
 }
 function toggleAddressVisibility(val, groupId) { document.getElementById(groupId).style.display = val.trim() ? 'block' : 'none'; }
+
+function handleRegLink() {
+  const val = document.getElementById('s-reg-link').value.trim();
+  const hasLink = val.length > 0;
+  document.getElementById('s-reg-link-note').style.display = hasLink ? 'block' : 'none';
+  document.getElementById('s-desc-section').style.display = hasLink ? 'none' : 'block';
+  document.getElementById('s-contact-fields').style.display = hasLink ? 'none' : 'block';
+  // Address section: hide if reg link present (handleOnlineCity handles online case)
+  if (hasLink) {
+    document.getElementById('s-address-section').style.display = 'none';
+  } else {
+    // Restore based on city selection
+    handleOnlineCity('s');
+  }
+}
 
 function handleOnlineCity(prefix) {
   const cityVal = document.getElementById(prefix + '-city').value;
