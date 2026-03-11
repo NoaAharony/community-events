@@ -1582,7 +1582,7 @@ function renderEventRow(e) {
           <span style="font-family:'Source Serif 4',serif; font-size:16px; font-style:italic; color:#e8b86a; font-weight:300;">IL</span>
         </div>
         <div style="width:28px; height:1px; background:rgba(200,150,62,0.4);"></div>
-        <span style="font-family:'Nunito',sans-serif; font-size:8px; color:rgba(255,255,255,0.35); letter-spacing:2px; text-transform:uppercase; text-align:center; line-height:2; font-weight:700;">COMMUNITY<br>EVENTS</span>
+        <span style="font-family:'Nunito',sans-serif; font-size:8px; color:rgba(255,255,255,0.85); letter-spacing:2px; text-transform:uppercase; text-align:center; line-height:2; font-weight:700;">COMMUNITY<br>EVENTS</span>
       </div>`;
 
   const timeStr = e.end_time ? `${formatTime(e.start_time)} - ${formatTime(e.end_time)}` : formatTime(e.start_time);
@@ -1652,7 +1652,7 @@ function openEventModal(id) {
           <span style="font-family:'Source Serif 4',serif; font-size:20px; font-style:italic; color:#e8b86a; font-weight:300;">IL</span>
         </div>
         <div style="width:32px; height:1px; background:rgba(200,150,62,0.4);"></div>
-        <span style="font-family:'Nunito',sans-serif; font-size:9px; color:rgba(255,255,255,0.35); letter-spacing:2px; text-transform:uppercase; text-align:center; line-height:2; font-weight:700;">COMMUNITY<br>EVENTS</span>
+        <span style="font-family:'Nunito',sans-serif; font-size:9px; color:rgba(255,255,255,0.85); letter-spacing:2px; text-transform:uppercase; text-align:center; line-height:2; font-weight:700;">COMMUNITY<br>EVENTS</span>
       </div>`;
 
   const isOnlineEvent = e.city === 'Online Event';
