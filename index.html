@@ -2532,7 +2532,10 @@ function setAudienceFilter(value, label, e) { e.stopPropagation(); filters.audie
 
 function updateFilterChip(id, active) { document.getElementById(id).classList.toggle('active', active); }
 function updateDropdownSelected(ddId, label) { document.querySelectorAll(`#${ddId} .dropdown-item`).forEach(i => i.classList.toggle('selected', i.textContent.trim() === label)); }
-function closeAllDropdowns() { document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open')); }
+function closeAllDropdowns() {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
+}
 function clearFilters() { filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'All Upcoming'; document.getElementById('city-label').textContent = 'City'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.add('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); renderEvents(); }
 
 function toggleDropdown(id, e) {
@@ -2545,11 +2548,20 @@ function toggleDropdown(id, e) {
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open'));
 
   if (!isOpen) {
-    // Position the dropdown using fixed coords from chip's bounding rect
     const rect = chip.getBoundingClientRect();
     const menu = document.getElementById(id);
-    menu.style.top = (rect.bottom + 6) + 'px';
-    menu.style.left = rect.left + 'px';
+    // Move menu to body to escape any stacking context (fixes mobile sticky overflow issue)
+    if (menu.parentElement !== document.body) {
+      document.body.appendChild(menu);
+    }
+    menu.style.position = 'fixed';
+    menu.style.zIndex = '99999';
+    menu.style.top = (rect.bottom + 4) + 'px';
+    // Keep within viewport horizontally
+    const menuWidth = 180;
+    const left = Math.min(rect.left, window.innerWidth - menuWidth - 8);
+    menu.style.left = Math.max(8, left) + 'px';
+    menu.style.display = 'block';
     chip.classList.add('open');
   }
 }
