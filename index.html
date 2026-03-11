@@ -765,6 +765,7 @@
             <input type="checkbox" id="s-show-email" autocomplete="off" onchange="updateContactHint('s')"> Show my email on the event page
           </label>
           <div class="privacy-note" id="s-email-note">Not shown publicly</div>
+          <div id="s-email-private-note" style="display:none; font-size:11px; color:var(--gray-600); margin-top:4px; font-style:italic;">Address requests will be sent to this email automatically.</div>
         </div>
         <div class="form-group">
           <label>Phone <span class="optional-tag">(optional)</span></label>
@@ -1116,6 +1117,7 @@
             <input type="checkbox" id="e-show-email" onchange="updateContactHint('e')"> Show my email on the event page
           </label>
           <div class="privacy-note" id="e-email-note">Not shown publicly</div>
+          <div id="e-email-private-note" style="display:none; font-size:11px; color:var(--gray-600); margin-top:4px; font-style:italic;">Address requests will be sent to this email automatically.</div>
         </div>
         <div class="form-group">
           <label>Phone <span class="optional-tag">(optional)</span></label>
@@ -2623,11 +2625,14 @@ function setAddressVisibility(val, prefix) {
       hint.textContent = 'The full address will be visible to everyone on your event page';
       hint.style.display = 'block';
     } else {
-      hint.textContent = 'Visitors see city only. Address requests will be sent to your email automatically - no need to show it publicly.';
+      hint.textContent = 'Visitors see city only. Interested visitors can request the address from you.';
       hint.style.display = 'block';
     }
   }
   updateContactHint('s');
+  // Show/hide address request note near email checkbox
+  const sEmailPrivateNote = document.getElementById('s-email-private-note');
+  if (sEmailPrivateNote) sEmailPrivateNote.style.display = !val ? 'block' : 'none';
   // When switching to private address, auto-check email if available
   if (!val) {
     const emailEl = document.getElementById('s-email');
@@ -2782,9 +2787,12 @@ function setEditAddressVisibility(val, btn) {
   if (hint) {
     hint.textContent = val
       ? 'The full address will be visible to everyone on your event page'
-      : 'Visitors see city only. Address requests will be sent to your email automatically - no need to show it publicly.';
+      : 'Visitors see city only. Interested visitors can request the address from you.';
     hint.style.display = 'block';
   }
+  // Show/hide address request note near email checkbox
+  const eEmailPrivateNote = document.getElementById('e-email-private-note');
+  if (eEmailPrivateNote) eEmailPrivateNote.style.display = !val ? 'block' : 'none';
   // When switching to private, auto-check email if available
   if (!val) {
     const emailEl = document.getElementById('e-email');
