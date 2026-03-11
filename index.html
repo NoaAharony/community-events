@@ -650,7 +650,7 @@
       <div class="form-section-title">3 · Location</div>
       <div class="form-group">
         <label>City <span class="req">*</span></label>
-        <select class="form-input" id="s-city" onchange="handleCityOther('s-city','s-city-other'); handleOnlineCity('s')">
+        <select class="form-input" id="s-city" onchange="handleCityOther('s-city','s-city-other'); handleOnlineCity('s'); if(document.getElementById('s-reg-link').value.trim()) document.getElementById('s-address-section').style.display='none';">
             <option value="">Select city...</option>
             <option>Alpharetta</option>
             <option>Atlanta</option>
