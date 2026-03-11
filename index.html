@@ -1711,9 +1711,7 @@ function renderEventRow(e) {
 // ═══════════════════════════════════════════════════════════
 // EVENT DETAIL MODAL
 // ═══════════════════════════════════════════════════════════
-function positionEventModalForMobile() {
-  const overlay = document.getElementById('overlay-event');
-  const modal = document.getElementById('modal-event');
+function positionOverlayModalUnderToolbar(overlay, modal) {
   if (!overlay || !modal) return;
 
   if (window.matchMedia('(max-width: 768px)').matches) {
@@ -1735,6 +1733,18 @@ function positionEventModalForMobile() {
   overlay.style.alignItems = '';
   overlay.style.padding = '';
   modal.style.maxHeight = '';
+}
+
+function positionEventModalForMobile() {
+  const overlay = document.getElementById('overlay-event');
+  const modal = document.getElementById('modal-event');
+  positionOverlayModalUnderToolbar(overlay, modal);
+}
+
+function positionAddressModalForMobile() {
+  const overlay = document.getElementById('overlay-address');
+  const modal = overlay ? overlay.querySelector('.modal') : null;
+  positionOverlayModalUnderToolbar(overlay, modal);
 }
 
 function openEventModal(id) {
@@ -1869,6 +1879,7 @@ function openAddressRequest(eventId) {
   closeModal('overlay-event');
   document.getElementById('address-form').style.display = 'block';
   document.getElementById('address-success').classList.remove('show');
+  positionAddressModalForMobile();
   document.getElementById('overlay-address').classList.add('open');
 }
 
@@ -2914,8 +2925,10 @@ function closeLightbox() {
 function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
 
 window.addEventListener('resize', () => {
-  const overlay = document.getElementById('overlay-event');
-  if (overlay && overlay.classList.contains('open')) positionEventModalForMobile();
+  const eventOverlay = document.getElementById('overlay-event');
+  if (eventOverlay && eventOverlay.classList.contains('open')) positionEventModalForMobile();
+  const addressOverlay = document.getElementById('overlay-address');
+  if (addressOverlay && addressOverlay.classList.contains('open')) positionAddressModalForMobile();
 });
 
 // ═══════════════════════════════════════════════════════════
