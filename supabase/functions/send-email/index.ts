@@ -90,8 +90,8 @@ serve(async (req) => {
               <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #5c3d10; font-weight: 600; margin: 0 0 18px; line-height: 1.6;">Save this email - it's the only way to edit or cancel your event.</p>
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td bgcolor="#1e4068" style="background-color: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
-                    <a href="${edit_link}" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Edit My Event &rarr;</a>
+                  <td bgcolor="#1e4068" style="background-color: #1e4068 !important; border-radius: 6px; text-align: center; padding: 0;"><div style="background-color: #1e4068 !important; border-radius: 6px; padding: 14px 20px;">
+                    <a href="${edit_link}" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Edit My Event &rarr;</a></div>
                   </td>
                 </tr>
               </table>
@@ -172,8 +172,8 @@ serve(async (req) => {
         </table>
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
           <tr>
-            <td bgcolor="#1e4068" style="background-color: #1e4068; border-radius: 6px; text-align: center; padding: 14px 20px;">
-              <a href="mailto:${requester_email}?subject=${encodeURIComponent(replySubject)}&body=${replyBody}" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Reply to ${requester_fname} &rarr;</a>
+            <td bgcolor="#1e4068" style="background-color: #1e4068 !important; border-radius: 6px; text-align: center; padding: 0;"><div style="background-color: #1e4068 !important; border-radius: 6px; padding: 14px 20px;">
+              <a href="mailto:${requester_email}?subject=${encodeURIComponent(replySubject)}&body=${replyBody}" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Reply to ${requester_fname} &rarr;</a></div>
             </td>
           </tr>
         </table>`;
