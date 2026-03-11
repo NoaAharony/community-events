@@ -748,6 +748,13 @@
           </div>
         </div>
       </div>
+      <div id="s-email-only" style="display:none;">
+        <div class="form-group">
+          <label>Email <span class="req">*</span></label>
+          <input class="form-input" id="s-email-reglink" type="email" placeholder="your@email.com">
+          <div class="privacy-note">Used to send you a confirmation - will not appear on the event page</div>
+        </div>
+      </div>
       <div id="s-contact-fields">
       <div class="field-hint" style="margin-bottom:10px;">Your contact details are private by default and will not appear on the event page. You can choose to make them visible below.</div>
       <div class="form-row">
@@ -1091,6 +1098,13 @@
             <button class="toggle-btn" id="e-org-business" onclick="setEditOrgType('Business',this)">Business</button>
             <button class="toggle-btn" id="e-org-individual" onclick="setEditOrgType('Individual',this)">Individual</button>
           </div>
+        </div>
+      </div>
+      <div id="e-email-only" style="display:none;">
+        <div class="form-group">
+          <label>Email <span class="req">*</span></label>
+          <input class="form-input" id="e-email-reglink" type="email">
+          <div class="privacy-note">Used to send you a confirmation - will not appear on the event page</div>
         </div>
       </div>
       <div id="e-contact-fields">
@@ -2090,7 +2104,7 @@ async function submitEvent() {
   const city = citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect;
   const isOnline = citySelect === 'Online Event';
   const organizer = document.getElementById('s-organizer').value.trim();
-  const email = document.getElementById('s-email').value.trim();
+  const email = regLink ? document.getElementById('s-email-reglink').value.trim() : document.getElementById('s-email').value.trim();
   const regLink = document.getElementById('s-reg-link').value.trim();
   const address = document.getElementById('s-address').value.trim();
 
@@ -2099,7 +2113,7 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
-  if (!regLink && !email) {
+  if (!email) {
     errDiv.textContent = 'Please enter your email address';
     errDiv.style.display = 'block';
     return;
@@ -2109,7 +2123,7 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
-  if (!regLink && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     errDiv.textContent = 'Please enter a valid email address';
     errDiv.style.display = 'block';
     return;
@@ -2286,6 +2300,7 @@ async function loadEditPage(editKey, fromAdmin = false) {
     });
     document.getElementById('e-desc').value = e.description || '';
     document.getElementById('e-reg-link').value = e.registration_link || '';
+    document.getElementById('e-email-reglink').value = e.contact_email || '';
     document.getElementById('e-address').value = e.full_address || '';
     // Handle city - including Online Event
     const eCityEl = document.getElementById('e-city');
@@ -2346,7 +2361,8 @@ async function saveEvent() {
   const eCitySelect = document.getElementById('e-city').value;
   const city = eCitySelect === 'other' ? document.getElementById('e-city-other').value.trim() : eCitySelect;
   const organizer = document.getElementById('e-organizer').value.trim();
-  const editEmail = document.getElementById('e-email').value.trim();
+  const eRegLinkVal = document.getElementById('e-reg-link').value.trim();
+  const editEmail = eRegLinkVal ? document.getElementById('e-email-reglink').value.trim() : document.getElementById('e-email').value.trim();
 
   if (!name || !date || !startTime || !city || !organizer || !editEmail) {
     errDiv.textContent = 'Please fill in all required fields marked with *';
@@ -2362,7 +2378,7 @@ async function saveEvent() {
 
   const eShowEmail = document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false;
   const eShowPhone = document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false;
-  const eRegLink = document.getElementById('e-reg-link').value.trim();
+  const eRegLink = eRegLinkVal;
   const eIsOnline = document.getElementById('e-city').value === 'Online Event';
   const eIsPrivate = !editFormState.addressPublic;
 
@@ -2404,7 +2420,7 @@ async function saveEvent() {
       address_public: editFormState.addressPublic,
       organizer_name: organizer,
       org_type: editFormState.orgType,
-      contact_email: document.getElementById('e-email').value.trim() || null,
+      contact_email: (eRegLink ? document.getElementById('e-email-reglink').value.trim() : document.getElementById('e-email').value.trim()) || null,
       contact_phone: document.getElementById('e-phone').value.trim() || null,
       show_email: document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false,
       show_phone: document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false,
@@ -2629,6 +2645,7 @@ function handleRegLink() {
   document.getElementById('s-reg-link-note').style.display = hasLink ? 'block' : 'none';
   document.getElementById('s-desc-section').style.display = hasLink ? 'none' : 'block';
   document.getElementById('s-contact-fields').style.display = hasLink ? 'none' : 'block';
+  document.getElementById('s-email-only').style.display = hasLink ? 'block' : 'none';
   if (hasLink) {
     document.getElementById('s-address-section').style.display = 'none';
   } else {
@@ -2654,16 +2671,19 @@ function syncEditForm() {
     document.getElementById('e-desc-section').style.display = 'none';
     document.getElementById('e-address-section').style.display = 'none';
     document.getElementById('e-contact-fields').style.display = 'none';
+    document.getElementById('e-email-only').style.display = 'block';
     document.getElementById('e-online-hint').style.display = 'none';
   } else if (isOnline) {
     document.getElementById('e-desc-section').style.display = 'block';
     document.getElementById('e-address-section').style.display = 'none';
     document.getElementById('e-contact-fields').style.display = 'block';
+    document.getElementById('e-email-only').style.display = 'none';
     document.getElementById('e-online-hint').style.display = 'block';
   } else {
     document.getElementById('e-desc-section').style.display = 'block';
     document.getElementById('e-address-section').style.display = 'block';
     document.getElementById('e-contact-fields').style.display = 'block';
+    document.getElementById('e-email-only').style.display = 'none';
     document.getElementById('e-online-hint').style.display = 'none';
   }
 
