@@ -698,7 +698,7 @@
         </div>
         <div class="form-group">
           <label>Phone <span class="optional-tag">(optional)</span></label>
-          <input class="form-input" id="s-phone" type="tel" placeholder="(404) 555-0000" oninput="formatPhoneInput(this)" inputmode="numeric">
+          <input class="form-input" id="s-phone" type="tel" placeholder="(404) 555-0000" oninput="formatPhoneInput(this); syncPhoneCheckbox('s')" inputmode="numeric">
           <div class="privacy-note" id="s-phone-note">🔒 Not shown publicly</div>
         </div>
       </div>
@@ -1039,7 +1039,7 @@
         </div>
         <div class="form-group">
           <label>Phone <span class="optional-tag">(optional)</span></label>
-          <input class="form-input" id="e-phone" type="tel" oninput="formatPhoneInput(this)" inputmode="numeric">
+          <input class="form-input" id="e-phone" type="tel" oninput="formatPhoneInput(this); syncPhoneCheckbox('e')" inputmode="numeric">
           <div class="privacy-note" id="e-phone-note">🔒 Not shown publicly</div>
         </div>
       </div>
@@ -2093,6 +2093,7 @@ function resetSubmitForm() {
   if (addrSection) addrSection.style.display = 'block';
   const sShowEmail = document.getElementById('s-show-email'); if(sShowEmail) sShowEmail.checked = false;
   const sShowPhone = document.getElementById('s-show-phone'); if(sShowPhone) sShowPhone.checked = false;
+  syncPhoneCheckbox('s');
   const sCG = document.getElementById('s-contact-details-group'); if(sCG) sCG.style.display = 'none';
   document.getElementById('cost-free-btn').classList.add('on');
   document.getElementById('cost-paid-btn').classList.remove('on');
@@ -2181,6 +2182,7 @@ async function loadEditPage(editKey, fromAdmin = false) {
     const eCG = document.getElementById('e-contact-details-group');
     if(eCG) eCG.style.display = e.address_public ? 'block' : 'none';
     updateContactHint('e');
+    syncPhoneCheckbox('e');
 
     if (e.image_url) {
       document.getElementById('e-upload-area').style.display = 'none';
@@ -2510,8 +2512,24 @@ function updateContactHint(prefix) {
   }
 }
 
+function syncPhoneCheckbox(prefix) {
+  const phoneEl = document.getElementById(prefix + '-phone');
+  const checkEl = document.getElementById(prefix + '-show-phone');
+  if (!phoneEl || !checkEl) return;
+  const hasPhone = phoneEl.value.trim().length > 0;
+  checkEl.disabled = !hasPhone;
+  if (!hasPhone && checkEl.checked) {
+    checkEl.checked = false;
+    updateContactHint(prefix);
+  }
+  if (checkEl.parentElement) {
+    checkEl.parentElement.style.opacity = hasPhone ? '1' : '0.4';
+    checkEl.parentElement.style.cursor = hasPhone ? '' : 'not-allowed';
+  }
+}
+
+
 function setEditCost(type, btn) {
-  editFormState.cost = type;
   document.getElementById('e-cost-free').classList.toggle('on', type === 'Free');
   document.getElementById('e-cost-paid').classList.toggle('on', type === 'Paid');
   document.getElementById('e-amount-field').classList.toggle('show', type === 'Paid');
