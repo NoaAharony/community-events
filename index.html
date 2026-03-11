@@ -1553,7 +1553,7 @@ function renderEvents() {
     const dateLabels = { 'this-week': 'this week', 'this-weekend': 'this weekend', 'next-week': 'next week', 'this-month': 'this month' };
     if (filters.date !== 'all' && dateLabels[filters.date]) parts.push(dateLabels[filters.date]);
     if (filters.city !== 'all') parts.push('in ' + (filters.city === 'other' ? 'other cities' : filters.city));
-    if (filters.type !== 'all') parts.push('of type "' + filters.type + '"');
+    if (filters.type !== 'all') parts.push(filters.type);
     if (filters.cost !== 'all') parts.push(filters.cost.toLowerCase());
     if (filters.audience !== 'all') parts.push('for ' + filters.audience);
     return parts.length ? parts.join(', ') : 'matching your filters';
