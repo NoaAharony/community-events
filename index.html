@@ -690,29 +690,27 @@
           </div>
         </div>
       </div>
+      <div class="field-hint" style="margin-bottom:10px;">Your contact details are private by default and will not appear on the event page. You can choose to make them visible below.</div>
       <div class="form-row">
         <div class="form-group">
           <label>Email <span class="req">*</span></label>
           <input class="form-input" id="s-email" type="email" placeholder="your@email.com">
-          <div class="privacy-note" id="s-email-note">🔒 Not shown publicly</div>
+          <label id="s-show-email-label" style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer; margin-top:8px;">
+            <input type="checkbox" id="s-show-email" autocomplete="off" onchange="updateContactHint('s')"> Show my email on the event page
+          </label>
+          <div class="privacy-note" id="s-email-note">Not shown publicly</div>
         </div>
         <div class="form-group">
           <label>Phone <span class="optional-tag">(optional)</span></label>
           <input class="form-input" id="s-phone" type="tel" placeholder="(404) 555-0000" oninput="formatPhoneInput(this); syncPhoneCheckbox('s')" inputmode="numeric">
-          <div class="privacy-note" id="s-phone-note">🔒 Not shown publicly</div>
+          <label id="s-show-phone-label" style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer; margin-top:8px;">
+            <input type="checkbox" id="s-show-phone" autocomplete="off" onchange="updateContactHint('s')"> Show my phone on the event page
+          </label>
+          <div class="privacy-note" id="s-phone-note">Not shown publicly</div>
         </div>
       </div>
-      <div class="form-group" id="s-contact-details-group" style="display:none;">
-        <label id="s-contact-label">Show your contact details on the event page?</label>
-        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px;">
-          <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
-            <input type="checkbox" id="s-show-email" autocomplete="off" onchange="updateContactHint('s')"> Show my email
-          </label>
-          <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
-            <input type="checkbox" id="s-show-phone" autocomplete="off" onchange="updateContactHint('s')"> Show my phone
-          </label>
-        </div>
-        <div class="field-hint" id="s-contact-hint">Your email and phone won't be shown on the event page.</div>
+      <div class="form-group" id="s-contact-details-group" style="display:block;">
+        <div class="field-hint" id="s-contact-hint" style="display:none;"></div>
         <div id="s-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Please show at least your email or phone.</div>
       </div>
     </div>
@@ -1035,25 +1033,22 @@
         <div class="form-group">
           <label>Email <span class="req">*</span></label>
           <input class="form-input" id="e-email" type="email">
-          <div class="privacy-note" id="e-email-note">🔒 Not shown publicly</div>
+          <label id="e-show-email-label" style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer; margin-top:8px;">
+            <input type="checkbox" id="e-show-email" onchange="updateContactHint('e')"> Show my email on the event page
+          </label>
+          <div class="privacy-note" id="e-email-note">Not shown publicly</div>
         </div>
         <div class="form-group">
           <label>Phone <span class="optional-tag">(optional)</span></label>
           <input class="form-input" id="e-phone" type="tel" oninput="formatPhoneInput(this); syncPhoneCheckbox('e')" inputmode="numeric">
-          <div class="privacy-note" id="e-phone-note">🔒 Not shown publicly</div>
+          <label id="e-show-phone-label" style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer; margin-top:8px;">
+            <input type="checkbox" id="e-show-phone" onchange="updateContactHint('e')"> Show my phone on the event page
+          </label>
+          <div class="privacy-note" id="e-phone-note">Not shown publicly</div>
         </div>
       </div>
-      <div class="form-group" id="e-contact-details-group" style="display:none;">
-        <label id="e-contact-label">Show your contact details on the event page?</label>
-        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px;">
-          <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
-            <input type="checkbox" id="e-show-email" onchange="updateContactHint('e')"> Show my email
-          </label>
-          <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer;">
-            <input type="checkbox" id="e-show-phone" onchange="updateContactHint('e')"> Show my phone
-          </label>
-        </div>
-        <div class="field-hint" id="e-contact-hint">Your email and phone won't be shown on the event page.</div>
+      <div class="form-group" id="e-contact-details-group" style="display:block;">
+        <div class="field-hint" id="e-contact-hint" style="display:none;"></div>
         <div id="e-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Please show at least your email or phone.</div>
       </div>
     </div>
@@ -2094,7 +2089,7 @@ function resetSubmitForm() {
   const sShowEmail = document.getElementById('s-show-email'); if(sShowEmail) sShowEmail.checked = false;
   const sShowPhone = document.getElementById('s-show-phone'); if(sShowPhone) sShowPhone.checked = false;
   syncPhoneCheckbox('s');
-  const sCG = document.getElementById('s-contact-details-group'); if(sCG) sCG.style.display = 'none';
+  updateContactHint('s');
   document.getElementById('cost-free-btn').classList.add('on');
   document.getElementById('cost-paid-btn').classList.remove('on');
   document.getElementById('amount-field').classList.remove('show');
@@ -2108,8 +2103,8 @@ function resetSubmitForm() {
   const sEnd = document.getElementById('s-end-time'); if(sEnd) sEnd.value = '';
   filterEndTimeOptions('s');
   const hint = document.getElementById('s-contact-hint'); if(hint) hint.textContent = "Visitors will be able to reach you privately through a form - your details won't be shown publicly";
-  const en = document.getElementById('s-email-note'); if(en){en.textContent='🔒 Not shown publicly'; en.classList.remove('visible');}
-  const pn = document.getElementById('s-phone-note'); if(pn){pn.textContent='🔒 Not shown publicly'; pn.classList.remove('visible');}
+  const en = document.getElementById('s-email-note'); if(en){en.textContent='Not shown publicly'; en.classList.remove('visible');}
+  const pn = document.getElementById('s-phone-note'); if(pn){pn.textContent='Not shown publicly'; pn.classList.remove('visible');}
   removeImage();
 }
 
@@ -2179,8 +2174,6 @@ async function loadEditPage(editKey, fromAdmin = false) {
     const eShowPhone = document.getElementById('e-show-phone');
     if(eShowEmail) eShowEmail.checked = e.show_email || false;
     if(eShowPhone) eShowPhone.checked = e.show_phone || false;
-    const eCG = document.getElementById('e-contact-details-group');
-    if(eCG) eCG.style.display = e.address_public ? 'block' : 'none';
     updateContactHint('e');
     syncPhoneCheckbox('e');
 
@@ -2452,17 +2445,6 @@ function setAddressVisibility(val, prefix) {
       hint.style.display = 'block';
     }
   }
-  // Show contact section only for public address (not private - request form handles it)
-  const cg = document.getElementById('s-contact-details-group');
-  const cl = document.getElementById('s-contact-label');
-  if (cg) {
-    if (val) {
-      cg.style.display = 'block';
-      if (cl) cl.textContent = 'Show your contact details on the event page?';
-    } else {
-      cg.style.display = 'none';
-    }
-  }
   updateContactHint('s');
 }
 function toggleAddressVisibility(val, groupId) { document.getElementById(groupId).style.display = val.trim() ? 'block' : 'none'; }
@@ -2472,19 +2454,8 @@ function handleOnlineCity(prefix) {
   const isOnline = cityVal === 'Online Event';
   const addrSection = document.getElementById(prefix + '-address-section');
   const onlineHint = document.getElementById(prefix + '-online-hint');
-  const contactGroup = document.getElementById(prefix + '-contact-details-group');
-  const contactLabel = document.getElementById(prefix + '-contact-label');
   if (addrSection) addrSection.style.display = isOnline ? 'none' : 'block';
   if (onlineHint) onlineHint.style.display = isOnline ? 'block' : 'none';
-  if (contactGroup && isOnline) {
-    contactGroup.style.display = 'block';
-    if (contactLabel) contactLabel.textContent = 'How can visitors contact you? (at least one required)';
-  } else if (contactGroup && !isOnline) {
-    // restore based on address visibility
-    const isPublic = prefix === 's' ? submitFormState.addressPublic : editFormState.addressPublic;
-    contactGroup.style.display = isPublic ? 'block' : 'none';
-    if (contactLabel) contactLabel.textContent = 'Show your contact details on the event page?';
-  }
 }
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function updateContactHint(prefix) {
@@ -2493,23 +2464,15 @@ function updateContactHint(prefix) {
   const hint = document.getElementById(prefix+'-contact-hint');
   const emailNote = document.getElementById(prefix === 's' ? 's-email-note' : 'e-email-note');
   const phoneNote = document.getElementById(prefix === 's' ? 's-phone-note' : 'e-phone-note');
-  if(showEmail && showPhone) {
-    if(hint) hint.textContent = 'Your email and phone will be shown on the event page.';
-    if(emailNote) emailNote.textContent = '👁 Will appear on your event page';
-    if(phoneNote) phoneNote.textContent = '👁 Will appear on your event page';
-  } else if(showEmail) {
-    if(hint) hint.textContent = 'Your email will be shown. Phone will stay private.';
-    if(emailNote) emailNote.textContent = '👁 Will appear on your event page';
-    if(phoneNote) phoneNote.textContent = '🔒 Not shown publicly';
-  } else if(showPhone) {
-    if(hint) hint.textContent = 'Your phone will be shown. Email will stay private.';
-    if(emailNote) emailNote.textContent = '🔒 Not shown publicly';
-    if(phoneNote) phoneNote.textContent = '👁 Will appear on your event page';
-  } else {
-    if(hint) hint.textContent = "Your email and phone won't be shown on the event page.";
-    if(emailNote) emailNote.textContent = '🔒 Not shown publicly';
-    if(phoneNote) phoneNote.textContent = '🔒 Not shown publicly';
+  if (emailNote) {
+    emailNote.textContent = showEmail ? 'Will appear on your event page' : 'Not shown publicly';
+    emailNote.classList.toggle('visible', showEmail);
   }
+  if (phoneNote) {
+    phoneNote.textContent = showPhone ? 'Will appear on your event page' : 'Not shown publicly';
+    phoneNote.classList.toggle('visible', showPhone);
+  }
+  if (hint) hint.style.display = 'none';
 }
 
 function syncPhoneCheckbox(prefix) {
@@ -2565,17 +2528,6 @@ function setEditAddressVisibility(val, btn) {
     } else {
       hint.textContent = 'Visitors see city only. To receive the address, the visitor will fill out a request form which will be sent to you.';
       hint.style.display = 'block';
-    }
-  }
-  // Show contact section only for public address
-  const cg = document.getElementById('e-contact-details-group');
-  const cl = document.getElementById('e-contact-label');
-  if (cg) {
-    if (val) {
-      cg.style.display = 'block';
-      if (cl) cl.textContent = 'Show your contact details on the event page?';
-    } else {
-      cg.style.display = 'none';
     }
   }
   updateContactHint('e');
