@@ -116,9 +116,9 @@
   .footer-link { color: rgba(255,255,255,0.7); cursor: pointer; transition: color 0.15s; }
   .footer-link:hover { color: var(--gold-light); }
 
-  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 16px; }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 24px 16px; }
   .overlay.open { display: flex; }
-  .modal { background: var(--white); border-radius: 10px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
+  .modal { background: var(--white); border-radius: 10px; width: 100%; max-width: 520px; max-height: 86vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
   @keyframes modalIn { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
   .modal-header { background: var(--blue); color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px 10px 0 0; }
   .addr-modal-header { background: linear-gradient(160deg, #1e4068, #0f2035); padding: 18px 20px; border-bottom: 3px solid var(--gold); }
@@ -320,7 +320,7 @@
 
     /* === EVENT MODAL - slides up from bottom === */
     .overlay { padding: 0; align-items: flex-end; }
-    .modal { border-radius: 16px 16px 0 0; max-height: 92vh; width: 100%; max-width: 100%; }
+    .modal { border-radius: 16px 16px 0 0; max-height: calc(100vh - 100px); width: 100%; max-width: 100%; }
     .modal-header { border-radius: 16px 16px 0 0; padding: 12px 16px; }
     .modal-header h3 { font-size: 14px; }
     .modal-body { padding: 14px 16px 24px; }
@@ -1711,6 +1711,32 @@ function renderEventRow(e) {
 // ═══════════════════════════════════════════════════════════
 // EVENT DETAIL MODAL
 // ═══════════════════════════════════════════════════════════
+function positionEventModalForMobile() {
+  const overlay = document.getElementById('overlay-event');
+  const modal = document.getElementById('modal-event');
+  if (!overlay || !modal) return;
+
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    const activeFilterBar = document.querySelector('.page-view.active .filter-bar');
+    const homeFilterBar = document.querySelector('#page-home .filter-bar');
+    const filterBar = activeFilterBar || homeFilterBar;
+    const toolbarBottom = filterBar ? filterBar.getBoundingClientRect().bottom : 92;
+    const topOffset = Math.max(0, Math.round(toolbarBottom));
+
+    overlay.style.alignItems = 'flex-start';
+    overlay.style.paddingTop = `${topOffset}px`;
+    overlay.style.paddingRight = '0';
+    overlay.style.paddingBottom = '0';
+    overlay.style.paddingLeft = '0';
+    modal.style.maxHeight = `calc(100vh - ${topOffset}px)`;
+    return;
+  }
+
+  overlay.style.alignItems = '';
+  overlay.style.padding = '';
+  modal.style.maxHeight = '';
+}
+
 function openEventModal(id) {
   const e = allEvents.find(ev => ev.id === id);
   if (!e) return;
@@ -1832,6 +1858,7 @@ function openEventModal(id) {
     ${regBtn}
     ${bottomPanel}
   `;
+  positionEventModalForMobile();
   document.getElementById('overlay-event').classList.add('open');
 }
 
@@ -2885,6 +2912,11 @@ function closeLightbox() {
   document.getElementById('lightbox-img').src = '';
 }
 function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+window.addEventListener('resize', () => {
+  const overlay = document.getElementById('overlay-event');
+  if (overlay && overlay.classList.contains('open')) positionEventModalForMobile();
+});
 
 // ═══════════════════════════════════════════════════════════
 // INIT
