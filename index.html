@@ -2582,6 +2582,15 @@ function handleOnlineCity(prefix) {
   const isOnline = cityVal === 'Online Event';
   const addrSection = document.getElementById(prefix + '-address-section');
   const onlineHint = document.getElementById(prefix + '-online-hint');
+  // If reg link is present (submit form only), keep address hidden regardless
+  if (prefix === 's') {
+    const regLink = document.getElementById('s-reg-link');
+    if (regLink && regLink.value.trim().length > 0) {
+      if (addrSection) addrSection.style.display = 'none';
+      if (onlineHint) onlineHint.style.display = 'none';
+      return;
+    }
+  }
   if (addrSection) addrSection.style.display = isOnline ? 'none' : 'block';
   if (onlineHint) onlineHint.style.display = isOnline ? 'block' : 'none';
 }
