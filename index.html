@@ -2245,7 +2245,6 @@ async function loadEditPage(editKey, fromAdmin = false) {
     });
     document.getElementById('e-desc').value = e.description || '';
     document.getElementById('e-reg-link').value = e.registration_link || '';
-    handleEditRegLink();
     document.getElementById('e-address').value = e.full_address || '';
     // Handle city - including Online Event
     const eCityEl = document.getElementById('e-city');
@@ -2273,6 +2272,8 @@ async function loadEditPage(editKey, fromAdmin = false) {
     if(eShowPhone) eShowPhone.checked = e.show_phone || false;
     updateContactHint('e');
     syncPhoneCheckbox('e');
+    // Apply reg link logic last - overrides address/contact visibility
+    handleEditRegLink();
 
     if (e.image_url) {
       document.getElementById('e-upload-area').style.display = 'none';
