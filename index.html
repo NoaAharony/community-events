@@ -2076,7 +2076,7 @@ async function submitEvent() {
 function resetSubmitForm() {
   populateYearDropdowns();
   bindFutureDatePicker('s');
-  ['s-name','s-date','s-amount','s-desc','s-reg-link','s-address','s-email','s-phone'].forEach(id => {
+  ['s-name','s-date','s-amount','s-desc','s-reg-link','s-address','s-organizer','s-email','s-phone'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
