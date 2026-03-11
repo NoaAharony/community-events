@@ -446,6 +446,7 @@
       <div class="dropdown-menu" id="dd-type">
         <div class="dropdown-item selected" onclick="setTypeFilter('all','Event Type',event)">All Types</div>
         <div class="dropdown-item" onclick="setTypeFilter('Party','Party',event)">Party</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Dinner','Dinner',event)">Dinner</div>
         <div class="dropdown-item" onclick="setTypeFilter('Meetup','Meetup',event)">Meetup</div>
         <div class="dropdown-item" onclick="setTypeFilter('Food Market','Food Market',event)">Food Market</div>
         <div class="dropdown-item" onclick="setTypeFilter('Conference','Conference',event)">Conference</div>
@@ -635,7 +636,7 @@
           <label>Event Type <span class="req">*</span></label>
           <select class="form-input" id="s-type">
             <option value="">Select type...</option>
-            <option>Party</option><option>Meetup</option><option>Food Market</option>
+            <option>Party</option><option>Dinner</option><option>Meetup</option><option>Food Market</option>
             <option>Conference</option><option>Talk / Lecture</option><option>Workshop</option><option>Other</option>
           </select>
         </div>
@@ -980,7 +981,7 @@
         <div class="form-group">
           <label>Event Type <span class="req">*</span></label>
           <select class="form-input" id="e-type">
-            <option>Party</option><option>Meetup</option><option>Food Market</option>
+            <option>Party</option><option>Dinner</option><option>Meetup</option><option>Food Market</option>
             <option>Conference</option><option>Talk / Lecture</option><option>Workshop</option><option>Other</option>
           </select>
         </div>
@@ -1620,7 +1621,7 @@ function getEventEmoji(type) {
 }
 
 function getTagClass(type) {
-  const map = { 'Party':'tag-party','Meetup':'tag-meetup','Food Market':'tag-food','Conference':'tag-conf','Talk / Lecture':'tag-talk','Workshop':'tag-workshop','Other':'tag-other' };
+  const map = { 'Party':'tag-party','Dinner':'tag-party','Meetup':'tag-meetup','Food Market':'tag-food','Conference':'tag-conf','Talk / Lecture':'tag-talk','Workshop':'tag-workshop','Other':'tag-other' };
   return map[type] || 'tag-other';
 }
 
