@@ -2623,7 +2623,7 @@ function setAddressVisibility(val, prefix) {
       hint.textContent = 'The full address will be visible to everyone on your event page';
       hint.style.display = 'block';
     } else {
-      hint.textContent = 'Visitors see city only. To receive the address, the visitor will fill out a request form which will be sent to you.';
+      hint.innerHTML = 'Visitors see city only. Interested visitors can request the address - their request will be sent to your email. <strong>Your email is required to receive these requests</strong> but will not appear on the event page unless you choose to show it.';
       hint.style.display = 'block';
     }
   }
@@ -2782,7 +2782,7 @@ function setEditAddressVisibility(val, btn) {
   if (hint) {
     hint.textContent = val
       ? 'The full address will be visible to everyone on your event page'
-      : 'Visitors see city only. To receive the address, the visitor will fill out a request form which will be sent to you.';
+      : 'Visitors see city only. Interested visitors can request the address - their request will be sent to your email. <strong>Your email is required to receive these requests</strong> but will not appear on the event page unless you choose to show it.';
     hint.style.display = 'block';
   }
   // When switching to private, auto-check email if available
