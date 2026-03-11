@@ -976,22 +976,26 @@
           <input class="form-input" id="e-amount" type="number" min="0" step="0.01" placeholder="25" style="border-radius:0 4px 4px 0;">
         </div>
       </div>
+      <div class="form-group" style="margin-top:6px; padding-top:14px; border-top:1px solid var(--gray-200);">
+        <label>Registration / External Link <span class="optional-tag">(optional)</span></label>
+        <input class="form-input" id="e-reg-link" type="url" placeholder="https://" oninput="handleEditRegLink()">
+        <div id="e-reg-link-note" style="display:none; font-size:12px; color:#1a5c35; font-weight:700; margin-top:8px; background:#f0faf4; border-left:3px solid #2e7d4f; border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5;">Visitors will be sent directly to this link - address, description and contact fields are not needed.</div>
+      </div>
+    </div>
+
+    <div class="form-section" id="e-desc-section">
+      <div class="form-section-title">2 · Description <span class="optional-tag">(optional)</span></div>
       <div class="form-group">
-        <label>Description <span class="optional-tag">(optional)</span></label>
         <textarea class="form-input" id="e-desc" rows="4" dir="auto"></textarea>
         <div class="field-hint">You can write in Hebrew or English</div>
-      </div>
-      <div class="form-group">
-        <label>Registration Link <span class="optional-tag">(optional)</span></label>
-        <input class="form-input" id="e-reg-link" type="url" placeholder="https://">
       </div>
     </div>
 
     <div class="form-section">
-      <div class="form-section-title">2 · Location</div>
+      <div class="form-section-title">3 · Location</div>
       <div class="form-group">
         <label>City <span class="req">*</span></label>
-        <select class="form-input" id="e-city" onchange="handleCityOther('e-city','e-city-other'); handleOnlineCity('e')">
+        <select class="form-input" id="e-city" onchange="handleCityOther('e-city','e-city-other'); handleOnlineCity('e'); if(document.getElementById('e-reg-link').value.trim()) document.getElementById('e-address-section').style.display='none';">
             <option value="">Select city...</option>
             <option>Alpharetta</option>
             <option>Atlanta</option>
@@ -1033,7 +1037,7 @@
     </div>
 
     <div class="form-section">
-      <div class="form-section-title">3 · Organizer Information</div>
+      <div class="form-section-title">4 · Organizer Information</div>
       <div class="form-row">
         <div class="form-group">
           <label>Name <span class="req">*</span></label>
@@ -1048,6 +1052,7 @@
           </div>
         </div>
       </div>
+      <div id="e-contact-fields">
       <div class="form-row">
         <div class="form-group">
           <label>Email <span class="req">*</span></label>
@@ -1070,10 +1075,11 @@
         <div class="field-hint" id="e-contact-hint" style="display:none;"></div>
         <div id="e-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Please show at least your email or phone.</div>
       </div>
+      </div>
     </div>
 
     <div class="form-section">
-      <div class="form-section-title">4 · Media</div>
+      <div class="form-section-title">5 · Media</div>
       <div class="form-group">
         <label>Event Image</label>
         <div id="e-upload-area" class="upload-area" onclick="document.getElementById('e-image').click()">
@@ -2239,6 +2245,7 @@ async function loadEditPage(editKey, fromAdmin = false) {
     });
     document.getElementById('e-desc').value = e.description || '';
     document.getElementById('e-reg-link').value = e.registration_link || '';
+    handleEditRegLink();
     document.getElementById('e-address').value = e.full_address || '';
     // Handle city - including Online Event
     const eCityEl = document.getElementById('e-city');
@@ -2568,12 +2575,23 @@ function handleRegLink() {
   document.getElementById('s-reg-link-note').style.display = hasLink ? 'block' : 'none';
   document.getElementById('s-desc-section').style.display = hasLink ? 'none' : 'block';
   document.getElementById('s-contact-fields').style.display = hasLink ? 'none' : 'block';
-  // Address section: hide if reg link present (handleOnlineCity handles online case)
   if (hasLink) {
     document.getElementById('s-address-section').style.display = 'none';
   } else {
-    // Restore based on city selection
     handleOnlineCity('s');
+  }
+}
+
+function handleEditRegLink() {
+  const val = document.getElementById('e-reg-link').value.trim();
+  const hasLink = val.length > 0;
+  document.getElementById('e-reg-link-note').style.display = hasLink ? 'block' : 'none';
+  document.getElementById('e-desc-section').style.display = hasLink ? 'none' : 'block';
+  document.getElementById('e-contact-fields').style.display = hasLink ? 'none' : 'block';
+  if (hasLink) {
+    document.getElementById('e-address-section').style.display = 'none';
+  } else {
+    handleOnlineCity('e');
   }
 }
 
