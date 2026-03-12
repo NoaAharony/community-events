@@ -1302,8 +1302,8 @@
           <div class="form-group"><label>Last Name <span class="req">*</span></label><input class="form-input" id="req-lname" type="text"></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label>Email <span class="req">*</span></label><input class="form-input" id="req-email" type="email"></div>
-          <div class="form-group"><label>Phone <span class="req">*</span></label><input class="form-input" id="req-phone" type="tel"></div>
+          <div class="form-group"><label>Email <span class="req">*</span></label><input class="form-input" id="req-email" type="email" inputmode="email" autocomplete="email"></div>
+          <div class="form-group"><label>Phone <span class="req">*</span></label><input class="form-input" id="req-phone" type="tel" oninput="formatPhoneInput(this)" inputmode="numeric"></div>
         </div>
         <div class="form-group"><label>Message <span class="optional-tag">(optional)</span></label><textarea class="form-input" id="req-message" rows="3" dir="auto"></textarea><div class="field-hint">You can write in Hebrew or English</div></div>
         <button class="modal-action-btn" onclick="submitAddressRequest()">Send Request →</button>
@@ -1317,7 +1317,7 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <div style="font-family:'Source Serif 4',serif; font-size:20px; color:var(--green); margin-bottom:10px; font-weight:400;">Request sent!</div>
-        <p style="font-size:14px; color:var(--gray-800); font-weight:600; line-height:1.6;">The organizer will contact you directly with the address.</p>
+        <p style="font-size:14px; color:var(--gray-800); font-weight:600; line-height:1.6;">The organizer will contact you directly.</p>
       </div>
     </div>
   </div>
