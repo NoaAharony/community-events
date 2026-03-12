@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const FROM = "Atlanta IL Community Events <onboarding@resend.dev>";
+const FROM = "Atlanta IL Community Events <noreply@ilcommunityevents.com>";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,7 +10,7 @@ const corsHeaders = {
 
 const goldDivider = `<tr><td bgcolor="#c8963e" style="background-color: #c8963e; height: 3px; font-size: 1px; line-height: 1px; mso-line-height-rule: exactly;">&nbsp;</td></tr>`;
 const siteTitle = `<p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; color: #ffffff; font-weight: 600; margin: 0 0 20px; line-height: 1.3; text-align: center;">Atlanta <span style="color: #e8b86a; font-style: italic; font-weight: 400;">IL</span> Community Events</p>`;
-const footer = `<p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #c8b89a; text-align: center; margin: 0; border-top: 1px solid #ede8e0; padding-top: 16px;">Atlanta IL Community Events</p>`;
+const footer = `<p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #a09880; text-align: center; margin: 0; border-top: 1px solid #e8e2d8; padding-top: 16px;">Atlanta IL Community Events</p>`;
 
 function wrapEmail(headerContent: string, bodyContent: string): string {
   return `<!DOCTYPE html>
@@ -23,17 +23,17 @@ function wrapEmail(headerContent: string, bodyContent: string): string {
 <meta name="supported-color-schemes" content="light">
 <style>
   :root { color-scheme: light only; supported-color-schemes: light only; }
-  body { margin: 0; padding: 0; background-color: #d8d0c4; }
+  body { margin: 0; padding: 0; background-color: #f4f1ec; }
   table { border-collapse: collapse; }
-  a { color: #1e4068; }
+  a { color: #1a3a5c; }
 </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #d8d0c4; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#d8d0c4" style="background-color: #d8d0c4;">
+<body style="margin: 0; padding: 0; background-color: #f4f1ec; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f1ec" style="background-color: #f4f1ec;">
   <tr><td align="center" style="padding: 32px 16px;">
     <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; width: 100%;">
       <tr>
-        <td bgcolor="#1e4068" style="background-color: #1e4068; border-radius: 10px 10px 0 0; padding: 28px 32px; text-align: center;">
+        <td bgcolor="#1a3a5c" style="background-color: #1a3a5c; border-radius: 10px 10px 0 0; padding: 28px 32px; text-align: center;">
           ${siteTitle}
           ${headerContent}
         </td>
@@ -68,18 +68,18 @@ serve(async (req) => {
 
       const headerContent = `
         <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; color: #ffffff; font-weight: 400; margin: 0 0 4px; line-height: 1.3; text-align: center;">Your event was added successfully!</p>
-        <p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #a8c4e0; margin: 0; line-height: 1.4; text-align: center;">It will appear on the events page shortly</p>`;
+        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #a8c4e0; margin: 0; line-height: 1.4; text-align: center;">It will appear on the events page shortly</p>`;
 
       const bodyContent = `
-        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #1a2028; margin: 0 0 6px; line-height: 1.4;">Hi <strong style="color: #1a2028;">${organizer_name}</strong>,</p>
-        <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #6a6058; margin: 0 0 28px; line-height: 1.6;">Thank you for adding your event to Atlanta IL Community Events. It will appear on the site shortly.</p>
+        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #3a342a; margin: 0 0 6px; line-height: 1.4;">Hi <strong style="color: #3a342a;">${organizer_name}</strong>,</p>
+        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b6355; margin: 0 0 28px; line-height: 1.6;">Thank you for adding your event to Atlanta IL Community Events. It will appear on the site shortly.</p>
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
           <tr>
             <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>
             <td bgcolor="#f9f5ef" style="background-color: #f9f5ef; padding: 14px 18px; border-radius: 0 8px 8px 0;">
-              <p style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 8px;">Your Event</p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 8px;">Your Event</p>
               <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; font-weight: 400; color: #1a3a5c; margin: 0 0 4px; line-height: 1.3;">${event_name}</p>
-              <p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #6a6058; margin: 0;">${event_date}</p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #6b6355; margin: 0;">${event_date}</p>
             </td>
           </tr>
         </table>
@@ -87,11 +87,11 @@ serve(async (req) => {
           <tr>
             <td bgcolor="#fff8ee" style="background-color: #fff8ee; border: 2px solid #c8963e; border-radius: 8px; padding: 20px 24px; text-align: center;">
               <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 17px; color: #1a3a5c; font-weight: 400; margin: 0 0 8px; line-height: 1.3;">Manage Your Event</p>
-              <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #5c3d10; font-weight: 600; margin: 0 0 18px; line-height: 1.6;">Save this email - it's the only way to edit or cancel your event.</p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #5c3d10; font-weight: 600; margin: 0 0 18px; line-height: 1.6;">Save this email - it's the only way to edit or cancel your event.</p>
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td bgcolor="#1e4068" style="background-color: #1e4068 !important; border-radius: 6px; text-align: center; padding: 0;"><div style="background-color: #1e4068 !important; border-radius: 6px; padding: 14px 20px;">
-                    <a href="${edit_link}" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Edit My Event &rarr;</a></div>
+                  <td bgcolor="#1a3a5c" style="background-color: #1a3a5c !important; border-radius: 6px; text-align: center; padding: 0;"><div style="background-color: #1a3a5c !important; border-radius: 6px; padding: 14px 20px;">
+                    <a href="${edit_link}" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Edit My Event &rarr;</a></div>
                   </td>
                 </tr>
               </table>
@@ -122,24 +122,24 @@ serve(async (req) => {
 
       const headerContent = `
         <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; color: #ffffff; font-weight: 400; margin: 0 0 4px; line-height: 1.3; text-align: center;">${isAddressRequest ? 'Someone requested your event address' : 'Someone sent you a message'}</p>
-        <p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #a8c4e0; margin: 0; line-height: 1.4; text-align: center;">For: <strong style="color: #e8d8b0;">${event_name}</strong></p>`;
+        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #a8c4e0; margin: 0; line-height: 1.4; text-align: center;">For: <strong style="color: #e8d8b0;">${event_name}</strong></p>`;
 
       const addressBlock = event_address ? `
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
           <tr>
             <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>
             <td bgcolor="#fff8ee" style="background-color: #fff8ee; padding: 14px 18px; border-radius: 0 8px 8px 0;">
-              <p style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 8px;">Event Address</p>
-              <p style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #1a3a5c; font-weight: 700; margin: 0 0 6px;">${event_address}</p>
-              <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #a09880; font-style: italic; margin: 0;">Copy this and paste it into your reply</p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 8px;">Event Address</p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: #1a3a5c; font-weight: 700; margin: 0 0 6px;">${event_address}</p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #a09880; font-style: italic; margin: 0;">Copy this and paste it into your reply</p>
             </td>
           </tr>
         </table>` : "";
 
       const messageRow = requester_message ? `
         <tr>
-          <td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #a09880; padding: 5px 0; width: 80px; vertical-align: top;">Message</td>
-          <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a2028; font-style: italic; padding: 5px 0;">"${requester_message}"</td>
+          <td style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #a09880; padding: 5px 0; width: 80px; vertical-align: top;">Message</td>
+          <td style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #3a342a; font-style: italic; padding: 5px 0;">"${requester_message}"</td>
         </tr>` : "";
 
       const replySubject = isAddressRequest
@@ -150,26 +150,26 @@ serve(async (req) => {
         : `Hi ${requester_fname},%0A%0A${organizer_name}`;
 
       const bodyContent = `
-        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #1a2028; margin: 0 0 6px; line-height: 1.4;">${isAddressRequest ? 'Someone wants your address' : 'Someone has a question about your event'}</p>
-        <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #6a6058; margin: 0 0 20px; line-height: 1.6;">${isAddressRequest ? `A visitor requested the address for <strong style="color: #1a2028;">${event_name}</strong>. Their details are below.` : `A visitor sent a message about <strong style="color: #1a2028;">${event_name}</strong>. Their details are below.`}</p>
+        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #3a342a; margin: 0 0 6px; line-height: 1.4;">${isAddressRequest ? 'Someone wants your address' : 'Someone has a question about your event'}</p>
+        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b6355; margin: 0 0 20px; line-height: 1.6;">${isAddressRequest ? `A visitor requested the address for <strong style="color: #3a342a;">${event_name}</strong>. Their details are below.` : `A visitor sent a message about <strong style="color: #3a342a;">${event_name}</strong>. Their details are below.`}</p>
         ${isAddressRequest ? addressBlock : ''}
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
           <tr>
             <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>
             <td bgcolor="#f9f5ef" style="background-color: #f9f5ef; padding: 14px 18px; border-radius: 0 8px 8px 0;">
-              <p style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 12px;">Requester Details</p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 12px;">Requester Details</p>
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #a09880; padding: 5px 0; width: 80px; vertical-align: top;">Name</td>
-                  <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a2028; font-weight: 600; padding: 5px 0;">${requester_fname} ${requester_lname}</td>
+                  <td style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #a09880; padding: 5px 0; width: 80px; vertical-align: top;">Name</td>
+                  <td style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #3a342a; font-weight: 600; padding: 5px 0;">${requester_fname} ${requester_lname}</td>
                 </tr>
                 <tr>
-                  <td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #a09880; padding: 5px 0; vertical-align: top;">Email</td>
-                  <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a2028; padding: 5px 0;"><a href="mailto:${requester_email}" style="color: #1e4068; text-decoration: none;">${requester_email}</a></td>
+                  <td style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #a09880; padding: 5px 0; vertical-align: top;">Email</td>
+                  <td style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #3a342a; padding: 5px 0;"><a href="mailto:${requester_email}" style="color: #1a3a5c; text-decoration: none;">${requester_email}</a></td>
                 </tr>
                 <tr>
-                  <td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #a09880; padding: 5px 0; vertical-align: top;">Phone</td>
-                  <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a2028; padding: 5px 0;">${requester_phone}</td>
+                  <td style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #a09880; padding: 5px 0; vertical-align: top;">Phone</td>
+                  <td style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #3a342a; padding: 5px 0;">${requester_phone}</td>
                 </tr>
                 ${messageRow}
               </table>
@@ -178,8 +178,8 @@ serve(async (req) => {
         </table>
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
           <tr>
-            <td bgcolor="#1e4068" style="background-color: #1e4068 !important; border-radius: 6px; text-align: center; padding: 0;"><div style="background-color: #1e4068 !important; border-radius: 6px; padding: 14px 20px;">
-              <a href="mailto:${requester_email}?subject=${encodeURIComponent(replySubject)}&body=${replyBody}" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Reply to ${requester_fname} &rarr;</a></div>
+            <td bgcolor="#1a3a5c" style="background-color: #1a3a5c !important; border-radius: 6px; text-align: center; padding: 0;"><div style="background-color: #1a3a5c !important; border-radius: 6px; padding: 14px 20px;">
+              <a href="mailto:${requester_email}?subject=${encodeURIComponent(replySubject)}&body=${replyBody}" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Reply to ${requester_fname} &rarr;</a></div>
             </td>
           </tr>
         </table>`;
