@@ -11,7 +11,7 @@
 - [ ] **Old event cleanup** — events stay in the database forever. Add auto-delete for events older than 60 days to keep the database clean.
 - [ ] **Save event / reminder** — visitors can share but not save an event or get a reminder. Common feature for event sites.
 - [ ] **Image size limit** — enforce a hard file size limit on image upload (not just a warning). Prevents large files from slowing the site and consuming Supabase storage.
-- [ ] **Custom 404 page** — Cloudflare currently shows a generic error for invalid URLs. Replace with a branded page matching site style, with a "Back to Events" button.
+- [ ] **Location field UI improvement** — the relationship between "Online Event" checkbox and the city dropdown is not clear enough. A first-time user may not understand it's an either/or choice. Consider redesigning as two clear options (e.g. toggle or radio buttons: "In Person" / "Online") with the city dropdown only appearing for in-person, and a clearer visual separation or label like "or" between them.
 - [ ] **Submission guidelines** — add content rules explaining what is and isn't allowed on the site. Likely to live on the About page. Exact wording to be decided.
 
 ## Admin Panel
