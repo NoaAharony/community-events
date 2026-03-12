@@ -2400,8 +2400,8 @@ async function loadEditPage(editKey, fromAdmin = false) {
         document.getElementById('e-city-other').style.display = 'block';
       }
     }
-    handleEditOnlineToggle();
     document.getElementById('e-email').value = e.contact_email || '';
+    updateContactHint('e');
     document.getElementById('e-amount').value = (e.amount || '').replace('$','');
 
     setEditCost(e.cost);
