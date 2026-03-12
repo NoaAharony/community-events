@@ -144,10 +144,10 @@ serve(async (req) => {
 
       const replySubject = isAddressRequest
         ? `Address for: ${event_name}${formattedDate ? " - " + formattedDate + (event_time ? ", " + event_time : "") : ""}`
-        : `Re: ${event_name}`;
+        : `Re: ${event_name}${formattedDate ? " - " + formattedDate : ""}`;
       const replyBody = isAddressRequest
         ? `Hi ${requester_fname},%0A%0AThe address for ${event_name}${formattedDate ? " (" + formattedDate + (event_time ? ", " + event_time : "") + ")" : ""} is:%0A${event_address ? event_address : "[address]"}%0A%0ASee you there!%0A${organizer_name}`
-        : `Hi ${requester_fname},%0A%0A${organizer_name}`;
+        : `Hi ${requester_fname},%0A%0AThanks for reaching out about ${event_name}${formattedDate ? " (" + formattedDate + ")" : ""}. ${organizer_name}`;
 
       const bodyContent = `
         <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #3a342a; margin: 0 0 6px; line-height: 1.4;">${isAddressRequest ? 'Someone wants your address' : 'Someone has a question about your event'}</p>
@@ -188,7 +188,7 @@ serve(async (req) => {
         from: FROM,
         to: [organizer_email],
         reply_to: requester_email,
-        subject: isAddressRequest ? `Address request for "${event_name}"${formattedDate ? " - " + formattedDate : ""}` : `Someone sent you a message about "${event_name}"`,
+        subject: isAddressRequest ? `Address request for "${event_name}"${formattedDate ? " - " + formattedDate : ""}` : `Someone sent you a message about "${event_name}"${formattedDate ? " - " + formattedDate : ""}`,
         html: wrapEmail(headerContent, bodyContent),
       };
     }
