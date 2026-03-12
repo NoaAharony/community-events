@@ -4,6 +4,7 @@
 - [x] **Supabase auto-pause — resolved.** Supabase has removed auto-pause from the free tier dashboard. The database will not pause automatically. No action needed. *(Confirmed Session 11, Mar 12 2026)*
 
 ## Priority 2 — Soon After Launch
+- [ ] **Analytics** — add website behavior tracking (visits, event clicks, contact organizer clicks, share clicks, traffic sources). Options: Google Analytics (detailed) or Plausible (simpler, privacy-friendly). ~10 min to set up.
 - [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form.
 - [ ] **Hebrew language toggle** — full UI toggle between Hebrew and English.
 
