@@ -188,7 +188,7 @@ serve(async (req) => {
         from: FROM,
         to: [organizer_email],
         reply_to: requester_email,
-        subject: `Address request for "${event_name}"${formattedDate ? " - " + formattedDate : ""}`,
+        subject: isAddressRequest ? `Address request for "${event_name}"${formattedDate ? " - " + formattedDate : ""}` : `Someone sent you a message about "${event_name}"`,
         html: wrapEmail(headerContent, bodyContent),
       };
     }
