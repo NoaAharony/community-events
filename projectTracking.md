@@ -226,3 +226,43 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - **Email fix:** Updated Edge Function `send-email` — FROM address changed from `onboarding@resend.dev` to `noreply@ilcommunityevents.com`. Emails now send to all users (not just account owner)
 - **About page:** Real content written and added — community story, Noa credit, business/individual/online mention
 - **Cloudflare:** Domain auto-connected to Cloudflare Pages (purchased directly via Cloudflare)
+
+### Session 11 (Mar 11, 2026) — Modal UX, Mobile Positioning, and Navigation
+- **Share button on cards:** Repositioned and enlarged for better tap target visibility (desktop + mobile), with spacing/layout adjustments to avoid overlap with card content.
+- **Card right rail consistency:** Standardized arrow column sizing so spacing next to share icon is consistent across cards.
+- **Event modal mobile placement:** Anchored event details modal directly below top toolbar/filter area on mobile/tablet, with dynamic viewport-based max height.
+- **Address modal mobile placement:** Applied same toolbar-anchored placement behavior to the address/contact modal.
+- **Home footer behavior:** Home page footer made fixed/static while event list scrolls, with extra bottom padding and safe-area handling.
+- **Topbar home navigation:** Clicking the site title now reliably returns users to the top of Home from any page/device (including iOS/Safari reliability ticks).
+- **Filter wording:** Main filter chip label changed from `City` to `Location` (including reset state text).
+
+### Session 12 (Mar 11–12, 2026) — Add/Edit Form Flow Overhaul + Contact Modal Enhancements
+- **Edit Location UX redesigned:**
+  - Replaced `Online Event` city option with dedicated checkbox above City.
+  - Checkbox disables/hides city fields and behaves exactly like `city = Online Event` in logic.
+  - Required marker moved from `City` label to `Location` section title.
+- **Add Location UX mirrored to match Edit:**
+  - Added same `Online Event` checkbox behavior, city hiding/restore logic, and validation parity.
+- **Organizer contact logic simplified (Add/Edit):**
+  - Removed phone input/checkbox/public-display controls from both forms.
+  - Email visibility behavior now state-driven by Registration Link / Online / Private Address scenarios.
+  - Helper texts and private-address email note copy updated for clarity.
+- **Address/Location copy and layout updates:**
+  - Full Address field moved directly below City in Add/Edit.
+  - Added explicit `Full Address *` label and improved generic placeholder text.
+  - Private address toggle copy changed from `Keep address private` to `Show City only`.
+  - Address hint text simplified: `Visitors can submit an address request on the site`.
+- **Paid amount validation parity:** Edit form now enforces Amount as required when Cost = Paid (matching submit form behavior).
+- **Event details private-location CTA update:**
+  - Changed button from `Request Address` to `Contact Organizer`.
+  - Replaced icon with email icon and added helper text explaining this is how to request full address.
+- **Address/contact modal enhancements:**
+  - Header updated to `Contact Organizer` with email icon.
+  - Added `Request Type` dropdown (`Request Address` / `Other`) at top.
+  - Intro guidance box now conditionally shown only for `Request Address`.
+  - Email and phone fields hardened with proper input behavior (`type`, `inputmode`, formatting/autocomplete).
+  - Success message updated to: `The organizer will contact you directly.`
+- **Address request email subject logic:**
+  - If `Request Address`: `Address Request for [event name, date]`
+  - If `Other`: `Other Request for [event name, date]`
+  - Request type + computed subject now included in payload sent to the email function.
