@@ -76,7 +76,7 @@
   .row-thumb { width: 120px; min-width: 120px; background: linear-gradient(160deg, #1e4068, #0f2035); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; flex-direction: column; gap: 2px; }
   .row-thumb img { width: 120px; height: 100%; object-fit: cover; object-position: center top; }
   .row-thumb-placeholder { font-family: 'Source Serif 4', serif; font-size: 12px; font-style: italic; color: var(--gold-light); letter-spacing: 0.5px; }
-  .row-main { flex: 1; padding: 14px 68px 14px 16px; min-width: 0; }
+  .row-main { flex: 1; padding: 14px 16px; min-width: 0; }
   .row-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; flex-wrap: wrap; }
   .row-title { font-size: 15px; font-weight: 800; color: #1a2028; font-family: 'Nunito', sans-serif; }
   .row-title.cancelled-title { text-decoration: line-through; color: var(--gray-400); }
@@ -95,9 +95,9 @@
   .event-row { position: relative; }
 
   /* Share button on card */
-  .share-card-btn { position: absolute; top: 10px; right: 56px; width: 42px; height: 42px; border-radius: 50%; background: white; border: 1.5px solid rgba(200,150,62,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.1); transition: all 0.15s; color: #c8963e; z-index: 2; }
-  .share-card-btn:hover { background: var(--gold); border-color: var(--gold); color: white; }
-  .share-card-btn svg { width: 20px; height: 20px; } { background: #fef8e8; border: 1.5px solid #e8c96a; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #6b5010; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 10px; }
+  .share-card-btn { position: absolute; top: 50%; right: 58px; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; background: white; border: 1.5px solid rgba(200,150,62,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 4px rgba(26,58,92,0.08); transition: all 0.18s; color: #c8963e; z-index: 2; flex-shrink: 0; }
+  .share-card-btn:hover { background: var(--gold); border-color: var(--gold); color: white; box-shadow: 0 2px 8px rgba(200,150,62,0.35); }
+  .share-card-btn svg { width: 12px; height: 12px; } { background: #fef8e8; border: 1.5px solid #e8c96a; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #6b5010; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 10px; }
   .notice-bar svg { flex-shrink: 0; margin-top: 1px; }
   .notice-bar-text { line-height: 1.5; }
   .notice-bar-text strong { display: block; font-size: 13.5px; color: #4a3800; margin-bottom: 2px; }
@@ -307,7 +307,7 @@
     .row-thumb { width: 72px; min-width: 72px; }
     .row-thumb img { width: 72px; }
     .row-thumb-placeholder { font-size: 10px; }
-    .row-main { padding: 9px 52px 9px 10px; }
+    .row-main { padding: 9px 10px; }
     .row-title { font-size: 13px; }
     .row-meta { font-size: 11.5px; gap: 4px; margin-bottom: 5px; }
     .row-organizer { margin-bottom: 6px; }
@@ -315,9 +315,9 @@
     .row-org-name { font-size: 10.5px; }
     .row-tags { gap: 4px; padding-top: 6px; }
     .tag { font-size: 9.5px; padding: 2px 7px; }
-    .row-arrow { width: 30px; flex: 0 0 30px; }
-    .share-card-btn { right: 36px; width: 33px; height: 33px; top: 7px; box-shadow: none; border-color: rgba(200,150,62,0.4); }
-    .share-card-btn svg { width: 15px; height: 15px; }
+    .row-arrow { width: 36px; flex: 0 0 36px; }
+    .share-card-btn { right: 42px; width: 24px; height: 24px; }
+    .share-card-btn svg { width: 10px; height: 10px; }
 
     /* === EVENT MODAL - slides up from bottom === */
     .overlay { padding: 0; align-items: flex-end; }
