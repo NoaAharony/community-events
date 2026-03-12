@@ -7,11 +7,20 @@
 - [ ] **Analytics** — add website behavior tracking (visits, event clicks, contact organizer clicks, share clicks, traffic sources). Options: Google Analytics (detailed) or Plausible (simpler, privacy-friendly). ~10 min to set up.
 - [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form.
 - [ ] **Hebrew language toggle** — full UI toggle between Hebrew and English.
+- [ ] **Spam / fake event submissions** — no verification exists; anyone can post anything. Options: admin approval before events go live, or a "Report this event" button for visitors.
+- [ ] **Old event cleanup** — events stay in the database forever. Add auto-delete for events older than 60 days to keep the database clean.
+- [ ] **Save event / reminder** — visitors can share but not save an event or get a reminder. Common feature for event sites.
+
+## Admin Panel
+- [ ] **Message all organizers** — button in admin panel to send an email to all organizers with active events. For maintenance notices, policy updates, holiday reminders, etc.
+- [ ] **Admin password protection** — currently only protected by a secret URL. If someone finds it, they have full access. Add a simple password login to the admin panel.
+- [ ] **Bulk actions** — select multiple events and delete/cancel at once.
+- [ ] **Export to CSV** — download all event data as a spreadsheet.
+- [ ] **Filter by status** — filter admin table by upcoming, cancelled, past.
 
 ## Priority 3 — Nice to Have
 - [ ] **Accessibility audit** — WCAG color contrast, font sizes, keyboard navigation, screen reader support.
 - [ ] **Phone number format validation** — confirm edge cases (international numbers, paste).
-- [ ] **Admin improvements** — bulk actions, export to CSV, filter by status.
 
 ---
 
