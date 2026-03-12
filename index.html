@@ -1898,6 +1898,7 @@ function openAddressRequest(eventId) {
 }
 
 async function submitAddressRequest() {
+  const reqType = (document.getElementById('req-type') && document.getElementById('req-type').value) || 'request_address';
   const fname = document.getElementById('req-fname').value.trim();
   const lname = document.getElementById('req-lname').value.trim();
   const email = document.getElementById('req-email').value.trim();
@@ -1910,8 +1911,15 @@ async function submitAddressRequest() {
   // Send email to organizer
   const event = allEvents.find(ev => ev.id === currentAddressRequestEventId);
   if (event && event.contact_email) {
+    const eventDateLabel = event.event_date ? formatDate(event.event_date) : '';
+    const subjectPrefix = reqType === 'other' ? 'Other Request for' : 'Address Request for';
+    const subjectSuffix = eventDateLabel ? `${event.name}, ${eventDateLabel}` : event.name;
+    const requestSubject = `${subjectPrefix} ${subjectSuffix}`;
+
     await sendEmail({
       type: 'address_request',
+      request_type: reqType,
+      email_subject: requestSubject,
       organizer_email: event.contact_email,
       organizer_name: event.organizer_name || '',
       event_name: event.name,
