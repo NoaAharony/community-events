@@ -2,7 +2,7 @@
 
 ## Priority 1 — Before Go-Live
 - [x] **Supabase auto-pause — resolved.** Supabase has removed auto-pause from the free tier dashboard. The database will not pause automatically. No action needed. *(Confirmed Session 11, Mar 12 2026)*
-- [ ] **Add "Show" as an event type** — add Show to the event type options alongside Party, Meetup, Food Market, Conference, Talk / Lecture, Workshop, Other.
+- [x] **Add "Show" as an event type** — added to form, edit form, filter bar, tag color, and emoji. *(Session 11, Mar 12 2026)*
 - [ ] **Add event type: Show** — add "Show" as a new option in the event type dropdown (currently: Party, Meetup, Food Market, Conference, Talk / Lecture, Workshop, Other). Needs to be added to the form, filter bar, and tag display.
 
 ## Priority 2 — Soon After Launch
