@@ -190,7 +190,7 @@
   .form-group label .req { color: var(--red); }
   .form-input { width: 100%; border: 1px solid var(--gray-200); border-radius: 4px; padding: 9px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; color: var(--gray-800); background: var(--white); transition: border-color 0.15s; }
   .form-input:focus { outline: none; border-color: var(--blue-light); }
-  #e-city:disabled, #e-city-other:disabled { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; }
+  #s-city:disabled, #s-city-other:disabled, #e-city:disabled, #e-city-other:disabled { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .privacy-note { font-size: 12px; color: var(--gray-600); margin-top: 6px; font-weight: 600; }
   .privacy-note.visible { font-size: 12px; color: #b06820; font-weight: 700; }
@@ -693,27 +693,31 @@
     </div>
 
     <div class="form-section">
-      <div class="form-section-title">3 · Location</div>
+      <div class="form-section-title">3 · Location <span class="req">*</span></div>
       <div class="form-group">
-        <label>City <span class="req">*</span></label>
-        <select class="form-input" id="s-city" onchange="handleCityOther('s-city','s-city-other'); handleOnlineCity('s'); if(document.getElementById('s-reg-link').value.trim()) document.getElementById('s-address-section').style.display='none';">
-            <option value="">Select city...</option>
-            <option>Alpharetta</option>
-            <option>Atlanta</option>
-            <option>Brookhaven</option>
-            <option>Cumming</option>
-            <option>Duluth</option>
-            <option>Dunwoody</option>
-            <option>East Cobb</option>
-            <option>Johns Creek</option>
-            <option>Peachtree Corners</option>
-            <option>Roswell</option>
-            <option>Sandy Springs</option>
-            <option>Suwanee</option>
-            <option value="Online Event">Online Event</option>
-            <option value="other">Other...</option>
-          </select>
-          <input class="form-input" id="s-city-other" autocomplete="off" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:14.3px; font-weight:600; text-transform:none; letter-spacing:0; margin-bottom:6px; cursor:pointer;">
+          <input type="checkbox" id="s-is-online" onchange="handleSubmitOnlineToggle()" style="transform:scale(1.1); transform-origin:left center;"> Online Event
+        </label>
+        <div id="s-city-fields">
+          <label>City</label>
+          <select class="form-input" id="s-city" onchange="handleSubmitCityChange()">
+              <option value="">Select city...</option>
+              <option>Alpharetta</option>
+              <option>Atlanta</option>
+              <option>Brookhaven</option>
+              <option>Cumming</option>
+              <option>Duluth</option>
+              <option>Dunwoody</option>
+              <option>East Cobb</option>
+              <option>Johns Creek</option>
+              <option>Peachtree Corners</option>
+              <option>Roswell</option>
+              <option>Sandy Springs</option>
+              <option>Suwanee</option>
+              <option value="other">Other...</option>
+            </select>
+            <input class="form-input" id="s-city-other" autocomplete="off" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
+        </div>
       </div>
       <!-- Address section - hidden when Online Event selected -->
       <div id="s-address-section">
@@ -2149,8 +2153,9 @@ async function submitEvent() {
   const type = document.getElementById('s-type').value;
   const audience = getAudienceValues();
   const citySelect = document.getElementById('s-city').value;
-  const city = citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect;
-  const isOnline = citySelect === 'Online Event';
+  const isOnlineChecked = document.getElementById('s-is-online') && document.getElementById('s-is-online').checked;
+  const city = isOnlineChecked ? 'Online Event' : (citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect);
+  const isOnline = isOnlineChecked || citySelect === 'Online Event';
   const organizer = document.getElementById('s-organizer').value.trim();
   const regLink = document.getElementById('s-reg-link').value.trim();
   const email = regLink ? document.getElementById('s-email-reglink').value.trim() : document.getElementById('s-email').value.trim();
@@ -2272,6 +2277,14 @@ function resetSubmitForm() {
   document.getElementById('s-type').value = '';
   document.querySelectorAll('input[name="s-audience"]').forEach(c => c.checked = false);
   document.getElementById('s-city').value = '';
+  const sOnline = document.getElementById('s-is-online');
+  if (sOnline) sOnline.checked = false;
+  const sCity = document.getElementById('s-city');
+  const sCityOther = document.getElementById('s-city-other');
+  const sCityFields = document.getElementById('s-city-fields');
+  if (sCity) { sCity.disabled = false; sCity.dataset.prevValue = ''; }
+  if (sCityOther) { sCityOther.disabled = false; sCityOther.value = ''; sCityOther.style.display = 'none'; sCityOther.dataset.prevValue = ''; }
+  if (sCityFields) sCityFields.style.display = 'block';
   submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', imageFile: null };
   // Reset address radio to "private" default
   setAddressVisibility(false, 's');
@@ -2759,7 +2772,8 @@ function handleOnlineCity(prefix) {
   if (prefix === 'e') { syncEditForm(); return; }
   // Submit form logic
   const cityVal = document.getElementById('s-city').value;
-  const isOnline = cityVal === 'Online Event';
+  const sOnlineCheckbox = document.getElementById('s-is-online');
+  const isOnline = (sOnlineCheckbox && sOnlineCheckbox.checked) || cityVal === 'Online Event';
   const addrSection = document.getElementById('s-address-section');
   const onlineHint = document.getElementById('s-online-hint');
   const regLink = document.getElementById('s-reg-link');
@@ -2770,6 +2784,47 @@ function handleOnlineCity(prefix) {
   }
   if (addrSection) addrSection.style.display = isOnline ? 'none' : 'block';
   if (onlineHint) onlineHint.style.display = isOnline ? 'block' : 'none';
+}
+
+function handleSubmitCityChange() {
+  const sOnline = document.getElementById('s-is-online');
+  const sCity = document.getElementById('s-city');
+  if (sOnline && sOnline.checked) sOnline.checked = false;
+  if (sCity) sCity.dataset.prevValue = sCity.value || '';
+  handleCityOther('s-city', 's-city-other');
+  handleOnlineCity('s');
+  if (document.getElementById('s-reg-link').value.trim()) document.getElementById('s-address-section').style.display = 'none';
+}
+
+function handleSubmitOnlineToggle() {
+  const sOnline = document.getElementById('s-is-online');
+  const sCity = document.getElementById('s-city');
+  const sCityOther = document.getElementById('s-city-other');
+  const sCityFields = document.getElementById('s-city-fields');
+  if (!sOnline || !sCity) return;
+
+  if (sOnline.checked) {
+    sCity.dataset.prevValue = sCity.value || '';
+    if (sCity.value === 'other' && sCityOther) sCityOther.dataset.prevValue = sCityOther.value || '';
+    sCity.value = '';
+    sCity.disabled = true;
+    if (sCityOther) {
+      sCityOther.disabled = true;
+      sCityOther.style.display = 'none';
+    }
+    if (sCityFields) sCityFields.style.display = 'none';
+  } else {
+    sCity.disabled = false;
+    if (sCity.dataset.prevValue) sCity.value = sCity.dataset.prevValue;
+    if (sCityOther) sCityOther.disabled = false;
+    if (sCityFields) sCityFields.style.display = 'block';
+    handleCityOther('s-city', 's-city-other');
+    if (sCity.value === 'other' && sCityOther && sCityOther.dataset.prevValue && !sCityOther.value) {
+      sCityOther.value = sCityOther.dataset.prevValue;
+    }
+  }
+
+  handleOnlineCity('s');
 }
 
 function handleEditCityChange() {
