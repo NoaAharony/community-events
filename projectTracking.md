@@ -226,3 +226,6 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - **Email fix:** Updated Edge Function `send-email` — FROM address changed from `onboarding@resend.dev` to `noreply@ilcommunityevents.com`. Emails now send to all users (not just account owner)
 - **About page:** Real content written and added — community story, Noa credit, business/individual/online mention
 - **Cloudflare:** Domain auto-connected to Cloudflare Pages (purchased directly via Cloudflare)
+
+### Session 11 (Mar 12, 2026) — Supabase Auto-Pause Resolved
+- **Supabase auto-pause:** Confirmed that Supabase has removed auto-pause from the free tier. Dashboard now shows only a manual "Pause project" button. Database stays awake automatically — no action needed.

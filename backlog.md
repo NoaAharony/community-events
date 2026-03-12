@@ -1,8 +1,7 @@
 # Backlog — Israeli Events Atlanta
 
 ## Priority 1 — Before Go-Live
-- [ ] **Disable Supabase auto-pause** — free tier pauses after 1 week of inactivity. Must be disabled before the site goes public or events will stop loading.
-- [ ] **Disable Supabase auto-pause** — still pending, must do before go-live
+- [x] **Supabase auto-pause — resolved.** Supabase has removed auto-pause from the free tier dashboard. The database will not pause automatically. No action needed. *(Confirmed Session 11, Mar 12 2026)*
 
 ## Priority 2 — Soon After Launch
 - [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form.
