@@ -21,6 +21,7 @@
 ## Priority 3 — Nice to Have
 - [ ] **Accessibility audit** — WCAG color contrast, font sizes, keyboard navigation, screen reader support.
 - [ ] **Phone number format validation** — confirm edge cases (international numbers, paste).
+- [ ] **Repeat organizer memory** — organizers who submit multiple events currently fill in all their details from scratch every time. Allow the form to remember name, email, phone, and org type based on their email address.
 
 ---
 
