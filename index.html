@@ -2877,7 +2877,7 @@ function updateContactHint(prefix) {
     }
   }
   if (defaultNote) {
-    defaultNote.style.display = (!regLink && isOnline) ? 'none' : 'block';
+    defaultNote.style.display = (!regLink && (isOnline || isPrivateAddress)) ? 'none' : 'block';
   }
   if (warning) warning.style.display = 'none';
 
