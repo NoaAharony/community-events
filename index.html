@@ -427,7 +427,7 @@
       </div>
     </div>
     <div class="filter-chip" id="chip-city" onclick="toggleDropdown('dd-city', event)">
-      <span id="city-label">City</span> ▾
+      <span id="city-label">Location</span> ▾
       <div class="dropdown-menu" id="dd-city">
         <div class="dropdown-item selected" onclick="setCityFilter('all','City',event)">All Cities</div>
         <div class="dropdown-item" onclick="setCityFilter('Alpharetta','Alpharetta',event)">Alpharetta</div>
@@ -2603,7 +2603,7 @@ function closeAllDropdowns() {
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open'));
   document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
 }
-function clearFilters() { filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'All Upcoming'; document.getElementById('city-label').textContent = 'City'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.add('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); renderEvents(); }
+function clearFilters() { filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'All Upcoming'; document.getElementById('city-label').textContent = 'Location'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.add('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); renderEvents(); }
 
 function toggleDropdown(id, e) {
   e.stopPropagation();
