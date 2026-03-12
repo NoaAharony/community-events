@@ -118,8 +118,10 @@ serve(async (req) => {
       };
       const formattedDate = event_date ? formatDate(event_date) : "";
 
+      const isAddressRequest = body.request_type === 'request_address';
+
       const headerContent = `
-        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; color: #ffffff; font-weight: 400; margin: 0 0 4px; line-height: 1.3; text-align: center;">Someone requested your event address</p>
+        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; color: #ffffff; font-weight: 400; margin: 0 0 4px; line-height: 1.3; text-align: center;">${isAddressRequest ? 'Someone requested your event address' : 'Someone sent you a message'}</p>
         <p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #a8c4e0; margin: 0; line-height: 1.4; text-align: center;">For: <strong style="color: #e8d8b0;">${event_name}</strong></p>`;
 
       const addressBlock = event_address ? `
@@ -140,13 +142,17 @@ serve(async (req) => {
           <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a2028; font-style: italic; padding: 5px 0;">"${requester_message}"</td>
         </tr>` : "";
 
-      const replySubject = `Address for: ${event_name}${formattedDate ? " - " + formattedDate + (event_time ? ", " + event_time : "") : ""}`;
-      const replyBody = `Hi ${requester_fname},%0A%0AThe address for ${event_name}${formattedDate ? " (" + formattedDate + (event_time ? ", " + event_time : "") + ")" : ""} is:%0A${event_address ? event_address : "[address]"}%0A%0ASee you there!%0A${organizer_name}`;
+      const replySubject = isAddressRequest
+        ? `Address for: ${event_name}${formattedDate ? " - " + formattedDate + (event_time ? ", " + event_time : "") : ""}`
+        : `Re: ${event_name}`;
+      const replyBody = isAddressRequest
+        ? `Hi ${requester_fname},%0A%0AThe address for ${event_name}${formattedDate ? " (" + formattedDate + (event_time ? ", " + event_time : "") + ")" : ""} is:%0A${event_address ? event_address : "[address]"}%0A%0ASee you there!%0A${organizer_name}`
+        : `Hi ${requester_fname},%0A%0A${organizer_name}`;
 
       const bodyContent = `
-        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #1a2028; margin: 0 0 6px; line-height: 1.4;">Someone wants your address</p>
-        <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #6a6058; margin: 0 0 20px; line-height: 1.6;">A visitor requested the address for <strong style="color: #1a2028;">${event_name}</strong>. Their details are below.</p>
-        ${addressBlock}
+        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #1a2028; margin: 0 0 6px; line-height: 1.4;">${isAddressRequest ? 'Someone wants your address' : 'Someone has a question about your event'}</p>
+        <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #6a6058; margin: 0 0 20px; line-height: 1.6;">${isAddressRequest ? `A visitor requested the address for <strong style="color: #1a2028;">${event_name}</strong>. Their details are below.` : `A visitor sent a message about <strong style="color: #1a2028;">${event_name}</strong>. Their details are below.`}</p>
+        ${isAddressRequest ? addressBlock : ''}
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
           <tr>
             <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>

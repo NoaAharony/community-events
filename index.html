@@ -1298,7 +1298,7 @@
             <option value="other">Other</option>
           </select>
         </div>
-        <div id="address-request-intro" style="font-size:13px; color:var(--gray-800); font-weight:600; margin-bottom:16px; line-height:1.6; padding:11px 14px; background:var(--gray-100); border-left:3px solid var(--gold); border-radius:0 6px 6px 0;">Fill in your details and the organizer will contact you with the address.</div>
+        <div id="address-request-intro" style="font-size:13px; color:var(--gray-800); font-weight:600; margin-bottom:16px; line-height:1.6; padding:11px 14px; background:var(--gray-100); border-left:3px solid var(--gold); border-radius:0 6px 6px 0;"></div>
         <div class="form-row">
           <div class="form-group"><label>First Name <span class="req">*</span></label><input class="form-input" id="req-fname" type="text"></div>
           <div class="form-group"><label>Last Name <span class="req">*</span></label><input class="form-input" id="req-lname" type="text"></div>
@@ -1319,7 +1319,7 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <div style="font-family:'Source Serif 4',serif; font-size:20px; color:var(--green); margin-bottom:10px; font-weight:400;">Request sent!</div>
-        <p style="font-size:14px; color:var(--gray-800); font-weight:600; line-height:1.6;">The organizer will contact you directly.</p>
+        <p id="address-success-msg" style="font-size:14px; color:var(--gray-800); font-weight:600; line-height:1.6;"></p>
       </div>
     </div>
   </div>
@@ -1883,8 +1883,15 @@ let currentAddressRequestEventId = null;
 function toggleAddressRequestIntro() {
   const typeEl = document.getElementById('req-type');
   const introEl = document.getElementById('address-request-intro');
+  const successMsg = document.getElementById('address-success-msg');
   if (!typeEl || !introEl) return;
-  introEl.style.display = typeEl.value === 'request_address' ? 'block' : 'none';
+  const isAddress = typeEl.value === 'request_address';
+  introEl.textContent = isAddress
+    ? 'Fill in your details and the organizer will contact you with the address.'
+    : 'Fill in your details and the organizer will get back to you.';
+  if (successMsg) successMsg.textContent = isAddress
+    ? 'The organizer will contact you with the address.'
+    : 'The organizer will contact you directly.';
 }
 
 function openAddressRequest(eventId) {
