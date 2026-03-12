@@ -2677,7 +2677,7 @@ function setAddressVisibility(val, prefix) {
       hint.textContent = 'The full address will be visible to everyone on your event page';
       hint.style.display = 'block';
     } else {
-      hint.textContent = 'Visitors will see city only. They can submit an address request form on the site to receive it from you.';
+      hint.textContent = 'Visitors can submit an address request on the site';
       hint.style.display = 'block';
     }
   }
@@ -2939,7 +2939,7 @@ function setEditAddressVisibility(val, btn) {
   if (hint) {
     hint.textContent = val
       ? 'The full address will be visible to everyone on your event page'
-      : 'Visitors will see city only. They can submit an address request form on the site to receive it from you.';
+      : 'Visitors can submit an address request on the site';
     hint.style.display = 'block';
   }
   syncEditForm();
