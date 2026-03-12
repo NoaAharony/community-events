@@ -697,9 +697,12 @@
     <div class="form-section">
       <div class="form-section-title">3 · Location <span class="req">*</span></div>
       <div class="form-group">
-        <label style="display:flex; align-items:center; gap:8px; font-size:14.3px; font-weight:600; text-transform:none; letter-spacing:0; margin-bottom:6px; cursor:pointer;">
-          <input type="checkbox" id="s-is-online" onchange="handleSubmitOnlineToggle()" style="transform:scale(1.1); transform-origin:left center;"> Online Event
-        </label>
+        <label>Event Location <span class="req">*</span></label>
+        <div class="toggle-group" style="margin-bottom:12px;">
+          <button class="toggle-btn on" id="s-inperson-btn" onclick="setLocationType('inperson','s')">In Person</button>
+          <button class="toggle-btn" id="s-online-btn" onclick="setLocationType('online','s')">Online Event</button>
+        </div>
+        <input type="hidden" id="s-is-online" value="false">
         <div id="s-city-fields">
           <label>City <span class="req">*</span></label>
           <select class="form-input" id="s-city" onchange="handleSubmitCityChange()">
@@ -1045,9 +1048,12 @@
     <div class="form-section">
       <div class="form-section-title">3 · Location <span class="req">*</span></div>
       <div class="form-group">
-        <label style="display:flex; align-items:center; gap:8px; font-size:14.3px; font-weight:600; text-transform:none; letter-spacing:0; margin-bottom:6px; cursor:pointer;">
-          <input type="checkbox" id="e-is-online" onchange="handleEditOnlineToggle()" style="transform:scale(1.1); transform-origin:left center;"> Online Event
-        </label>
+        <label>Event Location <span class="req">*</span></label>
+        <div class="toggle-group" style="margin-bottom:12px;">
+          <button class="toggle-btn on" id="e-inperson-btn" onclick="setLocationType('inperson','e')">In Person</button>
+          <button class="toggle-btn" id="e-online-btn" onclick="setLocationType('online','e')">Online Event</button>
+        </div>
+        <input type="hidden" id="e-is-online" value="false">
         <div id="e-city-fields">
           <label>City <span class="req">*</span></label>
           <select class="form-input" id="e-city" onchange="handleEditCityChange()">
@@ -2174,7 +2180,7 @@ async function submitEvent() {
   const type = document.getElementById('s-type').value;
   const audience = getAudienceValues();
   const citySelect = document.getElementById('s-city').value;
-  const isOnlineChecked = document.getElementById('s-is-online') && document.getElementById('s-is-online').checked;
+  const isOnlineChecked = document.getElementById('s-is-online') && document.getElementById('s-is-online').value === 'true';
   const city = isOnlineChecked ? 'Online Event' : (citySelect === 'other' ? document.getElementById('s-city-other').value.trim() : citySelect);
   const isOnline = isOnlineChecked || citySelect === 'Online Event';
   const organizer = document.getElementById('s-organizer').value.trim();
@@ -2298,7 +2304,7 @@ function resetSubmitForm() {
   document.querySelectorAll('input[name="s-audience"]').forEach(c => c.checked = false);
   document.getElementById('s-city').value = '';
   const sOnline = document.getElementById('s-is-online');
-  if (sOnline) sOnline.checked = false;
+  if (sOnline) { sOnline.value = 'false'; setLocationType('inperson', 's'); }
   const sCity = document.getElementById('s-city');
   const sCityOther = document.getElementById('s-city-other');
   const sCityFields = document.getElementById('s-city-fields');
@@ -2380,16 +2386,18 @@ async function loadEditPage(editKey, fromAdmin = false) {
     document.getElementById('e-reg-link').value = e.registration_link || '';
     document.getElementById('e-email-reglink').value = e.contact_email || '';
     document.getElementById('e-address').value = e.full_address || '';
-    // Handle city and online-event checkbox
+    // Handle city and online-event toggle
     const eCityEl = document.getElementById('e-city');
     const eOnlineEl = document.getElementById('e-is-online');
     if (e.city === 'Online Event') {
-      if (eOnlineEl) eOnlineEl.checked = true;
+      if (eOnlineEl) eOnlineEl.value = 'true';
+      setLocationType('online', 'e');
       eCityEl.value = '';
       document.getElementById('e-city-other').value = '';
       document.getElementById('e-city-other').style.display = 'none';
     } else {
-      if (eOnlineEl) eOnlineEl.checked = false;
+      if (eOnlineEl) eOnlineEl.value = 'false';
+      setLocationType('inperson', 'e');
       eCityEl.value = e.city || '';
       if (e.city && eCityEl.value !== e.city) {
         eCityEl.value = 'other';
@@ -2439,7 +2447,7 @@ async function saveEvent() {
   const date = buildDateValue('e');
   const startTime = document.getElementById('e-start-time').value;
   const eCitySelect = document.getElementById('e-city').value;
-  const eIsOnlineChecked = document.getElementById('e-is-online') && document.getElementById('e-is-online').checked;
+  const eIsOnlineChecked = document.getElementById('e-is-online') && document.getElementById('e-is-online').value === 'true';
   const city = eIsOnlineChecked
     ? 'Online Event'
     : (eCitySelect === 'other' ? document.getElementById('e-city-other').value.trim() : eCitySelect);
@@ -2749,7 +2757,7 @@ function syncEditForm() {
   const hasLink = regLink.length > 0;
   const cityVal = document.getElementById('e-city').value;
   const eOnlineCheckbox = document.getElementById('e-is-online');
-  const isOnline = (eOnlineCheckbox && eOnlineCheckbox.checked) || cityVal === 'Online Event';
+  const isOnline = (eOnlineCheckbox && eOnlineCheckbox.value === 'true') || cityVal === 'Online Event';
 
   // Reg link note
   document.getElementById('e-reg-link-note').style.display = hasLink ? 'block' : 'none';
@@ -2782,7 +2790,7 @@ function handleOnlineCity(prefix) {
   // Submit form logic
   const cityVal = document.getElementById('s-city').value;
   const sOnlineCheckbox = document.getElementById('s-is-online');
-  const isOnline = (sOnlineCheckbox && sOnlineCheckbox.checked) || cityVal === 'Online Event';
+  const isOnline = (sOnlineCheckbox && sOnlineCheckbox.value === 'true') || cityVal === 'Online Event';
   const addrSection = document.getElementById('s-address-section');
   const onlineHint = document.getElementById('s-online-hint');
   const regLink = document.getElementById('s-reg-link');
@@ -2797,85 +2805,58 @@ function handleOnlineCity(prefix) {
 }
 
 function handleSubmitCityChange() {
-  const sOnline = document.getElementById('s-is-online');
   const sCity = document.getElementById('s-city');
-  if (sOnline && sOnline.checked) sOnline.checked = false;
   if (sCity) sCity.dataset.prevValue = sCity.value || '';
+  setLocationType('inperson', 's');
   handleCityOther('s-city', 's-city-other');
   handleOnlineCity('s');
   if (document.getElementById('s-reg-link').value.trim()) document.getElementById('s-address-section').style.display = 'none';
 }
 
-function handleSubmitOnlineToggle() {
-  const sOnline = document.getElementById('s-is-online');
-  const sCity = document.getElementById('s-city');
-  const sCityOther = document.getElementById('s-city-other');
-  const sCityFields = document.getElementById('s-city-fields');
-  if (!sOnline || !sCity) return;
-
-  if (sOnline.checked) {
-    sCity.dataset.prevValue = sCity.value || '';
-    if (sCity.value === 'other' && sCityOther) sCityOther.dataset.prevValue = sCityOther.value || '';
-    sCity.value = '';
-    sCity.disabled = true;
-    if (sCityOther) {
-      sCityOther.disabled = true;
-      sCityOther.style.display = 'none';
-    }
-    if (sCityFields) sCityFields.style.display = 'none';
-  } else {
-    sCity.disabled = false;
-    if (sCity.dataset.prevValue) sCity.value = sCity.dataset.prevValue;
-    if (sCityOther) sCityOther.disabled = false;
-    if (sCityFields) sCityFields.style.display = 'block';
-    handleCityOther('s-city', 's-city-other');
-    if (sCity.value === 'other' && sCityOther && sCityOther.dataset.prevValue && !sCityOther.value) {
-      sCityOther.value = sCityOther.dataset.prevValue;
-    }
-  }
-
-  handleOnlineCity('s');
-}
+function handleSubmitOnlineToggle() { setLocationType('online', 's'); }
+function handleEditOnlineToggle() { setLocationType('online', 'e'); }
 
 function handleEditCityChange() {
-  const eOnline = document.getElementById('e-is-online');
   const eCity = document.getElementById('e-city');
-  if (eOnline && eOnline.checked) eOnline.checked = false;
   if (eCity) eCity.dataset.prevValue = eCity.value || '';
+  setLocationType('inperson', 'e');
   handleCityOther('e-city', 'e-city-other');
   syncEditForm();
   if (document.getElementById('e-reg-link').value.trim()) document.getElementById('e-address-section').style.display = 'none';
 }
 
-function handleEditOnlineToggle() {
-  const eOnline = document.getElementById('e-is-online');
-  const eCity = document.getElementById('e-city');
-  const eCityOther = document.getElementById('e-city-other');
-  const eCityFields = document.getElementById('e-city-fields');
-  if (!eOnline || !eCity) return;
+function setLocationType(type, prefix) {
+  const isOnline = type === 'online';
+  const onlineEl = document.getElementById(prefix + '-is-online');
+  const city = document.getElementById(prefix + '-city');
+  const cityOther = document.getElementById(prefix + '-city-other');
+  const cityFields = document.getElementById(prefix + '-city-fields');
+  const inpersonBtn = document.getElementById(prefix + '-inperson-btn');
+  const onlineBtn = document.getElementById(prefix + '-online-btn');
 
-  if (eOnline.checked) {
-    eCity.dataset.prevValue = eCity.value || '';
-    if (eCity.value === 'other' && eCityOther) eCityOther.dataset.prevValue = eCityOther.value || '';
-    eCity.value = '';
-    eCity.disabled = true;
-    if (eCityOther) {
-      eCityOther.disabled = true;
-      eCityOther.style.display = 'none';
-    }
-    if (eCityFields) eCityFields.style.display = 'none';
+  if (onlineEl) onlineEl.value = isOnline ? 'true' : 'false';
+
+  if (inpersonBtn && onlineBtn) {
+    inpersonBtn.classList.toggle('on', !isOnline);
+    onlineBtn.classList.toggle('on', isOnline);
+  }
+
+  if (isOnline) {
+    if (city) { city.dataset.prevValue = city.value || ''; city.value = ''; city.disabled = true; }
+    if (cityOther) { cityOther.dataset.prevValue = cityOther.value || ''; cityOther.disabled = true; cityOther.style.display = 'none'; }
+    if (cityFields) cityFields.style.display = 'none';
   } else {
-    eCity.disabled = false;
-    if (eCity.dataset.prevValue) eCity.value = eCity.dataset.prevValue;
-    if (eCityOther) eCityOther.disabled = false;
-    if (eCityFields) eCityFields.style.display = 'block';
-    handleCityOther('e-city', 'e-city-other');
-    if (eCity.value === 'other' && eCityOther && eCityOther.dataset.prevValue && !eCityOther.value) {
-      eCityOther.value = eCityOther.dataset.prevValue;
+    if (city) { city.disabled = false; if (city.dataset.prevValue) city.value = city.dataset.prevValue; }
+    if (cityOther) { cityOther.disabled = false; }
+    if (cityFields) cityFields.style.display = 'block';
+    handleCityOther(prefix + '-city', prefix + '-city-other');
+    if (city && city.value === 'other' && cityOther && cityOther.dataset.prevValue && !cityOther.value) {
+      cityOther.value = cityOther.dataset.prevValue;
     }
   }
 
-  syncEditForm();
+  if (prefix === 's') { handleOnlineCity('s'); updateContactHint('s'); }
+  if (prefix === 'e') syncEditForm();
 }
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function updateContactHint(prefix) {
@@ -2888,8 +2869,8 @@ function updateContactHint(prefix) {
   const warning = document.getElementById(prefix === 's' ? 's-contact-warning' : 'e-contact-warning');
   const regLink = document.getElementById(prefix + '-reg-link') ? document.getElementById(prefix + '-reg-link').value.trim() : '';
   const isOnline = prefix === 's'
-    ? ((document.getElementById('s-is-online') && document.getElementById('s-is-online').checked) || document.getElementById('s-city').value === 'Online Event')
-    : ((document.getElementById('e-is-online') && document.getElementById('e-is-online').checked) || document.getElementById('e-city').value === 'Online Event');
+    ? ((document.getElementById('s-is-online') && document.getElementById('s-is-online').value === 'true') || document.getElementById('s-city').value === 'Online Event')
+    : ((document.getElementById('e-is-online') && document.getElementById('e-is-online').value === 'true') || document.getElementById('e-city').value === 'Online Event');
   const isPrivateAddress = prefix === 's' ? !submitFormState.addressPublic : !editFormState.addressPublic;
   const showEmailInput = document.getElementById(prefix + '-show-email');
 
