@@ -3017,14 +3017,26 @@ function removeEditImage() { editFormState.imageFile = null; editFormState.remov
 function showPage(id) {
   document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  // Force scroll to top - multiple methods for iOS Safari compatibility
-  setTimeout(() => {
+  if (id === 'page-home') resetUrlToHome();
+
+  // Force scroll to top - repeated ticks for iOS Safari reliability
+  const scrollToTopNow = () => {
     window.scrollTo(0, 0);
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
-    const el = document.getElementById(id);
-    if (el) el.scrollTop = 0;
-  }, 0);
+    const pageEl = document.getElementById(id);
+    if (pageEl) pageEl.scrollTop = 0;
+    if (id === 'page-home') {
+      const homeEl = document.getElementById('page-home');
+      const eventsEl = document.getElementById('events-container');
+      if (homeEl) homeEl.scrollTop = 0;
+      if (eventsEl) eventsEl.scrollTop = 0;
+    }
+  };
+  scrollToTopNow();
+  requestAnimationFrame(scrollToTopNow);
+  setTimeout(scrollToTopNow, 0);
+  setTimeout(scrollToTopNow, 120);
 }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
