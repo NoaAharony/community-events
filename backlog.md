@@ -10,6 +10,9 @@
 - [ ] **Spam / fake event submissions** — no verification exists; anyone can post anything. Options: admin approval before events go live, or a "Report this event" button for visitors.
 - [ ] **Old event cleanup** — events stay in the database forever. Add auto-delete for events older than 60 days to keep the database clean.
 - [ ] **Save event / reminder** — visitors can share but not save an event or get a reminder. Common feature for event sites.
+- [ ] **Image size limit** — enforce a hard file size limit on image upload (not just a warning). Prevents large files from slowing the site and consuming Supabase storage.
+- [ ] **Custom 404 page** — Cloudflare currently shows a generic error for invalid URLs. Replace with a branded page matching site style, with a "Back to Events" button.
+- [ ] **Submission guidelines** — add content rules explaining what is and isn't allowed on the site. Likely to live on the About page. Exact wording to be decided.
 
 ## Admin Panel
 - [ ] **Message all organizers** — button in admin panel to send an email to all organizers with active events. For maintenance notices, policy updates, holiday reminders, etc.
@@ -22,6 +25,7 @@
 - [ ] **Accessibility audit** — WCAG color contrast, font sizes, keyboard navigation, screen reader support.
 - [ ] **Phone number format validation** — confirm edge cases (international numbers, paste).
 - [ ] **Repeat organizer memory** — organizers who submit multiple events currently fill in all their details from scratch every time. Allow the form to remember name, email, phone, and org type based on their email address.
+- [ ] **Google indexing** — add sitemap.xml and robots.txt so the site appears in Google search results (e.g. "Israeli events Atlanta"). Skipped for now for privacy reasons — revisit in the future.
 
 ---
 
