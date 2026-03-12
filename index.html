@@ -733,7 +733,7 @@
               <span><strong style="font-size:14px;color:var(--gray-800);">Keep address private</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see city only and can request the address from you</span></span>
             </label>
           </div>
-          <input class="form-input" id="s-address" autocomplete="off" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA">
+          <input class="form-input" id="s-address" autocomplete="off" type="text" placeholder="Enter full Address">
           <div id="s-address-hint" style="font-size:12px; color:#5c3d10; font-weight:700; margin-top:10px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; display:none;"></div>
         </div>
       </div>
@@ -765,7 +765,7 @@
         </div>
       </div>
       <div id="s-contact-fields">
-      <div class="field-hint" style="margin-bottom:10px;">Your contact details are private by default and will not appear on the event page. You can choose to make them visible below.</div>
+      <div class="field-hint" id="s-contact-default-note" style="margin-bottom:10px;">Your contact details are private by default and will not appear on the event page. You can choose to make them visible below.</div>
       <div class="form-row">
         <div class="form-group">
           <label>Email <span class="req">*</span></label>
@@ -774,20 +774,12 @@
             <input type="checkbox" id="s-show-email" autocomplete="off" onchange="updateContactHint('s')"> Show my email on the event page
           </label>
           <div class="privacy-note" id="s-email-note">Not shown publicly</div>
-          <div id="s-email-private-note" style="display:none; font-size:11px; color:var(--gray-600); margin-top:4px; font-style:italic;">Address requests from visitors will be sent to this email - whether or not it's shown on the event page.</div>
-        </div>
-        <div class="form-group">
-          <label>Phone <span class="optional-tag">(optional)</span></label>
-          <input class="form-input" id="s-phone" type="tel" placeholder="(404) 555-0000" oninput="formatPhoneInput(this); syncPhoneCheckbox('s')" inputmode="numeric">
-          <label id="s-show-phone-label" style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer; margin-top:8px;">
-            <input type="checkbox" id="s-show-phone" autocomplete="off" onchange="updateContactHint('s')"> Show my phone on the event page
-          </label>
-          <div class="privacy-note" id="s-phone-note">Not shown publicly</div>
+          <div id="s-email-private-note" style="display:none; font-size:11px; color:var(--gray-600); margin-top:4px; font-style:italic;">Address requests from visitors will be sent to this email.</div>
         </div>
       </div>
       <div class="form-group" id="s-contact-details-group" style="display:block;">
         <div class="field-hint" id="s-contact-hint" style="display:none;"></div>
-        <div id="s-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Please show at least your email or phone.</div>
+        <div id="s-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Email will be shown on the event page.</div>
       </div>
       </div>
     </div>
@@ -1089,7 +1081,7 @@
               <span><strong style="font-size:14px;color:var(--gray-800);">Keep address private</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see city only and can request the address from you</span></span>
             </label>
           </div>
-          <input class="form-input" id="e-address" type="text" placeholder="123 Peachtree Rd, Alpharetta, GA">
+          <input class="form-input" id="e-address" type="text" placeholder="Enter full Address">
           <div id="e-address-hint" style="font-size:12px; color:#5c3d10; font-weight:700; margin-top:10px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; display:none;"></div>
         </div>
       </div>
@@ -1129,20 +1121,12 @@
             <input type="checkbox" id="e-show-email" onchange="updateContactHint('e')"> Show my email on the event page
           </label>
           <div class="privacy-note" id="e-email-note">Not shown publicly</div>
-          <div id="e-email-private-note" style="display:none; font-size:11px; color:var(--gray-600); margin-top:4px; font-style:italic;">Address requests from visitors will be sent to this email - whether or not it's shown on the event page.</div>
-        </div>
-        <div class="form-group">
-          <label>Phone <span class="optional-tag">(optional)</span></label>
-          <input class="form-input" id="e-phone" type="tel" oninput="formatPhoneInput(this); syncPhoneCheckbox('e')" inputmode="numeric">
-          <label id="e-show-phone-label" style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer; margin-top:8px;">
-            <input type="checkbox" id="e-show-phone" onchange="updateContactHint('e')"> Show my phone on the event page
-          </label>
-          <div class="privacy-note" id="e-phone-note">Not shown publicly</div>
+          <div id="e-email-private-note" style="display:none; font-size:11px; color:var(--gray-600); margin-top:4px; font-style:italic;">Address requests from visitors will be sent to this email.</div>
         </div>
       </div>
       <div class="form-group" id="e-contact-details-group" style="display:block;">
         <div class="field-hint" id="e-contact-hint" style="display:none;"></div>
-        <div id="e-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Please show at least your email or phone.</div>
+        <div id="e-contact-warning" style="display:none; font-size:12px; color:#7a1010; font-weight:700; background:#fff0f0; border-left:3px solid var(--red); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; margin-top:8px;">For online events, visitors need a way to contact you. Email will be shown on the event page.</div>
       </div>
       </div>
     </div>
@@ -2197,11 +2181,10 @@ async function submitEvent() {
     errDiv.style.display = 'block';
     return;
   }
-  // Validation: online event must have at least email or phone shown
+  // Validation: online event must have email shown
   const showEmail = document.getElementById('s-show-email') ? document.getElementById('s-show-email').checked : false;
-  const showPhone = document.getElementById('s-show-phone') ? document.getElementById('s-show-phone').checked : false;
-  if (isOnline && !regLink && !showEmail && !showPhone) {
-    errDiv.textContent = 'For online events without a registration link, please show at least your email or phone so visitors can contact you';
+  if (isOnline && !regLink && !showEmail) {
+    errDiv.textContent = 'For online events without a registration link, your email must be shown so visitors can contact you';
     errDiv.style.display = 'block';
     return;
   }
@@ -2233,9 +2216,9 @@ async function submitEvent() {
       organizer_name: organizer,
       org_type: submitFormState.orgType,
       contact_email: email || null,
-      contact_phone: document.getElementById('s-phone').value.trim() || null,
+      contact_phone: null,
       show_email: showEmail,
-      show_phone: showPhone,
+      show_phone: false,
       contact_opt_in: false,
       image_url: imageUrl,
       edit_key: editKey,
@@ -2270,7 +2253,7 @@ async function submitEvent() {
 function resetSubmitForm() {
   populateYearDropdowns();
   bindFutureDatePicker('s');
-  ['s-name','s-date','s-amount','s-desc','s-reg-link','s-address','s-organizer','s-email','s-phone'].forEach(id => {
+  ['s-name','s-date','s-amount','s-desc','s-reg-link','s-address','s-organizer','s-email'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -2299,8 +2282,6 @@ function resetSubmitForm() {
   const addrSection = document.getElementById('s-address-section');
   if (addrSection) addrSection.style.display = 'block';
   const sShowEmail = document.getElementById('s-show-email'); if(sShowEmail) sShowEmail.checked = false;
-  const sShowPhone = document.getElementById('s-show-phone'); if(sShowPhone) sShowPhone.checked = false;
-  syncPhoneCheckbox('s');
   updateContactHint('s');
   document.getElementById('cost-free-btn').classList.add('on');
   document.getElementById('cost-paid-btn').classList.remove('on');
@@ -2314,9 +2295,7 @@ function resetSubmitForm() {
   const sStart = document.getElementById('s-start-time'); if(sStart) sStart.value = '17:00:00';
   const sEnd = document.getElementById('s-end-time'); if(sEnd) sEnd.value = '';
   filterEndTimeOptions('s');
-  const hint = document.getElementById('s-contact-hint'); if(hint) hint.textContent = "Visitors will be able to reach you privately through a form - your details won't be shown publicly";
   const en = document.getElementById('s-email-note'); if(en){en.textContent='Not shown publicly'; en.classList.remove('visible');}
-  const pn = document.getElementById('s-phone-note'); if(pn){pn.textContent='Not shown publicly'; pn.classList.remove('visible');}
   removeImage();
 }
 
@@ -2383,9 +2362,6 @@ async function loadEditPage(editKey, fromAdmin = false) {
     }
     handleEditOnlineToggle();
     document.getElementById('e-email').value = e.contact_email || '';
-    document.getElementById('e-phone').value = e.contact_phone || '';
-    const ePhone = document.getElementById('e-phone');
-    if (ePhone.value) formatPhoneInput(ePhone);
     document.getElementById('e-amount').value = (e.amount || '').replace('$','');
 
     setEditCost(e.cost);
@@ -2393,11 +2369,8 @@ async function loadEditPage(editKey, fromAdmin = false) {
     setEditOrgType(e.org_type);
     // Prefill contact checkboxes
     const eShowEmail = document.getElementById('e-show-email');
-    const eShowPhone = document.getElementById('e-show-phone');
     if(eShowEmail) eShowEmail.checked = e.show_email || false;
-    if(eShowPhone) eShowPhone.checked = e.show_phone || false;
     updateContactHint('e');
-    syncPhoneCheckbox('e');
     // Apply reg link logic last - overrides address/contact visibility
     handleEditRegLink();
 
@@ -2450,18 +2423,22 @@ async function saveEvent() {
   }
 
   const eShowEmail = document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false;
-  const eShowPhone = document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false;
   const eRegLink = eRegLinkVal;
   const eIsOnline = eIsOnlineChecked || document.getElementById('e-city').value === 'Online Event';
   const eIsPrivate = !editFormState.addressPublic;
 
-  if (eIsOnline && !eRegLink && !eShowEmail && !eShowPhone) {
-    errDiv.textContent = 'For online events without a registration link, please show at least your email or phone so visitors can contact you';
+  if (eIsOnline && !eRegLink && !eShowEmail) {
+    errDiv.textContent = 'For online events without a registration link, your email must be shown so visitors can contact you';
     errDiv.style.display = 'block';
     return;
   }
-  if (!eIsOnline && eIsPrivate && !eRegLink && !eShowEmail && !eShowPhone) {
-    errDiv.textContent = 'The address is private - please show your email or phone so visitors have a way to contact you';
+  if (!eIsOnline && eIsPrivate && !eRegLink && !document.getElementById('e-email').value.trim()) {
+    errDiv.textContent = 'The address is private - please enter an email so visitors can request the address';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (!eIsOnline && !eRegLink && editFormState.addressPublic && !document.getElementById('e-address').value.trim()) {
+    errDiv.textContent = 'Please enter the full address';
     errDiv.style.display = 'block';
     return;
   }
@@ -2494,9 +2471,9 @@ async function saveEvent() {
       organizer_name: organizer,
       org_type: editFormState.orgType,
       contact_email: (eRegLink ? document.getElementById('e-email-reglink').value.trim() : document.getElementById('e-email').value.trim()) || null,
-      contact_phone: document.getElementById('e-phone').value.trim() || null,
+      contact_phone: null,
       show_email: document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false,
-      show_phone: document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false,
+      show_phone: false,
       contact_opt_in: false,
     };
     if (imageUrl !== undefined) payload.image_url = imageUrl;
@@ -2700,18 +2677,6 @@ function setAddressVisibility(val, prefix) {
     }
   }
   updateContactHint('s');
-  // Show/hide address request note near email checkbox
-  const sEmailPrivateNote = document.getElementById('s-email-private-note');
-  if (sEmailPrivateNote) sEmailPrivateNote.style.display = !val ? 'block' : 'none';
-  // When switching to private address, auto-check email if available
-  if (!val) {
-    const emailEl = document.getElementById('s-email');
-    const showEmailEl = document.getElementById('s-show-email');
-    if (emailEl && emailEl.value.trim() && showEmailEl && !showEmailEl.checked) {
-      showEmailEl.checked = true;
-      updateContactHint('s');
-    }
-  }
 }
 function toggleAddressVisibility(val, groupId) { document.getElementById(groupId).style.display = val.trim() ? 'block' : 'none'; }
 
@@ -2727,6 +2692,7 @@ function handleRegLink() {
   } else {
     handleOnlineCity('s');
   }
+  updateContactHint('s');
 }
 
 function handleEditRegLink() {
@@ -2765,7 +2731,6 @@ function syncEditForm() {
   }
 
   updateContactHint('e');
-  syncPhoneCheckbox('e');
 }
 
 function handleOnlineCity(prefix) {
@@ -2784,6 +2749,7 @@ function handleOnlineCity(prefix) {
   }
   if (addrSection) addrSection.style.display = isOnline ? 'none' : 'block';
   if (onlineHint) onlineHint.style.display = isOnline ? 'block' : 'none';
+  updateContactHint('s');
 }
 
 function handleSubmitCityChange() {
@@ -2870,25 +2836,52 @@ function handleEditOnlineToggle() {
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function updateContactHint(prefix) {
   const showEmail = document.getElementById(prefix+'-show-email') ? document.getElementById(prefix+'-show-email').checked : false;
-  const showPhone = document.getElementById(prefix+'-show-phone') ? document.getElementById(prefix+'-show-phone').checked : false;
   const hint = document.getElementById(prefix+'-contact-hint');
   const emailNote = document.getElementById(prefix === 's' ? 's-email-note' : 'e-email-note');
-  const phoneNote = document.getElementById(prefix === 's' ? 's-phone-note' : 'e-phone-note');
-  if (emailNote) {
-    emailNote.textContent = showEmail ? 'Will appear on your event page' : 'Not shown publicly';
-    emailNote.classList.toggle('visible', showEmail);
+  const showEmailLabel = document.getElementById(prefix + '-show-email-label');
+  const privateNote = document.getElementById(prefix === 's' ? 's-email-private-note' : 'e-email-private-note');
+  const defaultNote = document.getElementById(prefix === 's' ? 's-contact-default-note' : 'e-contact-default-note');
+  const warning = document.getElementById(prefix === 's' ? 's-contact-warning' : 'e-contact-warning');
+  const regLink = document.getElementById(prefix + '-reg-link') ? document.getElementById(prefix + '-reg-link').value.trim() : '';
+  const isOnline = prefix === 's'
+    ? ((document.getElementById('s-is-online') && document.getElementById('s-is-online').checked) || document.getElementById('s-city').value === 'Online Event')
+    : ((document.getElementById('e-is-online') && document.getElementById('e-is-online').checked) || document.getElementById('e-city').value === 'Online Event');
+  const isPrivateAddress = prefix === 's' ? !submitFormState.addressPublic : !editFormState.addressPublic;
+  const showEmailInput = document.getElementById(prefix + '-show-email');
+
+  if (showEmailInput) {
+    if (regLink) {
+      showEmailInput.checked = false;
+    } else if (isOnline) {
+      showEmailInput.checked = true;
+    } else if (isPrivateAddress) {
+      showEmailInput.checked = false;
+    }
   }
-  if (phoneNote) {
-    phoneNote.textContent = showPhone ? 'Will appear on your event page' : 'Not shown publicly';
-    phoneNote.classList.toggle('visible', showPhone);
+
+  if (showEmailLabel) {
+    const hideEmailToggle = !!regLink || isOnline || isPrivateAddress;
+    showEmailLabel.style.display = hideEmailToggle ? 'none' : 'flex';
+  }
+  if (privateNote) {
+    if (regLink || isOnline || !isPrivateAddress) {
+      privateNote.style.display = 'none';
+    } else {
+      privateNote.textContent = 'Address requests from visitors will be sent to this email.';
+      privateNote.style.display = 'block';
+    }
+  }
+  if (defaultNote) {
+    defaultNote.style.display = (!regLink && isOnline) ? 'none' : 'block';
+  }
+  if (warning) warning.style.display = 'none';
+
+  const effectiveShowEmail = showEmailInput ? showEmailInput.checked : false;
+  if (emailNote) {
+    emailNote.textContent = effectiveShowEmail ? 'Will appear on your event page' : 'Not shown publicly';
+    emailNote.classList.toggle('visible', effectiveShowEmail);
   }
   if (hint) hint.style.display = 'none';
-  // Update contact warning for edit form when address is private
-  if (prefix === 'e') {
-    const isPrivate = !editFormState.addressPublic;
-    const warning = document.getElementById('e-contact-warning');
-    if (warning) warning.style.display = (isPrivate && !showEmail && !showPhone) ? 'block' : 'none';
-  }
 }
 
 function syncPhoneCheckbox(prefix) {
@@ -2943,17 +2936,6 @@ function setEditAddressVisibility(val, btn) {
       ? 'The full address will be visible to everyone on your event page'
       : 'Visitors will see city only. They can submit an address request form on the site to receive it from you.';
     hint.style.display = 'block';
-  }
-  // Show/hide address request note near email checkbox
-  const eEmailPrivateNote = document.getElementById('e-email-private-note');
-  if (eEmailPrivateNote) eEmailPrivateNote.style.display = !val ? 'block' : 'none';
-  // When switching to private, auto-check email if available
-  if (!val) {
-    const emailEl = document.getElementById('e-email');
-    const showEmailEl = document.getElementById('e-show-email');
-    if (emailEl && emailEl.value.trim() && showEmailEl && !showEmailEl.checked) {
-      showEmailEl.checked = true;
-    }
   }
   syncEditForm();
 }
