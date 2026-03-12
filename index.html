@@ -190,6 +190,7 @@
   .form-group label .req { color: var(--red); }
   .form-input { width: 100%; border: 1px solid var(--gray-200); border-radius: 4px; padding: 9px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; color: var(--gray-800); background: var(--white); transition: border-color 0.15s; }
   .form-input:focus { outline: none; border-color: var(--blue-light); }
+  #e-city:disabled, #e-city-other:disabled { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .privacy-note { font-size: 12px; color: var(--gray-600); margin-top: 6px; font-weight: 600; }
   .privacy-note.visible { font-size: 12px; color: #b06820; font-weight: 700; }
@@ -855,7 +856,6 @@
     <div class="site-name" onclick="showPage('page-home')">Atlanta <span>IL</span> Community Events</div>
   </div>
   <div class="page-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold); padding:20px 24px;">
-    <span class="back-link" id="edit-back-link" onclick="editFromAdmin ? loadAdminPage() : showPage('page-home')" style="font-size:12px; color:rgba(255,255,255,0.6); cursor:pointer; display:inline-block; margin-bottom:8px;">← Back to Admin</span>
     <h1 style="font-family:'Source Serif 4',serif; font-size:22px; font-weight:400; color:white; margin-bottom:4px;">Edit Event</h1>
     <p style="font-size:12px; color:rgba(255,255,255,0.55);">Update details below and click Save Changes. * Required fields</p>
   </div>
@@ -1045,27 +1045,31 @@
     </div>
 
     <div class="form-section">
-      <div class="form-section-title">3 · Location</div>
+      <div class="form-section-title">3 · Location <span class="req">*</span></div>
       <div class="form-group">
-        <label>City <span class="req">*</span></label>
-        <select class="form-input" id="e-city" onchange="handleCityOther('e-city','e-city-other'); handleOnlineCity('e'); if(document.getElementById('e-reg-link').value.trim()) document.getElementById('e-address-section').style.display='none';">
-            <option value="">Select city...</option>
-            <option>Alpharetta</option>
-            <option>Atlanta</option>
-            <option>Brookhaven</option>
-            <option>Cumming</option>
-            <option>Duluth</option>
-            <option>Dunwoody</option>
-            <option>East Cobb</option>
-            <option>Johns Creek</option>
-            <option>Peachtree Corners</option>
-            <option>Roswell</option>
-            <option>Sandy Springs</option>
-            <option>Suwanee</option>
-            <option value="Online Event">Online Event</option>
-            <option value="other">Other...</option>
-          </select>
-          <input class="form-input" id="e-city-other" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:14.3px; font-weight:600; text-transform:none; letter-spacing:0; margin-bottom:6px; cursor:pointer;">
+          <input type="checkbox" id="e-is-online" onchange="handleEditOnlineToggle()" style="transform:scale(1.1); transform-origin:left center;"> Online Event
+        </label>
+        <div id="e-city-fields">
+          <label>City</label>
+          <select class="form-input" id="e-city" onchange="handleEditCityChange()">
+              <option value="">Select city...</option>
+              <option>Alpharetta</option>
+              <option>Atlanta</option>
+              <option>Brookhaven</option>
+              <option>Cumming</option>
+              <option>Duluth</option>
+              <option>Dunwoody</option>
+              <option>East Cobb</option>
+              <option>Johns Creek</option>
+              <option>Peachtree Corners</option>
+              <option>Roswell</option>
+              <option>Sandy Springs</option>
+              <option>Suwanee</option>
+              <option value="other">Other...</option>
+            </select>
+            <input class="form-input" id="e-city-other" type="text" placeholder="Enter your city" style="display:none; margin-top:6px;">
+        </div>
       </div>
       <!-- Address section - hidden when Online Event selected -->
       <div id="e-address-section">
@@ -2347,16 +2351,24 @@ async function loadEditPage(editKey, fromAdmin = false) {
     document.getElementById('e-reg-link').value = e.registration_link || '';
     document.getElementById('e-email-reglink').value = e.contact_email || '';
     document.getElementById('e-address').value = e.full_address || '';
-    // Handle city - including Online Event
+    // Handle city and online-event checkbox
     const eCityEl = document.getElementById('e-city');
-    eCityEl.value = e.city || '';
-    if (e.city && eCityEl.value !== e.city) {
-      eCityEl.value = 'other';
-      document.getElementById('e-city-other').value = e.city;
-      document.getElementById('e-city-other').style.display = 'block';
+    const eOnlineEl = document.getElementById('e-is-online');
+    if (e.city === 'Online Event') {
+      if (eOnlineEl) eOnlineEl.checked = true;
+      eCityEl.value = '';
+      document.getElementById('e-city-other').value = '';
+      document.getElementById('e-city-other').style.display = 'none';
+    } else {
+      if (eOnlineEl) eOnlineEl.checked = false;
+      eCityEl.value = e.city || '';
+      if (e.city && eCityEl.value !== e.city) {
+        eCityEl.value = 'other';
+        document.getElementById('e-city-other').value = e.city;
+        document.getElementById('e-city-other').style.display = 'block';
+      }
     }
-    // Trigger online city handler to show/hide address section
-    handleOnlineCity('e');
+    handleEditOnlineToggle();
     document.getElementById('e-email').value = e.contact_email || '';
     document.getElementById('e-phone').value = e.contact_phone || '';
     const ePhone = document.getElementById('e-phone');
@@ -2404,7 +2416,10 @@ async function saveEvent() {
   const date = buildDateValue('e');
   const startTime = document.getElementById('e-start-time').value;
   const eCitySelect = document.getElementById('e-city').value;
-  const city = eCitySelect === 'other' ? document.getElementById('e-city-other').value.trim() : eCitySelect;
+  const eIsOnlineChecked = document.getElementById('e-is-online') && document.getElementById('e-is-online').checked;
+  const city = eIsOnlineChecked
+    ? 'Online Event'
+    : (eCitySelect === 'other' ? document.getElementById('e-city-other').value.trim() : eCitySelect);
   const organizer = document.getElementById('e-organizer').value.trim();
   const eRegLinkVal = document.getElementById('e-reg-link').value.trim();
   const editEmail = eRegLinkVal ? document.getElementById('e-email-reglink').value.trim() : document.getElementById('e-email').value.trim();
@@ -2424,7 +2439,7 @@ async function saveEvent() {
   const eShowEmail = document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false;
   const eShowPhone = document.getElementById('e-show-phone') ? document.getElementById('e-show-phone').checked : false;
   const eRegLink = eRegLinkVal;
-  const eIsOnline = document.getElementById('e-city').value === 'Online Event';
+  const eIsOnline = eIsOnlineChecked || document.getElementById('e-city').value === 'Online Event';
   const eIsPrivate = !editFormState.addressPublic;
 
   if (eIsOnline && !eRegLink && !eShowEmail && !eShowPhone) {
@@ -2710,7 +2725,8 @@ function syncEditForm() {
   const regLink = document.getElementById('e-reg-link').value.trim();
   const hasLink = regLink.length > 0;
   const cityVal = document.getElementById('e-city').value;
-  const isOnline = cityVal === 'Online Event';
+  const eOnlineCheckbox = document.getElementById('e-is-online');
+  const isOnline = (eOnlineCheckbox && eOnlineCheckbox.checked) || cityVal === 'Online Event';
 
   // Reg link note
   document.getElementById('e-reg-link-note').style.display = hasLink ? 'block' : 'none';
@@ -2754,6 +2770,47 @@ function handleOnlineCity(prefix) {
   }
   if (addrSection) addrSection.style.display = isOnline ? 'none' : 'block';
   if (onlineHint) onlineHint.style.display = isOnline ? 'block' : 'none';
+}
+
+function handleEditCityChange() {
+  const eOnline = document.getElementById('e-is-online');
+  const eCity = document.getElementById('e-city');
+  if (eOnline && eOnline.checked) eOnline.checked = false;
+  if (eCity) eCity.dataset.prevValue = eCity.value || '';
+  handleCityOther('e-city', 'e-city-other');
+  syncEditForm();
+  if (document.getElementById('e-reg-link').value.trim()) document.getElementById('e-address-section').style.display = 'none';
+}
+
+function handleEditOnlineToggle() {
+  const eOnline = document.getElementById('e-is-online');
+  const eCity = document.getElementById('e-city');
+  const eCityOther = document.getElementById('e-city-other');
+  const eCityFields = document.getElementById('e-city-fields');
+  if (!eOnline || !eCity) return;
+
+  if (eOnline.checked) {
+    eCity.dataset.prevValue = eCity.value || '';
+    if (eCity.value === 'other' && eCityOther) eCityOther.dataset.prevValue = eCityOther.value || '';
+    eCity.value = '';
+    eCity.disabled = true;
+    if (eCityOther) {
+      eCityOther.disabled = true;
+      eCityOther.style.display = 'none';
+    }
+    if (eCityFields) eCityFields.style.display = 'none';
+  } else {
+    eCity.disabled = false;
+    if (eCity.dataset.prevValue) eCity.value = eCity.dataset.prevValue;
+    if (eCityOther) eCityOther.disabled = false;
+    if (eCityFields) eCityFields.style.display = 'block';
+    handleCityOther('e-city', 'e-city-other');
+    if (eCity.value === 'other' && eCityOther && eCityOther.dataset.prevValue && !eCityOther.value) {
+      eCityOther.value = eCityOther.dataset.prevValue;
+    }
+  }
+
+  syncEditForm();
 }
 function setOrgType(val, btn) { submitFormState.orgType = val; if(btn){btn.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');} }
 function updateContactHint(prefix) {
