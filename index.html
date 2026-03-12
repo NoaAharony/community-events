@@ -2421,6 +2421,11 @@ async function saveEvent() {
     errDiv.style.display = 'block';
     return;
   }
+  if (editFormState.cost === 'Paid' && !document.getElementById('e-amount').value.trim()) {
+    errDiv.textContent = 'Please enter the event cost amount';
+    errDiv.style.display = 'block';
+    return;
+  }
 
   const eShowEmail = document.getElementById('e-show-email') ? document.getElementById('e-show-email').checked : false;
   const eRegLink = eRegLinkVal;
