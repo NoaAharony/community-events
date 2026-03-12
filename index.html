@@ -91,13 +91,13 @@
   .row-tags { display: flex; gap: 5px; flex-wrap: wrap; padding-top: 8px; border-top: 1px solid #f0ebe0; }
   .tag { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 20px; border: 1.5px solid #c8c0b0; background: transparent; color: #5a5048; font-family: 'Nunito', sans-serif; }
   .tag-party, .tag-meetup, .tag-food, .tag-conf, .tag-talk, .tag-workshop, .tag-other, .tag-kids, .tag-adults, .tag-all, .tag-teens { background: transparent; border-color: #c8c0b0; color: #5a5048; }
-  .row-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 52px; flex: 0 0 52px; padding: 10px 0; font-size: 25px; color: var(--gold); border-left: 1px solid #f0ebe0; }
+  .row-arrow { display: flex; align-items: center; justify-content: center; width: 52px; flex: 0 0 52px; padding: 0; font-size: 25px; color: var(--gold); border-left: 1px solid #f0ebe0; }
   .event-row { position: relative; }
 
   /* Share button on card */
-  .share-card-btn { background: none; border: none; cursor: pointer; color: var(--gray-400); padding: 4px; display: flex; align-items: center; justify-content: center; border-radius: 6px; transition: color 0.15s; line-height: 1; }
+  .share-card-btn { background: none; border: none; cursor: pointer; color: #c8c0b0; padding: 0; display: flex; align-items: center; gap: 4px; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; transition: color 0.15s; line-height: 1; }
   .share-card-btn:hover { color: var(--gold); }
-  .share-card-btn svg { width: 14px; height: 14px; } { background: #fef8e8; border: 1.5px solid #e8c96a; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #6b5010; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 10px; }
+  .share-card-btn svg { width: 11px; height: 11px; } { background: #fef8e8; border: 1.5px solid #e8c96a; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #6b5010; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 10px; }
   .notice-bar svg { flex-shrink: 0; margin-top: 1px; }
   .notice-bar-text { line-height: 1.5; }
   .notice-bar-text strong { display: block; font-size: 13.5px; color: #4a3800; margin-bottom: 2px; }
@@ -315,10 +315,7 @@
     .row-org-name { font-size: 10.5px; }
     .row-tags { gap: 4px; padding-top: 6px; }
     .tag { font-size: 9.5px; padding: 2px 7px; }
-    .row-arrow { width: 36px; flex: 0 0 36px; padding: 8px 0; gap: 6px; }
-
-    /* Share button on card - mobile */
-    .share-card-btn svg { width: 13px; height: 13px; }
+    .row-arrow { width: 36px; flex: 0 0 36px; }
 
     /* === EVENT MODAL - slides up from bottom === */
     .overlay { padding: 0; align-items: flex-end; }
@@ -1711,11 +1708,9 @@ function renderEventRow(e) {
           <span class="tag ${getTagClass(e.event_type)}">${e.event_type}</span>
           ${e.audience ? e.audience.split(',').map(a => a.trim()).filter(Boolean).map(a => `<span class="tag ${getAudienceTagClass(a)}">${a}</span>`).join('') : ''}
         </div>
+        ${!cancelled ? `<div style="display:flex; justify-content:flex-end; margin-top:6px;"><button class="share-card-btn" aria-label="Share event" onclick="shareEvent(event,'${e.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</button></div>` : ''}
       </div>
-      <div class="row-arrow">
-        ${arrow}
-        ${!cancelled ? `<button class="share-card-btn" aria-label="Share event" title="Share event" onclick="shareEvent(event,'${e.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>` : ''}
-      </div>
+      <div class="row-arrow">${arrow}</div>
     </div>`;
 }
 
