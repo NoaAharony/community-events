@@ -266,3 +266,5 @@ All pages are a single HTML file with JS toggling visibility between sections:
   - If `Request Address`: `Address Request for [event name, date]`
   - If `Other`: `Other Request for [event name, date]`
   - Request type + computed subject now included in payload sent to the email function.
+### Session 11 (Mar 12, 2026) — Supabase Auto-Pause Resolved
+- **Supabase auto-pause:** Confirmed that Supabase has removed auto-pause from the free tier. Dashboard now shows only a manual "Pause project" button. Database stays awake automatically — no action needed.

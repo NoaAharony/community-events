@@ -1,17 +1,33 @@
 # Backlog — Israeli Events Atlanta
 
 ## Priority 1 — Before Go-Live
-- [ ] **Disable Supabase auto-pause** — free tier pauses after 1 week of inactivity. Must be disabled before the site goes public or events will stop loading.
-- [ ] **Disable Supabase auto-pause** — still pending, must do before go-live
+- [x] **Supabase auto-pause — resolved.** Supabase has removed auto-pause from the free tier dashboard. The database will not pause automatically. No action needed. *(Confirmed Session 11, Mar 12 2026)*
+- [x] **Add "Show" as an event type** — added to form, edit form, filter bar, tag color, and emoji. *(Session 11, Mar 12 2026)*
+- [ ] **Add event type: Show** — add "Show" as a new option in the event type dropdown (currently: Party, Meetup, Food Market, Conference, Talk / Lecture, Workshop, Other). Needs to be added to the form, filter bar, and tag display.
 
 ## Priority 2 — Soon After Launch
+- [ ] **Analytics** — add website behavior tracking (visits, event clicks, contact organizer clicks, share clicks, traffic sources). Options: Google Analytics (detailed) or Plausible (simpler, privacy-friendly). ~10 min to set up.
 - [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form.
 - [ ] **Hebrew language toggle** — full UI toggle between Hebrew and English.
+- [ ] **Spam / fake event submissions** — no verification exists; anyone can post anything. Options: admin approval before events go live, or a "Report this event" button for visitors.
+- [ ] **Old event cleanup** — events stay in the database forever. Add auto-delete for events older than 60 days to keep the database clean.
+- [ ] **Save event / reminder** — visitors can share but not save an event or get a reminder. Common feature for event sites.
+- [ ] **Image size limit** — enforce a hard file size limit on image upload (not just a warning). Prevents large files from slowing the site and consuming Supabase storage.
+- [ ] **Location field UI improvement** — the relationship between "Online Event" checkbox and the city dropdown is not clear enough. A first-time user may not understand it's an either/or choice. Consider redesigning as two clear options (e.g. toggle or radio buttons: "In Person" / "Online") with the city dropdown only appearing for in-person, and a clearer visual separation or label like "or" between them.
+- [ ] **Submission guidelines** — add content rules explaining what is and isn't allowed on the site. Likely to live on the About page. Exact wording to be decided.
+
+## Admin Panel
+- [ ] **Message all organizers** — button in admin panel to send an email to all organizers with active events. For maintenance notices, policy updates, holiday reminders, etc.
+- [ ] **Admin password protection** — currently only protected by a secret URL. If someone finds it, they have full access. Add a simple password login to the admin panel.
+- [ ] **Bulk actions** — select multiple events and delete/cancel at once.
+- [ ] **Export to CSV** — download all event data as a spreadsheet.
+- [ ] **Filter by status** — filter admin table by upcoming, cancelled, past.
 
 ## Priority 3 — Nice to Have
 - [ ] **Accessibility audit** — WCAG color contrast, font sizes, keyboard navigation, screen reader support.
 - [ ] **Phone number format validation** — confirm edge cases (international numbers, paste).
-- [ ] **Admin improvements** — bulk actions, export to CSV, filter by status.
+- [ ] **Repeat organizer memory** — organizers who submit multiple events currently fill in all their details from scratch every time. Allow the form to remember name, email, phone, and org type based on their email address.
+- [ ] **Google indexing** — add sitemap.xml and robots.txt so the site appears in Google search results (e.g. "Israeli events Atlanta"). Skipped for now for privacy reasons — revisit in the future.
 
 ---
 

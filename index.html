@@ -32,6 +32,7 @@
     --tag-conf: #f0e8fd; --tag-conf-b: #b090d490;
     --tag-talk: #fdf5e0; --tag-talk-b: #d4b86090;
     --tag-workshop: #e0f5fd; --tag-workshop-b: #60b8d490;
+    --tag-show: #fde8f0; --tag-show-b: #d490a890;
     --tag-other: #f0f0f0; --tag-other-b: #b0b0b090;
     --tag-kids: #fde8f5; --tag-kids-b: #d490b890;
     --tag-adults: #e8eef5; --tag-adults-b: #90a8c490;
@@ -451,6 +452,7 @@
       <div class="dropdown-menu" id="dd-type">
         <div class="dropdown-item selected" onclick="setTypeFilter('all','Event Type',event)">All Types</div>
         <div class="dropdown-item" onclick="setTypeFilter('Party','Party',event)">Party</div>
+        <div class="dropdown-item" onclick="setTypeFilter('Show','Show',event)">Show</div>
         <div class="dropdown-item" onclick="setTypeFilter('Dinner','Dinner',event)">Dinner</div>
         <div class="dropdown-item" onclick="setTypeFilter('Meetup','Meetup',event)">Meetup</div>
         <div class="dropdown-item" onclick="setTypeFilter('Food Market','Food Market',event)">Food Market</div>
@@ -1635,12 +1637,12 @@ function renderEvents() {
 }
 
 function getEventEmoji(type) {
-  const map = { 'Party':'🎭','Meetup':'🕯️','Food Market':'🧆','Conference':'📋','Talk / Lecture':'🎤','Workshop':'🎨','Other':'📌' };
+  const map = { 'Party':'🎭','Show':'🎬','Meetup':'🕯️','Food Market':'🧆','Conference':'📋','Talk / Lecture':'🎤','Workshop':'🎨','Other':'📌' };
   return map[type] || '📅';
 }
 
 function getTagClass(type) {
-  const map = { 'Party':'tag-party','Dinner':'tag-party','Meetup':'tag-meetup','Food Market':'tag-food','Conference':'tag-conf','Talk / Lecture':'tag-talk','Workshop':'tag-workshop','Other':'tag-other' };
+  const map = { 'Party':'tag-party','Show':'tag-show','Dinner':'tag-party','Meetup':'tag-meetup','Food Market':'tag-food','Conference':'tag-conf','Talk / Lecture':'tag-talk','Workshop':'tag-workshop','Other':'tag-other' };
   return map[type] || 'tag-other';
 }
 
