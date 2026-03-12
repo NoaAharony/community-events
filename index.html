@@ -722,18 +722,18 @@
       <!-- Address section - hidden when Online Event selected -->
       <div id="s-address-section">
         <div class="form-group">
-          <label>Address <span class="req">*</span></label>
-          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
+          <label>Full Address <span class="req">*</span></label>
+          <input class="form-input" id="s-address" autocomplete="off" type="text" placeholder="e.g. 123 Main St, Apt 4B, Atlanta, GA 30303">
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; margin-bottom:12px;">
             <label style="border:1.5px solid var(--gray-200); border-radius:6px; padding:13px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; transition:all 0.15s;" id="s-addr-radio-public" onclick="setAddressVisibility(true, 's')">
               <span id="s-radio-public" style="width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;"></span>
               <span><strong style="font-size:14px;color:var(--gray-800);">Show full address publicly</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see the exact address on the event page</span></span>
             </label>
             <label style="border:1.5px solid var(--blue); border-radius:6px; padding:13px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; background:#f0f5fb; transition:all 0.15s;" id="s-addr-radio-private" onclick="setAddressVisibility(false, 's')">
               <span id="s-radio-private" style="width:18px;height:18px;border-radius:50%;border:2px solid var(--blue);background:var(--blue);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="width:6px;height:6px;border-radius:50%;background:white;display:block;"></span></span>
-              <span><strong style="font-size:14px;color:var(--gray-800);">Keep address private</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see city only and can request the address from you</span></span>
+              <span><strong style="font-size:14px;color:var(--gray-800);">Show City only</strong></span>
             </label>
           </div>
-          <input class="form-input" id="s-address" autocomplete="off" type="text" placeholder="Enter full Address">
           <div id="s-address-hint" style="font-size:12px; color:#5c3d10; font-weight:700; margin-top:10px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; display:none;"></div>
         </div>
       </div>
@@ -1070,18 +1070,18 @@
       <!-- Address section - hidden when Online Event selected -->
       <div id="e-address-section">
         <div class="form-group">
-          <label>Address <span class="req">*</span></label>
-          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
+          <label>Full Address <span class="req">*</span></label>
+          <input class="form-input" id="e-address" type="text" placeholder="e.g. 123 Main St, Apt 4B, Atlanta, GA 30303">
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; margin-bottom:12px;">
             <label style="border:1.5px solid var(--gray-200); border-radius:6px; padding:13px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; transition:all 0.15s;" id="e-addr-radio-public" onclick="setEditAddressVisibility(true)">
               <span id="e-radio-public" style="width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;"></span>
               <span><strong style="font-size:14px;color:var(--gray-800);">Show full address publicly</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see the exact address on the event page</span></span>
             </label>
             <label style="border:1.5px solid var(--gray-200); border-radius:6px; padding:13px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; transition:all 0.15s;" id="e-addr-radio-private" onclick="setEditAddressVisibility(false)">
               <span id="e-radio-private" style="width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;"></span>
-              <span><strong style="font-size:14px;color:var(--gray-800);">Keep address private</strong><br><span style="font-size:12px;color:var(--gray-600);">Visitors see city only and can request the address from you</span></span>
+              <span><strong style="font-size:14px;color:var(--gray-800);">Show City only</strong></span>
             </label>
           </div>
-          <input class="form-input" id="e-address" type="text" placeholder="Enter full Address">
           <div id="e-address-hint" style="font-size:12px; color:#5c3d10; font-weight:700; margin-top:10px; background:#fff8ee; border-left:3px solid var(--gold); border-radius:0 6px 6px 0; padding:9px 13px; line-height:1.5; display:none;"></div>
         </div>
       </div>
