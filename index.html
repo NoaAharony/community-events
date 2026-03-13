@@ -334,6 +334,7 @@
     .modal-field label { font-size: 9px; }
     .modal-field span { font-size: 13px; }
     .modal-desc { font-size: 13px; padding: 8px 11px; margin-bottom: 10px; }
+    .modal-action-btn { min-height: 44px; font-size: 13px; }
 
     /* Modal bottom panel - stack vertically */
     .modal-bottom { padding-top: 12px; margin-top: 6px; }
@@ -396,6 +397,12 @@
     .notice-bar { padding: 12px 14px; font-size: 13px; }
     .notice-bar-text strong { font-size: 13px; }
     .empty-box-body { padding: 20px 16px; }
+  }
+  @media (max-width: 375px) {
+    .modal-fields { grid-template-columns: 1fr; }
+    .modal-field.full { grid-column: span 1; }
+    .modal-event-img, .modal-event-img-wrap { height: 110px; }
+    .modal-event-title { font-size: 15px; }
   }
   @media (min-width: 601px) {
     .contact-call-mobile { display: none; }
@@ -1270,7 +1277,7 @@
 <!-- Event Detail Modal -->
 <div class="overlay" id="overlay-event" onclick="closeModalOnBg(event,'overlay-event')">
   <div class="modal" id="modal-event">
-    <div class="modal-header">
+    <div class="modal-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold);">
       <h3>Event Details</h3>
       <button class="modal-close-btn" onclick="closeModal('overlay-event')">✕</button>
     </div>
