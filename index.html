@@ -1180,7 +1180,7 @@
     <div class="error-content-block">
       <div class="error-note-block">If you submitted this event and still need to make changes, check your email for the original edit link that was sent to you.</div>
       <div class="error-actions-block">
-        <button class="btn-primary" onclick="showPage('page-home')">← Back to Events</button>
+        <button class="btn-primary" onclick="initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); })">← Back to Events</button>
         <button class="btn-secondary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add a New Event</button>
       </div>
     </div>
@@ -1200,7 +1200,7 @@
     <div class="error-content-block">
       <div class="error-note-block">This event is no longer taking place. If you'd like to stay up to date with community events, head back to the main page.</div>
       <div class="error-actions-block">
-        <button class="btn-primary" onclick="showPage('page-home')">← Back to Events</button>
+        <button class="btn-primary" onclick="initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); })">← Back to Events</button>
         <button class="btn-secondary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add a New Event</button>
       </div>
     </div>
