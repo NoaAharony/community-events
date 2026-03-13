@@ -764,7 +764,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Organizer / Business Name <span class="req">*</span></label>
-          <input class="form-input" id="s-organizer" type="text" placeholder="Your name or business name">
+          <input class="form-input" id="s-organizer" type="text" autocomplete="name" placeholder="Your name or business name">
           <div class="field-hint">You can write in Hebrew or English</div>
         </div>
         <div class="form-group">
@@ -787,7 +787,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Email <span class="req">*</span></label>
-          <input class="form-input" id="s-email" type="email" placeholder="your@email.com">
+          <input class="form-input" id="s-email" type="email" autocomplete="email" placeholder="your@email.com">
           <label id="s-show-email-label" style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer; margin-top:8px;">
             <input type="checkbox" id="s-show-email" autocomplete="off" onchange="updateContactHint('s')"> Show my email on the event page
           </label>
@@ -1115,7 +1115,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Name <span class="req">*</span></label>
-          <input class="form-input" id="e-organizer" type="text">
+          <input class="form-input" id="e-organizer" type="text" autocomplete="name">
           <div class="field-hint">You can write in Hebrew or English</div>
         </div>
         <div class="form-group">
@@ -1137,7 +1137,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Email <span class="req">*</span></label>
-          <input class="form-input" id="e-email" type="email">
+          <input class="form-input" id="e-email" type="email" autocomplete="email">
           <label id="e-show-email-label" style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; text-transform:none; letter-spacing:0; cursor:pointer; margin-top:8px;">
             <input type="checkbox" id="e-show-email" onchange="updateContactHint('e')"> Show my email on the event page
           </label>
