@@ -1657,7 +1657,7 @@ function getAudienceTagClass(a) {
 function renderEventRow(e) {
   const cancelled = e.status === 'cancelled';
   const thumb = e.image_url
-    ? `<div class="row-thumb"><img src="${e.image_url}" alt=""></div>`
+    ? `<div class="row-thumb"><img src="${e.image_url}" alt="" onerror="this.closest('.row-thumb').remove()"></div>`
     : `<div class="row-thumb" style="flex-direction:column; gap:6px; align-self:stretch; min-height:100%;">
         <div style="display:flex; align-items:baseline; gap:4px;">
           <span style="font-family:'Source Serif 4',serif; font-size:13px; color:white; font-weight:400;">Atlanta</span>
@@ -1729,17 +1729,27 @@ function positionOverlayModalUnderToolbar(overlay, modal) {
     const topOffset = Math.max(0, Math.round(toolbarBottom));
 
     overlay.style.alignItems = 'flex-start';
+    overlay.style.justifyContent = 'center';
     overlay.style.paddingTop = `${topOffset}px`;
-    overlay.style.paddingRight = '0';
-    overlay.style.paddingBottom = '0';
-    overlay.style.paddingLeft = '0';
-    modal.style.maxHeight = `calc(100vh - ${topOffset}px)`;
+    overlay.style.paddingRight = '16px';
+    overlay.style.paddingBottom = 'env(safe-area-inset-bottom, 16px)';
+    overlay.style.paddingLeft = '16px';
+    modal.style.maxHeight = `calc(100vh - ${topOffset}px - env(safe-area-inset-bottom, 16px))`;
+    modal.style.width = '100%';
+    modal.style.maxWidth = '520px';
+    modal.style.marginLeft = 'auto';
+    modal.style.marginRight = 'auto';
     return;
   }
 
   overlay.style.alignItems = '';
+  overlay.style.justifyContent = '';
   overlay.style.padding = '';
   modal.style.maxHeight = '';
+  modal.style.width = '';
+  modal.style.maxWidth = '';
+  modal.style.marginLeft = '';
+  modal.style.marginRight = '';
 }
 
 function positionEventModalForMobile() {
@@ -1751,7 +1761,34 @@ function positionEventModalForMobile() {
 function positionAddressModalForMobile() {
   const overlay = document.getElementById('overlay-address');
   const modal = overlay ? overlay.querySelector('.modal') : null;
-  positionOverlayModalUnderToolbar(overlay, modal);
+  if (!overlay || !modal) return;
+
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    // Use safe centered positioning (not toolbar-anchored)
+    // because this modal opens on top of the event modal and the toolbar
+    // may be scrolled off-screen or measured incorrectly on iPhone
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.padding = '16px 16px env(safe-area-inset-bottom, 16px) 16px';
+    modal.style.maxHeight = 'calc(100svh - 32px)';
+    modal.style.width = '100%';
+    modal.style.maxWidth = '520px';
+    modal.style.marginLeft = 'auto';
+    modal.style.marginRight = 'auto';
+    modal.style.overflowY = 'auto';
+    return;
+  }
+
+  // Desktop — reset to CSS defaults
+  overlay.style.alignItems = '';
+  overlay.style.justifyContent = '';
+  overlay.style.padding = '';
+  modal.style.maxHeight = '';
+  modal.style.width = '';
+  modal.style.maxWidth = '';
+  modal.style.marginLeft = '';
+  modal.style.marginRight = '';
+  modal.style.overflowY = '';
 }
 
 function openEventModal(id) {
@@ -1762,7 +1799,7 @@ function openEventModal(id) {
   const costStr = e.cost === 'Paid' && e.amount ? e.amount : e.cost;
 
   const imgHtml = e.image_url
-    ? `<div class="modal-event-img-wrap"><div class="modal-event-img" onclick="openLightbox('${e.image_url}')" style="cursor:zoom-in;"><img src="${e.image_url}" alt=""></div><div class="modal-img-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>View full flyer</div></div>`
+    ? `<div class="modal-event-img-wrap"><div class="modal-event-img" onclick="openLightbox('${e.image_url}')" style="cursor:zoom-in;"><img src="${e.image_url}" alt="" onerror="this.parentElement.style.cssText='background:linear-gradient(160deg,#1e4068,#0f2035);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;overflow:hidden;cursor:default;'; this.parentElement.onclick=null; this.parentElement.innerHTML='<div style=\\'position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c8963e,#e8b86a,#c8963e);\\'></div><div style=\\'display:flex;align-items:baseline;gap:4px;\\'><span style=\\'font-family:Source Serif 4,serif;font-size:16px;color:white;font-weight:400;\\'>Atlanta</span><span style=\\'font-family:Source Serif 4,serif;font-size:20px;font-style:italic;color:#e8b86a;font-weight:300;\\'>IL</span></div><div style=\\'width:32px;height:1px;background:rgba(200,150,62,0.4);\\'></div><span style=\\'font-family:Nunito,sans-serif;font-size:9px;color:white;letter-spacing:2px;text-transform:uppercase;text-align:center;line-height:2;font-weight:700;\\'>COMMUNITY<br>EVENTS</span>';"></div><div class="modal-img-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>View full flyer</div></div>`
     : `<div class="modal-event-img" style="background:linear-gradient(160deg,#1e4068,#0f2035); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; position:relative; overflow:hidden;">
         <div style="position:absolute; bottom:0; left:0; right:0; height:3px; background: linear-gradient(90deg, #c8963e, #e8b86a, #c8963e);"></div>
         <div style="display:flex; align-items:baseline; gap:4px;">
