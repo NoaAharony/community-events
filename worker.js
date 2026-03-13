@@ -8,14 +8,15 @@ export default {
     const url = new URL(request.url);
     const eventId = url.searchParams.get('event');
 
-    // For non-HTML requests (images, fonts, etc.) — serve directly
+    // For non-HTML requests (images, fonts, favicon, etc.) — serve directly
     const path = url.pathname;
-    if (path !== '/' && !path.endsWith('.html')) {
+    if (path !== '/' && !path.endsWith('.html') && path !== '') {
       return env.ASSETS.fetch(request);
     }
 
-    // Get the base HTML from static assets
-    const assetResponse = await env.ASSETS.fetch(request);
+    // Always fetch the index.html from assets
+    const indexRequest = new Request(`${url.origin}/index.html`, request);
+    const assetResponse = await env.ASSETS.fetch(indexRequest);
     const html = await assetResponse.text();
     const BANNER_URL = `${url.origin}/site_banner.png`;
 
