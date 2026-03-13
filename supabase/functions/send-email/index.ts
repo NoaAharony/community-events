@@ -26,21 +26,31 @@ function wrapEmail(headerContent: string, bodyContent: string): string {
   body { margin: 0; padding: 0; background-color: #f4f1ec; }
   table { border-collapse: collapse; }
   a { color: #1a3a5c; }
+  @media only screen and (max-width: 600px) {
+    .email-outer-td { padding: 16px 8px !important; }
+    .email-inner-table { width: 100% !important; }
+    .email-header-td { padding: 20px 18px !important; }
+    .email-body-td { padding: 20px 18px !important; }
+    .email-btn-text { font-size: 14px !important; }
+    .email-event-box td { padding: 12px 14px !important; }
+    .email-manage-box td { padding: 16px 14px !important; }
+    p { font-size: 13px !important; }
+  }
 </style>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f1ec; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f1ec" style="background-color: #f4f1ec;">
-  <tr><td align="center" style="padding: 32px 16px;">
-    <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; width: 100%;">
+  <tr><td align="center" class="email-outer-td" style="padding: 32px 16px;">
+    <table class="email-inner-table" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; width: 100%;">
       <tr>
-        <td bgcolor="#1a3a5c" style="background-color: #1a3a5c; border-radius: 10px 10px 0 0; padding: 28px 32px; text-align: center;">
+        <td class="email-header-td" bgcolor="#1a3a5c" style="background-color: #1a3a5c; border-radius: 10px 10px 0 0; padding: 28px 32px; text-align: center;">
           ${siteTitle}
           ${headerContent}
         </td>
       </tr>
       ${goldDivider}
       <tr>
-        <td bgcolor="#ffffff" style="background-color: #ffffff; border-radius: 0 0 10px 10px; padding: 28px 32px;">
+        <td class="email-body-td" bgcolor="#ffffff" style="background-color: #ffffff; border-radius: 0 0 10px 10px; padding: 28px 32px;">
           ${bodyContent}
           ${footer}
         </td>
@@ -83,7 +93,7 @@ serve(async (req) => {
             </td>
           </tr>
         </table>
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
+        <table class="email-manage-box" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
           <tr>
             <td bgcolor="#fff8ee" style="background-color: #fff8ee; border: 2px solid #c8963e; border-radius: 8px; padding: 20px 24px; text-align: center;">
               <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 17px; color: #1a3a5c; font-weight: 400; margin: 0 0 8px; line-height: 1.3;">Manage Your Event</p>
@@ -91,7 +101,7 @@ serve(async (req) => {
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td bgcolor="#1a3a5c" style="background-color: #1a3a5c !important; border-radius: 6px; text-align: center; padding: 0;"><div style="background-color: #1a3a5c !important; border-radius: 6px; padding: 14px 20px;">
-                    <a href="${edit_link}" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Edit My Event &rarr;</a></div>
+                    <a href="${edit_link}" class="email-btn-text" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block; word-break: break-all;">Edit My Event &rarr;</a></div>
                   </td>
                 </tr>
               </table>
@@ -179,7 +189,7 @@ serve(async (req) => {
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
           <tr>
             <td bgcolor="#1a3a5c" style="background-color: #1a3a5c !important; border-radius: 6px; text-align: center; padding: 0;"><div style="background-color: #1a3a5c !important; border-radius: 6px; padding: 14px 20px;">
-              <a href="mailto:${requester_email}?subject=${encodeURIComponent(replySubject)}&body=${replyBody}" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Reply to ${requester_fname} &rarr;</a></div>
+              <a href="mailto:${requester_email}?subject=${encodeURIComponent(replySubject)}&body=${replyBody}" class="email-btn-text" style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; display: inline-block;">Reply to ${requester_fname} &rarr;</a></div>
             </td>
           </tr>
         </table>`;
