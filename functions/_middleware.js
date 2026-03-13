@@ -33,11 +33,11 @@ export async function onRequest(context) {
     });
   }
 
-  // Fetch event from Supabase
+  // Fetch event from Supabase (correct column: name, not title)
   let event = null;
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/events?id=eq.${eventId}&select=title,description,image_url,event_date&limit=1`,
+      `${SUPABASE_URL}/rest/v1/events?id=eq.${eventId}&select=name,description,image_url,event_date,city,event_type&limit=1`,
       {
         headers: {
           'apikey': SUPABASE_ANON_KEY,
@@ -58,10 +58,23 @@ export async function onRequest(context) {
   const response = await next();
   const html = await response.text();
 
-  const title = event.title ? `${event.title} - ${SITE_NAME}` : SITE_NAME;
-  const description = event.description
-    ? event.description.slice(0, 200)
-    : DEFAULT_DESCRIPTION;
+  const title = event.name ? `${event.name} - ${SITE_NAME}` : SITE_NAME;
+
+  // Build a useful description: date + city + event type, then organizer description
+  let descParts = [];
+  if (event.event_date) {
+    const d = new Date(event.event_date + 'T00:00:00');
+    descParts.push(d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }));
+  }
+  if (event.city && event.city !== 'Online Event') descParts.push(event.city);
+  else if (event.city === 'Online Event') descParts.push('Online');
+  if (event.event_type) descParts.push(event.event_type);
+  const contextLine = descParts.join(' - ');
+  const bodyText = event.description ? event.description.replace(/\n/g, ' ').slice(0, 120) : '';
+  const description = contextLine
+    ? (bodyText ? `${contextLine}. ${bodyText}` : contextLine)
+    : (bodyText || DEFAULT_DESCRIPTION);
+
   const image = event.image_url || BANNER_URL;
   const pageUrl = request.url;
 
@@ -79,8 +92,11 @@ export async function onRequest(context) {
     <meta name="twitter:description" content="${escapeHtml(description)}" />
     <meta name="twitter:image" content="${escapeHtml(image)}" />`;
 
-  // Inject before </head>
-  const newHtml = html.replace('</head>', `${ogTags}\n</head>`);
+  // Remove existing static OG tags from index.html, then inject event-specific ones
+  const stripped = html
+    .replace(/<meta\s+property="og:[^"]*"[^>]*>/gi, '')
+    .replace(/<meta\s+name="twitter:[^"]*"[^>]*>/gi, '');
+  const newHtml = stripped.replace('</head>', `${ogTags}\n</head>`);
 
   return new Response(newHtml, {
     status: response.status,
