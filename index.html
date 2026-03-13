@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <title>Atlanta IL Community Events</title>
 <meta property="og:title" content="Atlanta IL Community Events">
 <meta property="og:description" content="Events for the Israeli community in Metro Atlanta">
@@ -321,7 +321,7 @@
 
     /* === EVENT MODAL - slides up from bottom === */
     .overlay { padding: 0; align-items: flex-end; }
-    .modal { border-radius: 16px 16px 0 0; max-height: calc(100vh - 100px); width: 100%; max-width: 100%; }
+    .modal { border-radius: 16px 16px 0 0; max-height: calc(100dvh - 100px); width: 100%; max-width: 100%; }
     .modal-header { border-radius: 16px 16px 0 0; padding: 12px 16px; }
     .modal-header h3 { font-size: 14px; }
     .modal-body { padding: 14px 16px 24px; }
@@ -355,7 +355,6 @@
     .form-section { padding: 14px; margin-bottom: 16px; }
     .form-section-title { margin: -14px -14px 14px -14px; font-size: 10px; padding: 8px 14px; }
     .form-row { grid-template-columns: 1fr; }
-    .form-group { margin-bottom: 10px; }
     .form-input { font-size: 16px; }
     .form-actions { padding: 10px 12px; gap: 8px; flex-wrap: wrap; }
     .form-actions .btn-secondary, .form-actions .btn-primary { flex: 1; text-align: center; font-size: 13px; }
@@ -1734,7 +1733,7 @@ function positionOverlayModalUnderToolbar(overlay, modal) {
     overlay.style.paddingRight = '16px';
     overlay.style.paddingBottom = 'env(safe-area-inset-bottom, 16px)';
     overlay.style.paddingLeft = '16px';
-    modal.style.maxHeight = `calc(100vh - ${topOffset}px - env(safe-area-inset-bottom, 16px))`;
+    modal.style.maxHeight = `calc(100dvh - ${topOffset}px - env(safe-area-inset-bottom, 16px))`;
     modal.style.width = '100%';
     modal.style.maxWidth = '520px';
     modal.style.marginLeft = 'auto';
@@ -1914,7 +1913,7 @@ function openEventModal(id) {
     ${bottomPanel}
   `;
   positionEventModalForMobile();
-  document.getElementById('overlay-event').classList.add('open');
+  openModal('overlay-event');
 }
 
 let currentAddressRequestEventId = null;
@@ -1942,7 +1941,7 @@ function openAddressRequest(eventId) {
   document.getElementById('address-form').style.display = 'block';
   document.getElementById('address-success').classList.remove('show');
   positionAddressModalForMobile();
-  document.getElementById('overlay-address').classList.add('open');
+  openModal('overlay-address');
 }
 
 async function submitAddressRequest() {
@@ -2577,7 +2576,7 @@ async function saveEvent() {
 }
 
 function openCancelConfirm() {
-  document.getElementById('overlay-cancel').classList.add('open');
+  openModal('overlay-cancel');
 }
 
 async function confirmCancelEvent(action) {
@@ -2651,7 +2650,7 @@ async function loadAdminPage() {
 
 function openAdminDelete(id) {
   adminDeleteId = id;
-  document.getElementById('overlay-admin-delete').classList.add('open');
+  openModal('overlay-admin-delete');
 }
 
 async function confirmAdminDelete() {
@@ -3064,7 +3063,16 @@ function showPage(id) {
   setTimeout(scrollToTopNow, 0);
   setTimeout(scrollToTopNow, 120);
 }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  // Only unlock scroll if no other modals are open
+  const anyOpen = document.querySelector('.overlay.open');
+  if (!anyOpen) document.body.style.overflow = '';
+}
 
 function shareEvent(e, id) {
   if (e) e.stopPropagation();
