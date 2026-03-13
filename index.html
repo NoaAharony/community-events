@@ -4,13 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <title>Atlanta IL Community Events</title>
-<meta property="og:title" content="Atlanta IL Community Events">
-<meta property="og:description" content="Events for the Israeli community in Metro Atlanta">
-<meta property="og:image" content="https://ilcommunityevents.com/site_banner.png">
-<meta property="og:url" content="https://ilcommunityevents.com">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://ilcommunityevents.com/site_banner.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -40,6 +33,10 @@
     --tag-teens: #f5ede8; --tag-teens-b: #c4a89090;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Mobile browser resets */
+  a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+  button, input, select, textarea { -webkit-appearance: none; appearance: none; }
+  img { max-width: 100%; height: auto; }
   body { font-family: 'Nunito', 'Assistant', sans-serif; background: var(--cream); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); color: var(--gray-800); min-height: 100vh; }
 
   .topbar { background: linear-gradient(160deg, #1e4068 0%, #152d4a 60%, #0f2035 100%); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.3); }
@@ -132,7 +129,7 @@
   .addr-modal-header { background: linear-gradient(160deg, #1e4068, #0f2035); padding: 18px 20px; border-bottom: 3px solid var(--gold); }
   .addr-modal-icon { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(232,184,106,0.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .modal-header h3 { font-family: 'Source Serif 4', serif; font-size: 16px; font-weight: 400; }
-  .modal-close-btn { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 20px; cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 3px; transition: color 0.15s; }
+  .modal-close-btn { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 20px; cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 3px; transition: color 0.15s; min-width: 36px; min-height: 36px; display: flex; align-items: center; justify-content: center; }
   .modal-close-btn:hover { color: white; }
 
   /* Share button in modal */
@@ -289,14 +286,13 @@
     /* === TOPBAR === */
     .topbar { padding: 0 14px; height: 52px; z-index: 1000; }
     .site-name { font-size: 14px; }
-    .btn-submit-top { font-size: 11px; padding: 6px 10px; }
+    .btn-submit-top { font-size: 11px; padding: 8px 10px; min-height: 36px; }
 
     /* === FILTER BAR === */
     .filter-bar { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 8px 14px; gap: 6px; scrollbar-width: none; top: 52px; z-index: 999; }
     .filter-bar::-webkit-scrollbar { display: none; }
     .filter-label { display: none; }
-    .filter-chip { white-space: nowrap; flex-shrink: 0; font-size: 11.5px; padding: 5px 11px; }
-
+    .filter-chip { white-space: nowrap; flex-shrink: 0; font-size: 11.5px; padding: 7px 11px; min-height: 36px; }
     /* === MAIN CONTENT === */
     .main { padding: 16px 12px; }
     #page-home #events-container { padding-bottom: 120px; }
@@ -317,8 +313,8 @@
     .row-tags { gap: 4px; padding-top: 6px; }
     .tag { font-size: 9.5px; padding: 2px 7px; }
     .row-arrow { width: 36px; flex: 0 0 36px; }
-    .share-card-btn { top: 8px; right: 40px; width: 24px; height: 24px; }
-    .share-card-btn svg { width: 10px; height: 10px; }
+    .share-card-btn { top: 8px; right: 40px; width: 36px; height: 36px; }
+    .share-card-btn svg { width: 12px; height: 12px; }
 
     /* === EVENT MODAL - slides up from bottom === */
     .overlay { padding: 0; align-items: flex-end; }
@@ -342,8 +338,9 @@
     .modal-bottom-divider { display: none; }
     .modal-bottom-col-label { font-size: 9px; }
     .modal-bottom-col-value { font-size: 12.5px; }
-    .modal-contact-btn-main, .modal-contact-btn-ghost { font-size: 12px; padding: 8px 10px; }
-    .share-modal-btn { font-size: 12.5px; padding: 8px 12px; }
+    .modal-contact-btn-main, .modal-contact-btn-ghost { font-size: 12px; padding: 8px 10px; min-height: 44px; }
+    .share-modal-btn { font-size: 12.5px; padding: 8px 12px; min-height: 44px; }
+    .admin-table { min-width: 600px; }
 
     /* === ADDRESS REQUEST MODAL === */
     .addr-modal-header { padding: 14px 16px; }
@@ -359,7 +356,8 @@
     .form-row { grid-template-columns: 1fr; }
     .form-input { font-size: 16px; }
     .form-actions { padding: 10px 12px; gap: 8px; flex-wrap: wrap; }
-    .form-actions .btn-secondary, .form-actions .btn-primary { flex: 1; text-align: center; font-size: 13px; }
+    .form-actions .btn-secondary, .form-actions .btn-primary { flex: 1; text-align: center; font-size: 13px; min-height: 44px; }
+    .btn-primary, .btn-secondary, .btn-danger { min-height: 44px; }
     .edit-cancel-bar { flex-direction: column; gap: 8px; padding: 10px 12px; }
     .edit-cancel-bar .btn-right { width: 100%; }
     .edit-cancel-bar .btn-right button { flex: 1; }

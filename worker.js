@@ -20,9 +20,23 @@ export default {
     const html = await assetResponse.text();
     const BANNER_URL = `${url.origin}/site_banner.png`;
 
-    // No event param — serve with default OG tags (already in index.html)
+    // No event param — serve with default site OG tags
     if (!eventId) {
-      return new Response(html, {
+      const ogTags = `
+    <meta property="og:title" content="${SITE_NAME}" />
+    <meta property="og:description" content="${DEFAULT_DESCRIPTION}" />
+    <meta property="og:url" content="${url.origin}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="${SITE_NAME}" />
+    <meta property="og:image" content="${BANNER_URL}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${SITE_NAME}" />
+    <meta name="twitter:description" content="${DEFAULT_DESCRIPTION}" />
+    <meta name="twitter:image" content="${BANNER_URL}" />`;
+      const newHtml = html.replace('</head>', `${ogTags}\n</head>`);
+      return new Response(newHtml, {
         status: assetResponse.status,
         headers: { ...Object.fromEntries(assetResponse.headers), 'content-type': 'text/html;charset=UTF-8' }
       });
