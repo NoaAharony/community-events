@@ -268,3 +268,12 @@ All pages are a single HTML file with JS toggling visibility between sections:
   - Request type + computed subject now included in payload sent to the email function.
 ### Session 11 (Mar 12, 2026) — Supabase Auto-Pause Resolved
 - **Supabase auto-pause:** Confirmed that Supabase has removed auto-pause from the free tier. Dashboard now shows only a manual "Pause project" button. Database stays awake automatically — no action needed.
+
+### Session 13 (Mar 13, 2026) — Mobile Bug Fixes
+- **Contact Organizer modal off-screen on iPhone 17 Pro:** Changed positioning from toolbar-anchored to safe screen-centering. Uses `100svh` and proper safe-area padding so the X button and submit button are always reachable.
+- **Image delay explained:** Newly uploaded images may take 1-5 minutes to appear publicly after submission (Supabase Storage free tier propagation delay). The uploader sees a local preview instantly - other users must wait. Not a bug.
+- **Android modal cut off at bottom:** Changed `100vh` to `100dvh` for the event modal. Android Chrome's `100vh` includes the browser address bar, hiding the modal bottom.
+- **Android keyboard pushing modals:** Added `interactive-widget=resizes-content` to viewport meta tag. Prevents Android keyboard from repositioning fixed/modal elements.
+- **Background scroll while modal open:** Added body scroll lock (`overflow: hidden`) when any modal opens, released when all modals are closed. Fixes iOS Safari background jump bug.
+- **Contact Organizer form fields cramped on small phones:** Confirmed `.form-row` single-column rule applies globally on mobile (already in place).
+- **Notice bar completely unstyled:** The `.notice-bar` CSS class selector was accidentally missing - only the style block `{ background:... }` remained with no class name attached. The yellow fallback banner (shown when no events match filters) had no background, border, or padding on any device. Restored the selector. Also fixed missing space between sentences, added `white-space:nowrap` to "Clear filters" link, and bumped mobile font size from 12px to 13px.
