@@ -358,3 +358,22 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - Applied to: filter dropdown, submit form checkboxes, edit form checkboxes
 - Tag map updated: Women → `tag-women`, Men → `tag-men`, both added to CSS tag rule
 - Existing events with "Parents" audience tag continue to display gracefully — show under "All" filter
+
+**Header & footer polish:**
+- Header "Add Event" button: `border-radius: 4px` -> `20px` (now matches footer pill style)
+- Footer "Community links coming soon": replaced inline style with `.footer-tagline` class, hidden on mobile
+- Footer height matched to header: `padding: 20px 24px` -> `height: 60px` on desktop. Both header and footer now exactly 60px desktop / 52px mobile
+- Footer links unified as plain text (Option A): removed pill border/padding from "+ Add Event", both "About" and "+ Add Event" now identical style - white 0.92, bold 700, 13px, gold hover
+- `flex-wrap: wrap` -> `flex-wrap: nowrap` on footer (content fits cleanly at fixed height)
+
+**Button text wrapping - global fix:**
+- Added `white-space: nowrap` to `.btn-primary`, `.btn-secondary`, `.btn-danger` CSS base rules
+- Fixed individually: confirmation page, both error pages, admin delete modal, Cancel Event in edit bar, Save Changes, Discard Changes
+- Hidden `.submit-disclaimer` on mobile (was squeezing "Add Event" button to zero width on Samsung S22)
+
+**Skeleton loader fix:**
+- Removed `border-left: 3.5px solid gold` — was making loading placeholders look like real event cards
+- Replaced with `border: 1px solid gray-200` — clearly a placeholder
+- Thumb background: `gray-100` -> `gray-200` (more visually distinct as empty)
+- Added `opacity: 0.7` — reads as inactive/loading state
+- Reduced from 3 to 2 skeleton cards (both HTML and JS)
