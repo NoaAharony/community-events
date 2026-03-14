@@ -377,3 +377,16 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - Thumb background: `gray-100` -> `gray-200` (more visually distinct as empty)
 - Added `opacity: 0.7` — reads as inactive/loading state
 - Reduced from 3 to 2 skeleton cards (both HTML and JS)
+
+**Image size limit + Storage cleanup:**
+- 2MB hard limit enforced in both `handleImageSelect` and `handleEditImageSelect` — file rejected immediately with clear error message and compression tip
+- `deleteStorageImage(imageUrl)` helper added — extracts filename from Supabase Storage URL, calls DELETE on the storage object, non-fatal (logs warning, never blocks main flow)
+- Images now deleted from Storage on all delete paths:
+  - Admin deletes event → image deleted before DB row removed
+  - Organizer removes event completely → image deleted before DB row removed
+  - Organizer replaces image in edit form → old image deleted before new upload
+  - Organizer removes image in edit form → image deleted, DB set to null
+  - Cancelling event (keeping visible) → image NOT deleted, event still shows on site
+- `editFormState` now stores `existingImageUrl` so edit/save flows know which file to clean up
+- `adminDeleteImageUrl` variable added alongside `adminDeleteId` — passed from admin table row into delete modal
+- Orphaned images from before this fix remain in Storage but no new ones will accumulate

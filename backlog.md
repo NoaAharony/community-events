@@ -15,7 +15,6 @@
 - [ ] **Spam / fake event submissions** — no verification exists; anyone can post anything. Options: admin approval before events go live, or a "Report this event" button for visitors.
 - [ ] **Old event cleanup (database only)** — The website and admin panel already handle display correctly: past events disappear from the site the day after, and from the admin panel after 7 days. This task is only about permanently deleting raw data from Supabase after a long period (e.g. 90 days) to keep the database lean at high usage. Not urgent — Supabase free tier allows 500MB and current usage is well under 5MB. Revisit only if the site grows significantly. *(Low priority)*
 - [ ] **Save event / reminder** — visitors can share but not save an event or get a reminder. Common feature for event sites.
-- [ ] **Image size limit** — enforce a hard file size limit on image upload (not just a warning). Prevents large files from slowing the site and consuming Supabase storage.
 - [ ] **Location field UI improvement** — the relationship between "Online Event" checkbox and the city dropdown is not clear enough. A first-time user may not understand it's an either/or choice. Consider redesigning as two clear options (e.g. toggle or radio buttons: "In Person" / "Online") with the city dropdown only appearing for in-person, and a clearer visual separation or label like "or" between them.
 - [ ] **Submission guidelines** — add content rules explaining what is and isn't allowed on the site. Likely to live on the About page. Exact wording to be decided.
 
@@ -79,7 +78,7 @@
 - [ ] **Hebrew language toggle** — full UI toggle between Hebrew and English.
 - [ ] **Spam / fake event submissions** — no verification exists; anyone can post anything. Options: admin approval before events go live, or a "Report this event" button for visitors.
 - [ ] **Save event / reminder** — visitors can share but not save an event or get a reminder. Common feature for event sites.
-- [ ] **Image size limit** — enforce a hard file size limit on image upload (not just a warning). Prevents large files from slowing the site and consuming Supabase storage.
+- [x] **Image size limit + Storage cleanup** — 2MB hard limit on upload enforced in both submit and edit forms with clear error message. Images now deleted from Supabase Storage on all delete paths: admin delete, organizer remove completely, image replace, image removal in edit form. deleteStorageImage() helper added. *(Session 14, Mar 14 2026)*
 - [ ] **Location field UI improvement** — the relationship between "Online Event" checkbox and the city dropdown is not clear enough. A first-time user may not understand it's an either/or choice. Consider redesigning as two clear options (e.g. toggle or radio buttons: "In Person" / "Online") with the city dropdown only appearing for in-person, and a clearer visual separation or label like "or" between them.
 - [ ] **Submission guidelines** — add content rules explaining what is and isn't allowed on the site. Likely to live on the About page. Exact wording to be decided.
 
