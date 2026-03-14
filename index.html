@@ -541,8 +541,10 @@
       gap: 8px;
       flex-wrap: wrap;
     }
+    /* Hide disclaimer on mobile - prevents submit button from being squeezed */
+    .submit-disclaimer { display: none; }
     .form-actions .btn-secondary,
-    .form-actions .btn-primary { flex: 1; text-align: center; font-size: 13px; min-height: 48px; }
+    .form-actions .btn-primary { flex: 1; text-align: center; font-size: 13px; min-height: 48px; white-space: nowrap; }
     .btn-primary, .btn-secondary, .btn-danger { min-height: 48px; touch-action: manipulation; }
     .edit-cancel-bar {
       flex-direction: column;
@@ -1063,8 +1065,8 @@
     <div class="form-actions">
       <button class="btn-secondary" onclick="showPage('page-home')">Cancel</button>
       <div style="display:flex; align-items:center; gap:12px;">
-        <span style="font-size:11px; color:var(--gray-600);">By submitting you confirm all details are accurate</span>
-        <button class="btn-primary" id="submit-btn" onclick="submitEvent()">Add Event →</button>
+        <span class="submit-disclaimer" style="font-size:11px; color:var(--gray-600);">By submitting you confirm all details are accurate</span>
+        <button class="btn-primary" id="submit-btn" onclick="submitEvent()" style="white-space:nowrap; flex-shrink:0;">Add Event →</button>
       </div>
     </div>
   </div>
@@ -1415,8 +1417,8 @@
     <div class="edit-cancel-bar">
       <button class="btn-danger" onclick="openCancelConfirm()" style="display:flex; align-items:center; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg> Cancel Event</button>
       <div class="btn-right">
-        <button class="btn-secondary" onclick="editFromAdmin ? loadAdminPage() : (initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); }))">Discard Changes</button>
-        <button class="btn-primary" id="save-btn" onclick="saveEvent()">Save Changes →</button>
+        <button class="btn-secondary" style="white-space:nowrap;" onclick="editFromAdmin ? loadAdminPage() : (initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); }))">Discard Changes</button>
+        <button class="btn-primary" id="save-btn" style="white-space:nowrap;" onclick="saveEvent()">Save Changes →</button>
       </div>
     </div>
   </div>
