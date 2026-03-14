@@ -66,6 +66,7 @@
   /* Mobile browser resets */
   a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
   button, input, select, textarea { -webkit-appearance: none; appearance: none; }
+  input[type="checkbox"], input[type="radio"] { -webkit-appearance: auto; appearance: auto; }
   img { max-width: 100%; height: auto; }
   body { font-family: 'Nunito', 'Assistant', sans-serif; background: var(--cream); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); color: var(--gray-800); min-height: 100vh; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   * { box-sizing: border-box; }
@@ -2229,6 +2230,25 @@ function getAudienceValues(prefix) {
   return Array.from(checked).map(c => c.value).join(', ');
 }
 
+function syncAudienceSelectionState(prefix) {
+  const allAges = document.querySelector(`input[name="${prefix}-audience"][value="All Ages"]`);
+  const audienceChecks = document.querySelectorAll(`input[name="${prefix}-audience"]`);
+  if (!allAges || !audienceChecks.length) return;
+
+  if (allAges.checked) {
+    audienceChecks.forEach(c => {
+      if (c.value !== 'All Ages') {
+        c.checked = false;
+        c.disabled = true;
+      }
+    });
+  } else {
+    audienceChecks.forEach(c => {
+      if (c.value !== 'All Ages') c.disabled = false;
+    });
+  }
+}
+
 function handleAllAges(cb, prefix) {
   if (cb.checked) {
     // Uncheck all specific options
@@ -2236,6 +2256,7 @@ function handleAllAges(cb, prefix) {
       if (c.value !== 'All Ages') c.checked = false;
     });
   }
+  syncAudienceSelectionState(prefix);
 }
 
 function handleSpecificAudience(cb, prefix) {
@@ -2244,6 +2265,7 @@ function handleSpecificAudience(cb, prefix) {
     const allAges = document.querySelector(`input[name="${prefix}-audience"][value="All Ages"]`);
     if (allAges) allAges.checked = false;
   }
+  syncAudienceSelectionState(prefix);
 }
 
 function handleCityOther(selectId, otherId) {
@@ -2424,6 +2446,7 @@ function resetSubmitForm() {
   });
   document.getElementById('s-type').value = '';
   document.querySelectorAll('input[name="s-audience"]').forEach(c => c.checked = false);
+  syncAudienceSelectionState('s');
   document.getElementById('s-city').value = '';
   const sOnline = document.getElementById('s-is-online');
   if (sOnline) { sOnline.value = 'false'; setLocationType('inperson', 's'); }
@@ -2504,6 +2527,7 @@ async function loadEditPage(editKey, fromAdmin = false) {
     document.querySelectorAll('input[name="e-audience"]').forEach(cb => {
       cb.checked = eAudiences.includes(cb.value);
     });
+    syncAudienceSelectionState('e');
     document.getElementById('e-desc').value = e.description || '';
     document.getElementById('e-reg-link').value = e.registration_link || '';
     document.getElementById('e-email-reglink').value = e.contact_email || '';
