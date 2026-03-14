@@ -28,6 +28,7 @@
 
 ## Priority 3 — Nice to Have
 - [ ] **Accessibility audit** — WCAG color contrast, font sizes, keyboard navigation, screen reader support.
+- [ ] **Tagline under site name** — add a short tagline beneath "Atlanta IL Community Events" in the header. No community identity mentioned explicitly (safety first). Options discussed: (1) "Where the community connects" - meaningful, warm, says what the site is; (2) "Never miss what's happening" - FOMO-driven, personal; (3) "All the events. One place." - clear but cold; (4) "Your community, your events" - good but repetitive. Leaning toward option 1 — fits the warm tone of the About page better than FOMO. Decision pending.
 - [ ] **Phone number format validation** — confirm edge cases (international numbers, paste).
 - [x] **Repeat organizer memory** — added autocomplete="name" and autocomplete="email" to organizer fields. Browser will suggest previously typed values from the second submission onward. *(Session 13, Mar 13 2026)*
 - [ ] **Google indexing** — add sitemap.xml and robots.txt so the site appears in Google search results (e.g. "Israeli events Atlanta"). Skipped for now for privacy reasons — revisit in the future.
