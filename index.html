@@ -1566,10 +1566,39 @@ function isPast(dateStr) {
 // ═══════════════════════════════════════════════════════════
 async function loadEvents() {
   const container = document.getElementById('events-container');
+  const CACHE_KEY = 'events_cache';
+  const CACHE_TIME_KEY = 'events_cache_time';
+  const CACHE_MAX_AGE = 5 * 60 * 1000; // 5 minutes
+
+  // Show cached events instantly if available
+  try {
+    const cached = sessionStorage.getItem(CACHE_KEY);
+    const cachedTime = sessionStorage.getItem(CACHE_TIME_KEY);
+    const isFresh = cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_MAX_AGE;
+    if (cached && isFresh) {
+      allEvents = JSON.parse(cached);
+      renderEvents();
+      // Still fetch in background to update cache silently
+      sbFetch('events?order=event_date.asc,start_time.asc&select=id,name,event_date,start_time,end_time,event_type,audience,cost,amount,description,registration_link,city,full_address,address_public,organizer_name,org_type,contact_email,contact_phone,show_email,show_phone,image_url,status')
+        .then(fresh => {
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
+          sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+          allEvents = fresh;
+          renderEvents();
+        }).catch(() => {});
+      return;
+    }
+  } catch(e) {}
+
+  // No cache — show skeleton and fetch
   const skeletonCard = `<div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>`;
   container.innerHTML = skeletonCard + skeletonCard + skeletonCard;
   try {
     allEvents = await sbFetch('events?order=event_date.asc,start_time.asc&select=id,name,event_date,start_time,end_time,event_type,audience,cost,amount,description,registration_link,city,full_address,address_public,organizer_name,org_type,contact_email,contact_phone,show_email,show_phone,image_url,status');
+    try {
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify(allEvents));
+      sessionStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+    } catch(e) {}
     const knownCities = ['Alpharetta','Atlanta','Brookhaven','Cumming','Duluth','Dunwoody','East Cobb','Johns Creek','Peachtree Corners','Roswell','Sandy Springs','Suwanee'];
     const hasOther = allEvents.some(e => e.city && !knownCities.includes(e.city));
     document.getElementById('city-filter-other').style.display = hasOther ? 'block' : 'none';
@@ -2263,6 +2292,7 @@ async function submitEvent() {
   const btn = document.getElementById('submit-btn');
   const errDiv = document.getElementById('submit-error');
   errDiv.style.display = 'none';
+  try { sessionStorage.removeItem('events_cache'); sessionStorage.removeItem('events_cache_time'); } catch(e) {}
 
   const name = document.getElementById('s-name').value.trim();
   const date = buildDateValue('s');
@@ -2534,6 +2564,7 @@ async function saveEvent() {
   const btn = document.getElementById('save-btn');
   const errDiv = document.getElementById('edit-error');
   errDiv.style.display = 'none';
+  try { sessionStorage.removeItem('events_cache'); sessionStorage.removeItem('events_cache_time'); } catch(e) {}
 
   const name = document.getElementById('e-name').value.trim();
   const date = buildDateValue('e');
