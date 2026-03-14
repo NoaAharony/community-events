@@ -6,16 +6,24 @@ const DEFAULT_DESCRIPTION = 'Events for the Israeli community in Atlanta';
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const path = url.pathname;
     const eventId = url.searchParams.get('event');
 
-    // For non-HTML requests (images, fonts, etc.) — serve directly
-    const path = url.pathname;
+    // For all non-HTML static assets — pass through directly, no processing
     if (path !== '/' && !path.endsWith('.html')) {
       return env.ASSETS.fetch(request);
     }
 
-    // Get the base HTML from static assets
-    const assetResponse = await env.ASSETS.fetch(request);
+    // Fetch index.html by explicit URL to avoid redirect loop
+    // Never pass the original request — that causes infinite loop with run_worker_first
+    const indexUrl = new URL('/', url.origin);
+    const assetRequest = new Request(indexUrl.toString(), { method: 'GET' });
+    let assetResponse;
+    try {
+      assetResponse = await env.ASSETS.fetch(assetRequest);
+    } catch(e) {
+      return new Response('Site unavailable', { status: 503 });
+    }
     const html = await assetResponse.text();
     const BANNER_URL = `${url.origin}/site_banner.png`;
 
