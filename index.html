@@ -151,8 +151,10 @@
   .site-footer { background: linear-gradient(160deg, #1e4068, #0f2035); color: rgba(255,255,255,0.7); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; margin-top: 40px; font-size: 13px; flex-wrap: wrap; gap: 12px; }
   #page-home > .site-footer { position: fixed; left: 0; right: 0; bottom: 0; margin-top: 0; z-index: 98; }
   .footer-links { display: flex; gap: 24px; }
-  .footer-link { color: rgba(255,255,255,0.7); cursor: pointer; transition: color 0.15s; }
+  .footer-link { color: rgba(255,255,255,0.92); font-weight: 700; font-size: 13px; cursor: pointer; transition: color 0.15s; letter-spacing: 0.2px; }
   .footer-link:hover { color: var(--gold-light); }
+  .footer-link.footer-add { color: var(--gold-light); border: 1.5px solid rgba(232,184,106,0.5); padding: 5px 13px; border-radius: 20px; font-size: 12.5px; transition: all 0.15s; }
+  .footer-link.footer-add:hover { background: var(--gold); color: white; border-color: var(--gold); }
 
   .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 24px 16px; }
   .overlay.open { display: flex; }
@@ -587,7 +589,8 @@
       padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
     }
     .footer-links { gap: 16px; }
-    .footer-link { min-height: 36px; display: flex; align-items: center; }
+    .footer-link { min-height: 44px; display: flex; align-items: center; font-size: 13.5px; }
+    .footer-link.footer-add { min-height: 40px; font-size: 13px; }
 
     /* === ABOUT === */
     .about-body { padding: 20px 14px; }
@@ -734,7 +737,7 @@
   <footer class="site-footer">
     <div class="footer-links">
       <span class="footer-link" onclick="showPage('page-about')">About</span>
-      <span class="footer-link" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</span>
+      <span class="footer-link footer-add" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</span>
     </div>
     <span style="font-size:11px; color:rgba(255,255,255,0.3); font-style:italic;">Community links coming soon</span>
   </footer>
@@ -1474,7 +1477,7 @@
   <footer class="site-footer">
     <div class="footer-links">
       <span class="footer-link" onclick="showPage('page-about')">About</span>
-      <span class="footer-link" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</span>
+      <span class="footer-link footer-add" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</span>
     </div>
     <span style="font-size:11px; color:rgba(255,255,255,0.3); font-style:italic;">Community links coming soon</span>
   </footer>
