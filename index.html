@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>Atlanta IL Community Events</title>
 <!-- Preconnect to Supabase only - fonts are now self-hosted -->
 <link rel="preconnect" href="https://pscedpbjswyajgledixu.supabase.co">
@@ -322,72 +322,194 @@
 
   .inline-error { background: #fef0f0; border: 1px solid #f0c0c0; border-radius: 4px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 12px; }
 
+  /* ─────────────────────────────────────────────────────────
+     RESPONSIVE BREAKPOINT: tablets and below (≤ 768px)
+     ───────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    /* Prevent iOS/Android text zoom on orientation change */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     RESPONSIVE BREAKPOINT: mobile (≤ 600px)
+     Covers: iPhone SE (375px), iPhone 14/15 (390px),
+     Samsung S22 (360/412px), Pixel 7 (412px), etc.
+     ───────────────────────────────────────────────────────── */
   @media (max-width: 600px) {
+
     /* === TOPBAR === */
-    .topbar { padding: 0 14px; height: 52px; z-index: 1000; }
+    .topbar {
+      padding: 0 12px 0 14px;
+      height: 52px;
+      z-index: 1000;
+    }
     .site-name { font-size: 14px; }
-    .btn-submit-top { font-size: 11px; padding: 8px 10px; min-height: 36px; }
+    .btn-submit-top {
+      font-size: 11px;
+      padding: 7px 10px;
+      min-height: 40px;
+      min-width: 80px;
+      flex-shrink: 0;
+    }
 
     /* === FILTER BAR === */
-    .filter-bar { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 8px 14px; gap: 6px; scrollbar-width: none; top: 52px; z-index: 999; }
+    .filter-bar {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      padding: 8px 12px;
+      gap: 6px;
+      scrollbar-width: none;
+      top: 52px;
+      z-index: 999;
+    }
     .filter-bar::-webkit-scrollbar { display: none; }
     .filter-label { display: none; }
-    .filter-chip { white-space: nowrap; flex-shrink: 0; font-size: 11.5px; padding: 7px 11px; min-height: 36px; }
+    .filter-chip {
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-size: 12px;
+      padding: 8px 12px;
+      min-height: 40px;
+      touch-action: manipulation;
+    }
+
     /* === MAIN CONTENT === */
-    .main { padding: 16px 12px; }
-    #page-home #events-container { padding-bottom: 120px; }
-    .results-bar { margin-bottom: 14px; }
-    .date-header-text { font-size: 11px; letter-spacing: 2px; }
+    .main { padding: 14px 12px; }
+    #page-home #events-container { padding-bottom: 130px; }
+    .results-bar { margin-bottom: 12px; }
+    .results-count { font-size: 12px; }
+    .date-header-text { font-size: 11px; letter-spacing: 1.5px; }
 
     /* === EVENT CARDS === */
-    .event-row { border-radius: 10px; margin-bottom: 10px; }
-    .row-thumb { width: 72px; min-width: 72px; }
-    .row-thumb img { width: 72px; }
+    .event-row {
+      border-radius: 10px;
+      margin-bottom: 10px;
+      /* Prevent horizontal overflow on small screens */
+      overflow: hidden;
+    }
+    .row-thumb { width: 72px; min-width: 72px; max-width: 72px; }
+    .row-thumb img { width: 72px; min-width: 72px; }
     .row-thumb-placeholder { font-size: 10px; }
-    /* right padding accounts for arrow (36px) + share btn (36px) + gap */
-    .row-main { padding: 9px 80px 9px 10px; min-width: 0; overflow: hidden; }
-    .row-title { font-size: 13px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-    .row-meta { font-size: 11.5px; gap: 4px; margin-bottom: 5px; }
-    .row-organizer { margin-bottom: 6px; }
-    .row-avatar { width: 20px; height: 20px; font-size: 9px; }
-    .row-org-name { font-size: 10.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
-    .row-tags { gap: 4px; padding-top: 6px; }
-    .tag { font-size: 9.5px; padding: 2px 7px; }
-    .row-arrow { width: 36px; flex: 0 0 36px; }
-    .share-card-btn { top: 8px; right: 40px; width: 36px; height: 36px; }
-    .share-card-btn svg { width: 12px; height: 12px; }
 
-    /* === EVENT MODAL - slides up from bottom === */
-    .overlay { padding: 0; align-items: flex-end; }
-    .modal { border-radius: 16px 16px 0 0; max-height: calc(100dvh - 100px); width: 100%; max-width: 100%; }
-    .modal-header { border-radius: 16px 16px 0 0; padding: 12px 16px; }
+    /* right-side: arrow col (36px) + share btn (44px) + gap */
+    .row-main {
+      padding: 10px 10px 10px 10px;
+      /* Let the absolute-positioned share+arrow sit on top */
+      padding-right: 82px;
+      min-width: 0;
+      overflow: hidden;
+      flex: 1;
+    }
+    .row-title {
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-height: 1.35;
+    }
+    .row-meta { font-size: 11.5px; gap: 3px; margin-bottom: 5px; flex-wrap: wrap; }
+    .row-meta .meta-free-badge { font-size: 10px; padding: 2px 7px; }
+    .row-organizer { margin-bottom: 5px; }
+    .row-avatar { width: 20px; height: 20px; font-size: 9px; flex-shrink: 0; }
+    .row-org-name {
+      font-size: 10.5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      /* Don't let organizer name push into share button */
+      max-width: calc(100% - 28px);
+    }
+    .row-tags { gap: 4px; padding-top: 5px; flex-wrap: wrap; }
+    .tag { font-size: 9.5px; padding: 2px 7px; }
+
+    /* Arrow column */
+    .row-arrow {
+      width: 36px;
+      flex: 0 0 36px;
+      min-width: 36px;
+      font-size: 20px;
+    }
+
+    /* Share button - larger tap target, reliable positioning */
+    .share-card-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 40px;        /* sits left of the arrow column */
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      z-index: 3;
+    }
+    .share-card-btn svg { width: 13px; height: 13px; }
+
+    /* === EVENT MODAL === */
+    /* On mobile: slides up from bottom edge */
+    .overlay {
+      padding: 0;
+      align-items: flex-end;
+    }
+    .modal {
+      border-radius: 18px 18px 0 0;
+      /* Use dvh for Android Chrome, fall back to vh */
+      max-height: calc(100dvh - 96px);
+      max-height: calc(100vh - 96px);
+      width: 100%;
+      max-width: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .modal-header {
+      border-radius: 18px 18px 0 0;
+      padding: 14px 16px;
+      /* Sticky header so title stays visible while scrolling modal */
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
     .modal-header h3 { font-size: 14px; }
-    /* Bigger close button tap target on mobile */
-    .modal-close-btn { min-width: 44px; min-height: 44px; font-size: 18px; }
-    .modal-body { padding: 14px 16px calc(24px + env(safe-area-inset-bottom, 0px)); }
+    .modal-close-btn {
+      min-width: 44px;
+      min-height: 44px;
+      font-size: 20px;
+      touch-action: manipulation;
+    }
+    .modal-body {
+      padding: 14px 16px;
+      padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    }
     .modal-event-img { height: 130px; border-radius: 8px; }
     .modal-event-img-wrap { margin-bottom: 12px; }
-    .modal-event-title { font-size: 17px; margin-bottom: 10px; }
+    .modal-event-title { font-size: 18px; margin-bottom: 10px; }
     .modal-fields { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
     .modal-field.full { grid-column: span 2; }
     .modal-field label { font-size: 9px; }
     .modal-field span { font-size: 13px; }
-    .modal-desc { font-size: 13px; padding: 8px 11px; margin-bottom: 10px; }
-    .modal-action-btn { min-height: 44px; font-size: 13px; }
+    .modal-desc { font-size: 13px; padding: 9px 12px; margin-bottom: 10px; }
+    .modal-action-btn { min-height: 48px; font-size: 14px; border-radius: 8px; }
 
-    /* Modal bottom panel - stack vertically */
+    /* Modal bottom panel - stack vertically on mobile */
     .modal-bottom { padding-top: 12px; margin-top: 6px; }
-    .modal-bottom-row { grid-template-columns: 1fr; gap: 12px; }
+    .modal-bottom-row { grid-template-columns: 1fr; gap: 10px; }
     .modal-bottom-divider { display: none; }
     .modal-bottom-col-label { font-size: 9px; }
     .modal-bottom-col-value { font-size: 12.5px; }
-    .modal-contact-btn-main, .modal-contact-btn-ghost { font-size: 12px; padding: 8px 10px; min-height: 44px; }
-    .share-modal-btn { font-size: 12.5px; padding: 8px 12px; min-height: 44px; }
+    .modal-contact-btn-main,
+    .modal-contact-btn-ghost { font-size: 13px; padding: 10px 12px; min-height: 48px; border-radius: 8px; }
+    .share-modal-btn { font-size: 13px; padding: 10px 14px; min-height: 48px; border-radius: 8px; }
+    .modal-inline-btn { padding: 7px 13px; font-size: 12px; min-height: 36px; }
+
+    /* Admin table scrolls horizontally */
     .admin-table { min-width: 600px; }
 
-    /* === ADDRESS REQUEST MODAL === */
+    /* === ADDRESS / CONTACT MODAL === */
     .addr-modal-header { padding: 14px 16px; }
-    .addr-modal-icon { width: 30px; height: 30px; }
+    .addr-modal-icon { width: 32px; height: 32px; }
 
     /* === FORMS === */
     .page-header { padding: 14px 16px; }
@@ -395,39 +517,77 @@
     .page-header p { font-size: 12px; }
     .form-body { padding: 14px 12px; }
     .form-section { padding: 14px; margin-bottom: 16px; }
-    .form-section-title { margin: -14px -14px 14px -14px; font-size: 10px; padding: 8px 14px; }
-    .form-row { grid-template-columns: 1fr; }
-    .form-input { font-size: 16px; }
-    /* Sticky form actions respect home bar on iPhone */
-    .form-actions { padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px)); gap: 8px; flex-wrap: wrap; }
-    .form-actions .btn-secondary, .form-actions .btn-primary { flex: 1; text-align: center; font-size: 13px; min-height: 44px; }
-    .btn-primary, .btn-secondary, .btn-danger { min-height: 44px; }
-    .edit-cancel-bar { flex-direction: column; gap: 8px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px)); }
+    .form-section-title {
+      margin: -14px -14px 14px -14px;
+      font-size: 10px;
+      padding: 8px 14px;
+    }
+    /* Single-column form rows on mobile */
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+    /* 16px prevents iOS auto-zoom on input focus */
+    .form-input, select.form-input, textarea.form-input { font-size: 16px; }
+    /* Touch-friendly inputs */
+    .form-input {
+      padding: 10px 12px;
+      min-height: 44px;
+    }
+    /* Sticky bottom form actions - iPhone home bar safe */
+    .form-actions {
+      padding: 10px 12px;
+      padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .form-actions .btn-secondary,
+    .form-actions .btn-primary { flex: 1; text-align: center; font-size: 13px; min-height: 48px; }
+    .btn-primary, .btn-secondary, .btn-danger { min-height: 48px; touch-action: manipulation; }
+    .edit-cancel-bar {
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 12px;
+      padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    }
     .edit-cancel-bar .btn-right { width: 100%; }
     .edit-cancel-bar .btn-right button { flex: 1; }
     .edit-cancel-bar .btn-secondary { width: 100%; text-align: center; }
-    .toggle-btn { font-size: 12px; padding: 8px; min-height: 44px; }
-    .upload-area { padding: 20px; }
+    .toggle-btn { font-size: 12px; padding: 10px 8px; min-height: 48px; touch-action: manipulation; }
+    .upload-area { padding: 20px 14px; }
+    .field-hint { font-size: 12px; }
+    .field-hint.contact-important { font-size: 12px; }
 
     /* === CONFIRMATION === */
-    .confirmation-actions { flex-direction: column; }
+    .confirmation-actions { flex-direction: column; gap: 8px; }
+    .confirmation-actions .btn-primary,
+    .confirmation-actions .btn-secondary { min-height: 48px; width: 100%; }
     .confirmation-body { padding: 16px; }
-    .conf-checkmark { width: 36px; height: 36px; }
+    .conf-checkmark { width: 40px; height: 40px; }
 
     /* === ERROR PAGES === */
     .error-page-styled { margin: 12px; }
     .error-hero-block { padding: 20px 16px; }
     .error-content-block { padding: 16px; }
-    .error-actions-block { flex-direction: column; }
-    .error-actions-block button { width: 100%; min-height: 44px; }
+    .error-actions-block { flex-direction: column; align-items: stretch; }
+    .error-actions-block button { width: 100%; min-height: 48px; }
 
     /* === ADMIN === */
-    .admin-stats { grid-template-columns: 1fr 1fr; }
+    .admin-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-num { font-size: 20px; }
 
     /* === FOOTER === */
-    .site-footer { flex-direction: column; align-items: flex-start; padding: 16px 14px; gap: 8px; font-size: 12px; }
-    #page-home > .site-footer { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+    .site-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 14px 14px;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      gap: 8px;
+      font-size: 12px;
+    }
+    /* Fixed home footer accounts for iPhone home bar */
+    #page-home > .site-footer {
+      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    }
     .footer-links { gap: 16px; }
+    .footer-link { min-height: 36px; display: flex; align-items: center; }
 
     /* === ABOUT === */
     .about-body { padding: 20px 14px; }
@@ -435,22 +595,53 @@
 
     /* === MISC === */
     .contact-phone-desktop { display: none; }
-    .cancel-modal .modal-body > div[style*="flex-direction:column"] { gap: 8px; }
-    .notice-bar { padding: 12px 14px; font-size: 13px; }
+    .notice-bar { padding: 12px 13px; font-size: 12.5px; }
     .notice-bar-text strong { font-size: 13px; }
     .empty-box-body { padding: 20px 16px; }
 
     /* === LIGHTBOX === */
-    .lightbox { padding: 60px 12px 12px; }
-    .lightbox img { max-height: calc(100dvh - 80px); border-radius: 4px; }
-    .lightbox-close { top: 12px; right: 12px; width: 44px; height: 44px; font-size: 18px; }
+    .lightbox { padding: 60px 10px 10px; }
+    .lightbox img { max-height: calc(100dvh - 80px); max-height: calc(100vh - 80px); border-radius: 4px; }
+    .lightbox-close { top: 12px; right: 12px; width: 48px; height: 48px; font-size: 20px; }
   }
+
+  /* ─────────────────────────────────────────────────────────
+     NARROW PHONES: iPhone SE, older Android (≤ 375px)
+     ───────────────────────────────────────────────────────── */
   @media (max-width: 375px) {
+    .topbar { padding: 0 10px 0 12px; }
+    .site-name { font-size: 13px; }
+    .btn-submit-top { font-size: 10px; padding: 6px 8px; min-width: 70px; }
+
     .modal-fields { grid-template-columns: 1fr; }
     .modal-field.full { grid-column: span 1; }
     .modal-event-img, .modal-event-img-wrap { height: 110px; }
-    .modal-event-title { font-size: 15px; }
+    .modal-event-title { font-size: 16px; }
+
+    /* Extra-narrow cards: shrink thumb, tighten padding */
+    .row-thumb { width: 60px; min-width: 60px; max-width: 60px; }
+    .row-thumb img { width: 60px; min-width: 60px; }
+    .row-main { padding-right: 78px; }
+    .row-title { font-size: 12.5px; }
+    .row-meta { font-size: 11px; }
+
+    .filter-chip { font-size: 11.5px; padding: 7px 10px; }
   }
+
+  /* ─────────────────────────────────────────────────────────
+     LARGE PHONES / PHABLETS: Samsung S22 Ultra, Note
+     (411px–480px, more room but still mobile)
+     ───────────────────────────────────────────────────────── */
+  @media (min-width: 401px) and (max-width: 600px) {
+    .row-thumb { width: 80px; min-width: 80px; max-width: 80px; }
+    .row-thumb img { width: 80px; min-width: 80px; }
+    .row-main { padding-right: 84px; }
+    .row-title { font-size: 14px; }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     DESKTOP ONLY: hide mobile-only elements
+     ───────────────────────────────────────────────────────── */
   @media (min-width: 601px) {
     .contact-call-mobile { display: none; }
   }
@@ -1808,6 +1999,21 @@ function renderEventRow(e) {
 function positionOverlayModalUnderToolbar(overlay, modal) {
   if (!overlay || !modal) return;
 
+  if (window.matchMedia('(max-width: 600px)').matches) {
+    // On mobile, modal slides up from bottom — no top-pinning needed.
+    // CSS handles the bottom-sheet style. Just reset any JS overrides.
+    overlay.style.alignItems = '';
+    overlay.style.justifyContent = '';
+    overlay.style.padding = '';
+    modal.style.maxHeight = '';
+    modal.style.width = '';
+    modal.style.maxWidth = '';
+    modal.style.marginLeft = '';
+    modal.style.marginRight = '';
+    return;
+  }
+
+  // Tablet (601–768px): pin below toolbar
   if (window.matchMedia('(max-width: 768px)').matches) {
     const activeFilterBar = document.querySelector('.page-view.active .filter-bar');
     const homeFilterBar = document.querySelector('#page-home .filter-bar');
@@ -1821,7 +2027,8 @@ function positionOverlayModalUnderToolbar(overlay, modal) {
     overlay.style.paddingRight = '16px';
     overlay.style.paddingBottom = 'env(safe-area-inset-bottom, 16px)';
     overlay.style.paddingLeft = '16px';
-    modal.style.maxHeight = `calc(100dvh - ${topOffset}px - env(safe-area-inset-bottom, 16px))`;
+    // dvh fallback to vh for Samsung Internet compatibility
+    modal.style.maxHeight = `calc(100vh - ${topOffset}px - 16px)`;
     modal.style.width = '100%';
     modal.style.maxWidth = '520px';
     modal.style.marginLeft = 'auto';
@@ -1829,6 +2036,7 @@ function positionOverlayModalUnderToolbar(overlay, modal) {
     return;
   }
 
+  // Desktop — reset to CSS defaults
   overlay.style.alignItems = '';
   overlay.style.justifyContent = '';
   overlay.style.padding = '';
@@ -1851,13 +2059,13 @@ function positionAddressModalForMobile() {
   if (!overlay || !modal) return;
 
   if (window.matchMedia('(max-width: 768px)').matches) {
-    // Use safe centered positioning (not toolbar-anchored)
-    // because this modal opens on top of the event modal and the toolbar
-    // may be scrolled off-screen or measured incorrectly on iPhone
+    // Safe centered positioning — this modal stacks on top of the event modal,
+    // so toolbar measurement would be unreliable
     overlay.style.alignItems = 'center';
     overlay.style.justifyContent = 'center';
-    overlay.style.padding = '16px 16px env(safe-area-inset-bottom, 16px) 16px';
-    modal.style.maxHeight = 'calc(100svh - 32px)';
+    overlay.style.padding = '16px';
+    // Use vh as primary (100svh not supported on Samsung Internet < 17)
+    modal.style.maxHeight = 'calc(100vh - 32px)';
     modal.style.width = '100%';
     modal.style.maxWidth = '520px';
     modal.style.marginLeft = 'auto';
@@ -2800,7 +3008,7 @@ function updateFilterChip(id, active) { document.getElementById(id).classList.to
 function updateDropdownSelected(ddId, label) { document.querySelectorAll(`#${ddId} .dropdown-item`).forEach(i => i.classList.toggle('selected', i.textContent.trim() === label)); }
 function closeAllDropdowns() {
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open'));
-  document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
+  document.querySelectorAll('.dropdown-menu').forEach(m => { m.style.display = 'none'; });
 }
 function clearFilters() { filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'All Upcoming'; document.getElementById('city-label').textContent = 'Location'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.add('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); renderEvents(); }
 
@@ -2812,6 +3020,7 @@ function toggleDropdown(id, e) {
 
   // Close all first
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
 
   if (!isOpen) {
     const rect = chip.getBoundingClientRect();
@@ -2822,12 +3031,21 @@ function toggleDropdown(id, e) {
     }
     menu.style.position = 'fixed';
     menu.style.zIndex = '99999';
-    menu.style.top = (rect.bottom + 4) + 'px';
-    // Keep within viewport horizontally
-    const menuWidth = 180;
-    const left = Math.min(rect.left, window.innerWidth - menuWidth - 8);
-    menu.style.left = Math.max(8, left) + 'px';
+
+    // Position below the chip
+    const topPos = rect.bottom + 4;
+    // Clamp to viewport bottom
     menu.style.display = 'block';
+    const menuH = menu.offsetHeight;
+    const viewH = window.innerHeight;
+    menu.style.top = (topPos + menuH > viewH - 8) ? Math.max(8, viewH - menuH - 8) + 'px' : topPos + 'px';
+
+    // Keep within viewport horizontally - account for different screen widths (Samsung S22, etc)
+    const menuWidth = Math.max(menu.scrollWidth, 160);
+    const rawLeft = rect.left;
+    const clampedLeft = Math.max(8, Math.min(rawLeft, window.innerWidth - menuWidth - 8));
+    menu.style.minWidth = menuWidth + 'px';
+    menu.style.left = clampedLeft + 'px';
     chip.classList.add('open');
   }
 }
