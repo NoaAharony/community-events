@@ -307,8 +307,8 @@
   .loading-spinner { text-align: center; padding: 60px; font-size: 13px; color: var(--gray-400); }
   .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
   @keyframes shimmer { 0% { background-position: -600px 0; } 100% { background-position: 600px 0; } }
-  .skeleton-card { display: flex; background: white; border-radius: 14px; margin-bottom: 14px; overflow: hidden; border-left: 3.5px solid var(--gold); box-shadow: 0 2px 8px rgba(0,0,0,0.05); height: 90px; }
-  .skeleton-thumb { width: 72px; min-width: 72px; background: var(--gray-100); }
+  .skeleton-card { display: flex; background: white; border-radius: 14px; margin-bottom: 14px; overflow: hidden; border: 1px solid var(--gray-200); box-shadow: 0 2px 8px rgba(0,0,0,0.04); height: 90px; opacity: 0.7; }
+  .skeleton-thumb { width: 72px; min-width: 72px; background: var(--gray-200); }
   .skeleton-body { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
   .skeleton-line { height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 600px 100%; animation: shimmer 1.4s infinite; }
   .skeleton-line.short { width: 40%; }
@@ -735,7 +735,6 @@
   </div>
 
   <div class="main" id="events-container">
-    <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
     <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
     <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
   </div>
@@ -1797,7 +1796,7 @@ async function loadEvents() {
 
   // No cache — show skeleton and fetch
   const skeletonCard = `<div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>`;
-  container.innerHTML = skeletonCard + skeletonCard + skeletonCard;
+  container.innerHTML = skeletonCard + skeletonCard;
   try {
     allEvents = await sbFetch('events?order=event_date.asc,start_time.asc&select=id,name,event_date,start_time,end_time,event_type,audience,cost,amount,description,registration_link,city,full_address,address_public,organizer_name,org_type,contact_email,contact_phone,show_email,show_phone,image_url,status');
     try {
