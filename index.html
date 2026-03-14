@@ -143,11 +143,11 @@
   .empty-desc-header { font-size: 13px; color: rgba(255,255,255,0.55); position: relative; z-index: 1; }
   .empty-desc { font-size: 13px; color: var(--gray-600); line-height: 1.7; margin-bottom: 20px; }
 
-  .btn-primary { background: var(--blue); color: white; border: none; padding: 10px 22px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: background 0.2s; }
+  .btn-primary { background: var(--blue); color: white; border: none; padding: 10px 22px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: background 0.2s; white-space: nowrap; }
   .btn-primary:hover { background: var(--blue-light); }
-  .btn-secondary { background: var(--gray-200); color: var(--gray-800); border: none; padding: 10px 22px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 4px; transition: background 0.2s; }
+  .btn-secondary { background: var(--gray-200); color: var(--gray-800); border: none; padding: 10px 22px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 4px; transition: background 0.2s; white-space: nowrap; }
   .btn-secondary:hover { background: var(--gray-400); color: white; }
-  .btn-danger { background: var(--red); color: white; border: none; padding: 10px 18px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; }
+  .btn-danger { background: var(--red); color: white; border: none; padding: 10px 18px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; white-space: nowrap; }
 
   .site-footer { background: linear-gradient(160deg, #1e4068, #0f2035); color: rgba(255,255,255,0.7); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; margin-top: 40px; font-size: 13px; flex-wrap: wrap; gap: 12px; }
   #page-home > .site-footer { position: fixed; left: 0; right: 0; bottom: 0; margin-top: 0; z-index: 98; }
@@ -1096,8 +1096,8 @@
           <div style="font-size:11px; color:var(--gray-600); margin-top:8px;">Save this link to edit or cancel your event at any time</div>
         </div>
         <div class="confirmation-actions">
-          <button class="btn-secondary" onclick="showPage('page-home'); loadEvents()">← Back to Events</button>
-          <button class="btn-primary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Another Event</button>
+          <button class="btn-secondary" style="white-space:nowrap;" onclick="showPage('page-home'); loadEvents()">← Back to Events</button>
+          <button class="btn-primary" style="white-space:nowrap;" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Another Event</button>
         </div>
       </div>
     </div>
@@ -1415,7 +1415,7 @@
     </div>
 
     <div class="edit-cancel-bar">
-      <button class="btn-danger" onclick="openCancelConfirm()" style="display:flex; align-items:center; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg> Cancel Event</button>
+      <button class="btn-danger" onclick="openCancelConfirm()" style="display:flex; align-items:center; gap:7px; white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg> Cancel Event</button>
       <div class="btn-right">
         <button class="btn-secondary" style="white-space:nowrap;" onclick="editFromAdmin ? loadAdminPage() : (initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); }))">Discard Changes</button>
         <button class="btn-primary" id="save-btn" style="white-space:nowrap;" onclick="saveEvent()">Save Changes →</button>
@@ -1439,8 +1439,8 @@
     <div class="error-content-block">
       <div class="error-note-block">If you submitted this event and still need to make changes, check your email for the original edit link that was sent to you.</div>
       <div class="error-actions-block">
-        <button class="btn-primary" onclick="initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); })">← Back to Events</button>
-        <button class="btn-secondary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add a New Event</button>
+        <button class="btn-primary" style="white-space:nowrap;" onclick="initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); })">← Back to Events</button>
+        <button class="btn-secondary" style="white-space:nowrap;" onclick="resetSubmitForm(); showPage('page-submit')">+ Add a New Event</button>
       </div>
     </div>
   </div>
@@ -1459,8 +1459,8 @@
     <div class="error-content-block">
       <div class="error-note-block">This event is no longer taking place. If you'd like to stay up to date with community events, head back to the main page.</div>
       <div class="error-actions-block">
-        <button class="btn-primary" onclick="initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); })">← Back to Events</button>
-        <button class="btn-secondary" onclick="resetSubmitForm(); showPage('page-submit')">+ Add a New Event</button>
+        <button class="btn-primary" style="white-space:nowrap;" onclick="initHomePage().then(() => { showPage('page-home'); resetUrlToHome(); })">← Back to Events</button>
+        <button class="btn-secondary" style="white-space:nowrap;" onclick="resetSubmitForm(); showPage('page-submit')">+ Add a New Event</button>
       </div>
     </div>
   </div>
@@ -1644,8 +1644,8 @@
       <p style="font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px;">Are you sure you want to permanently delete this event?</p>
       <div class="cancel-warning">This action cannot be undone. The event will be completely removed from the site.</div>
       <div style="display:flex; gap:10px; margin-top:16px;">
-        <button class="btn-danger" style="flex:1; padding:11px;" onclick="confirmAdminDelete()">Yes, Delete Permanently</button>
-        <button class="btn-secondary" style="flex:1; padding:11px;" onclick="closeModal('overlay-admin-delete')">No, Go Back</button>
+        <button class="btn-danger" style="flex:1; padding:11px; white-space:nowrap;" onclick="confirmAdminDelete()">Yes, Delete Permanently</button>
+        <button class="btn-secondary" style="flex:1; padding:11px; white-space:nowrap;" onclick="closeModal('overlay-admin-delete')">No, Go Back</button>
       </div>
     </div>
   </div>
