@@ -1707,6 +1707,7 @@ let filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'a
 let submitFormState = { cost: 'Free', addressPublic: false, orgType: 'Business', contactOptIn: false, imageFile: null };
 let editFormState = { cost: 'Free', addressPublic: true, orgType: 'Business', contactOptIn: false, imageFile: null, removeImage: false, eventId: null, editKey: null };
 let adminDeleteId = null;
+let adminDeleteImageUrl = null;
 let currentEditEventId = null;
 let editFromAdmin = false;
 
@@ -2316,6 +2317,29 @@ async function uploadImage(file, folder) {
   return `${SUPABASE_URL}/storage/v1/object/public/event-images/${filename}`;
 }
 
+// Extract filename from a Supabase Storage URL and delete it from the bucket.
+// Safe to call even if imageUrl is null/undefined — just does nothing.
+async function deleteStorageImage(imageUrl) {
+  if (!imageUrl) return;
+  try {
+    // URL format: .../storage/v1/object/public/event-images/events/123456.jpg
+    const marker = '/event-images/';
+    const idx = imageUrl.indexOf(marker);
+    if (idx === -1) return;
+    const filePath = imageUrl.slice(idx + marker.length);
+    await fetch(`${SUPABASE_URL}/storage/v1/object/event-images/${filePath}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      }
+    });
+  } catch (e) {
+    // Non-fatal — log but don't block the delete flow
+    console.warn('Storage image delete failed:', e.message);
+  }
+}
+
 function buildTimeValue(hourId, minId, ampmId) {
   const hour = document.getElementById(hourId).value;
   const min = document.getElementById(minId).value;
@@ -2729,7 +2753,8 @@ async function loadEditPage(editKey, fromAdmin = false) {
     editFormState = {
       cost: e.cost, addressPublic: e.address_public,
       orgType: e.org_type, contactOptIn: e.contact_opt_in,
-      imageFile: null, removeImage: false, editKey
+      imageFile: null, removeImage: false, editKey,
+      existingImageUrl: e.image_url || null
     };
 
     document.getElementById('e-name').value = e.name || '';
@@ -2868,8 +2893,12 @@ async function saveEvent() {
   try {
     let imageUrl = undefined;
     if (editFormState.imageFile) {
+      // Replacing image — delete the old one from Storage first
+      await deleteStorageImage(editFormState.existingImageUrl);
       imageUrl = await uploadImage(editFormState.imageFile, 'events');
     } else if (editFormState.removeImage) {
+      // Removing image — delete from Storage and set db to null
+      await deleteStorageImage(editFormState.existingImageUrl);
       imageUrl = null;
     }
 
@@ -2918,6 +2947,8 @@ function openCancelConfirm() {
 async function confirmCancelEvent(action) {
   try {
     if (action === 'remove') {
+      // Delete image from Storage before removing event
+      await deleteStorageImage(editFormState.existingImageUrl);
       await sbFetch(`events?id=eq.${currentEditEventId}`, { method: 'DELETE', prefer: 'return=minimal' });
     } else {
       await sbFetch(`events?id=eq.${currentEditEventId}`, {
@@ -2961,7 +2992,7 @@ async function loadAdminPage() {
 
       const timeStr = e.end_time ? `${formatTime(e.start_time)} - ${formatTime(e.end_time)}` : formatTime(e.start_time);
       const editBtn = !isCancelled ? `<button class="admin-btn-edit" onclick="loadEditPage('${e.edit_key}', true)">Edit</button>` : '';
-
+      const imageUrl = e.image_url || '';
       rows += `<tr class="${isCancelled ? 'cancelled-row' : ''}">
         <td><strong>${isCancelled ? '<s>' : ''}${e.name}${isCancelled ? '</s>' : ''}</strong></td>
         <td>${e.event_date.slice(5).replace('-','/')} · ${timeStr}</td>
@@ -2970,7 +3001,7 @@ async function loadAdminPage() {
         <td>${e.contact_email || '-'}<br>${e.contact_phone || ''}</td>
         <td>${e.event_type}</td>
         <td>${statusBadge}</td>
-        <td><button class="admin-btn-delete" onclick="openAdminDelete('${e.id}')">Delete</button> ${editBtn}</td>
+        <td><button class="admin-btn-delete" onclick="openAdminDelete('${e.id}','${imageUrl}')">Delete</button> ${editBtn}</td>
       </tr>`;
     });
 
@@ -2984,13 +3015,16 @@ async function loadAdminPage() {
   }
 }
 
-function openAdminDelete(id) {
+function openAdminDelete(id, imageUrl) {
   adminDeleteId = id;
+  adminDeleteImageUrl = imageUrl || null;
   openModal('overlay-admin-delete');
 }
 
 async function confirmAdminDelete() {
   try {
+    // Delete image from Storage first (non-fatal if it fails)
+    await deleteStorageImage(adminDeleteImageUrl);
     await sbFetch(`events?id=eq.${adminDeleteId}`, { method: 'DELETE', prefer: 'return=minimal' });
     closeModal('overlay-admin-delete');
     loadAdminPage();
@@ -3360,6 +3394,11 @@ function handleImageSelect(input) {
     input.value = '';
     return;
   }
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image is too large. Please upload a file under 2MB.\n\nTip: WhatsApp-shared flyers and Canva exports are usually fine. If your file is too large, try saving it as a JPG at lower quality.');
+    input.value = '';
+    return;
+  }
   submitFormState.imageFile = file;
   const reader = new FileReader();
   reader.onload = e => { document.getElementById('upload-thumb-img').src = e.target.result; document.getElementById('upload-area').style.display = 'none'; document.getElementById('upload-preview').style.display = 'flex'; };
@@ -3372,6 +3411,11 @@ function handleEditImageSelect(input) {
   if (!file) return;
   if (!file.type.startsWith('image/')) {
     alert('Please upload an image file only (JPG, PNG, GIF, WebP). Videos are not supported.');
+    input.value = '';
+    return;
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image is too large. Please upload a file under 2MB.\n\nTip: WhatsApp-shared flyers and Canva exports are usually fine. If your file is too large, try saving it as a JPG at lower quality.');
     input.value = '';
     return;
   }
