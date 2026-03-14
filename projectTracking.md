@@ -323,3 +323,38 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - Added `autocomplete="email"` to organizer email field (submit + edit forms)
 - Address field intentionally left as `autocomplete="off"` — will conflict with future Google Places integration
 - Event-specific fields (name, description, date, amount) correctly remain `autocomplete="off"`
+
+### Session 14 (Mar 14, 2026) — Mobile Responsiveness Overhaul + Audience Filter Redesign
+
+**Mobile responsiveness overhaul:**
+- Added `viewport-fit=cover` to meta viewport tag (iPhone notch/Dynamic Island support)
+- Rewrote all mobile CSS with three proper breakpoints:
+  - `≤600px` — main mobile (covers iPhone SE, iPhone 14/15, Samsung S22, Pixel 7)
+  - `≤375px` — narrow phones (iPhone SE, older Android)
+  - `401px–600px` — large phones (Samsung S22 Ultra, Note, Pixel 7 Pro)
+- Fixed share button: changed from `top: 8px` to `top: 50%; transform: translateY(-50%)` — always vertically centered regardless of card height
+- All form inputs, selects, and textareas: explicit `font-size: 16px` on mobile (prevents iOS auto-zoom on focus)
+- All buttons: raised to `min-height: 48px` (was 44px) for more reliable touch targets
+- Fixed JS/CSS breakpoint mismatch: `positionOverlayModalUnderToolbar` was checking `768px` but CSS was written for `600px` — now aligned
+- Fixed address modal: replaced `100svh` (not supported on Samsung Internet <17) with `100vh`
+- Fixed event modal: `100dvh` used in JS with `100vh` CSS fallback for cross-browser safety
+- Improved filter dropdown positioning: measures actual rendered menu width instead of assuming 180px — fixes menus flying off-screen on narrow devices
+- Added `overscroll-behavior-x: contain` on filter bar (prevents accidental page scroll while swiping filters)
+- Added `touch-action: manipulation` on buttons and chips (removes 300ms tap delay on Android/Samsung)
+- Modal header now `position: sticky` — stays visible when scrolling tall modals
+- Organizer name: `max-width: calc(100% - 28px)` prevents text overflowing into share button area
+- Safe-area insets applied consistently to footer, modal body, and all sticky action bars
+
+**Header and footer visibility improvements:**
+- Header "Add Event" button: added subtle gold tint background, raised border opacity from 0.55 to 0.75, slightly brighter text color — much more visible on dark navy, especially in sunlight
+- Footer "About" link: color raised from `rgba(255,255,255,0.7)` to `0.92`, `font-weight: 700` added
+- Footer "Add Event": restyled as a gold pill (color + border + border-radius) to read as a clear CTA
+- Both footer links: tap target raised to 44px on mobile
+
+**Audience filter redesign:**
+- Removed "Parents" — redundant with Adults; event name can communicate parent-specific context
+- Added "Women" and "Men" — fills a real gap for gender-specific events (women's gatherings, men's shiurim, etc.)
+- Final audience options: All Ages, Adults, Women, Men, Families, Kids, Teens
+- Applied to: filter dropdown, submit form checkboxes, edit form checkboxes
+- Tag map updated: Women → `tag-women`, Men → `tag-men`, both added to CSS tag rule
+- Existing events with "Parents" audience tag continue to display gracefully — show under "All" filter

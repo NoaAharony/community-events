@@ -3,7 +3,8 @@
 ## Priority 1 — Before Go-Live
 - [x] **Supabase auto-pause — resolved.** Supabase has removed auto-pause from the free tier dashboard. The database will not pause automatically. No action needed. *(Confirmed Session 11, Mar 12 2026)*
 - [x] **Add "Show" as an event type** — added to form, edit form, filter bar, tag color, and emoji. *(Session 11, Mar 12 2026)*
-- [ ] **Add event type: Show** — add "Show" as a new option in the event type dropdown (currently: Party, Meetup, Food Market, Conference, Talk / Lecture, Workshop, Other). Needs to be added to the form, filter bar, and tag display.
+- [x] **Mobile responsiveness overhaul** — full rewrite of mobile CSS, viewport fixes, touch targets, Samsung S22 and iOS/Android compatibility. *(Session 14, Mar 14 2026)*
+- [x] **Audience filter redesign** — removed Parents, added Women and Men. Applied to filter bar, submit form, and edit form. *(Session 14, Mar 14 2026)*
 
 ## Priority 2 — Soon After Launch
 - [ ] **Analytics** — add website behavior tracking (visits, event clicks, contact organizer clicks, share clicks, traffic sources). Options: Google Analytics (detailed) or Plausible (simpler, privacy-friendly). ~10 min to set up.
