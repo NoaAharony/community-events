@@ -4,8 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <title>Atlanta IL Community Events</title>
+<!-- Preconnect to external services so connections start immediately -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://pscedpbjswyajgledixu.supabase.co">
+<!-- Load fonts async so they don't block page render -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;500;600;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* Elements that can contain Hebrew text: Assistant first so Hebrew glyphs render correctly */
   .row-title, .modal-event-title, .row-meta, .modal-field,
@@ -273,6 +279,13 @@
 
   .loading-spinner { text-align: center; padding: 60px; font-size: 13px; color: var(--gray-400); }
   .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+  @keyframes shimmer { 0% { background-position: -600px 0; } 100% { background-position: 600px 0; } }
+  .skeleton-card { display: flex; background: white; border-radius: 14px; margin-bottom: 14px; overflow: hidden; border-left: 3.5px solid var(--gold); box-shadow: 0 2px 8px rgba(0,0,0,0.05); height: 90px; }
+  .skeleton-thumb { width: 72px; min-width: 72px; background: var(--gray-100); }
+  .skeleton-body { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .skeleton-line { height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 600px 100%; animation: shimmer 1.4s infinite; }
+  .skeleton-line.short { width: 40%; }
+  .skeleton-line.medium { width: 65%; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .upload-area { border: 2px dashed var(--gray-200); border-radius: 6px; padding: 28px; text-align: center; color: var(--gray-400); cursor: pointer; font-size: 13px; transition: border-color 0.15s; }
@@ -497,7 +510,9 @@
   </div>
 
   <div class="main" id="events-container">
-    <div class="loading-spinner"><div class="spinner"></div><br>Loading events...</div>
+    <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
   </div>
 
   <footer class="site-footer">
@@ -1527,9 +1542,10 @@ function isPast(dateStr) {
 // ═══════════════════════════════════════════════════════════
 async function loadEvents() {
   const container = document.getElementById('events-container');
-  container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><br>Loading events...</div>';
+  const skeletonCard = `<div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>`;
+  container.innerHTML = skeletonCard + skeletonCard + skeletonCard;
   try {
-    allEvents = await sbFetch('events?order=event_date.asc,start_time.asc&select=*');
+    allEvents = await sbFetch('events?order=event_date.asc,start_time.asc&select=id,name,event_date,start_time,end_time,event_type,audience,cost,amount,description,registration_link,city,full_address,address_public,organizer_name,org_type,contact_email,contact_phone,show_email,show_phone,image_url,status');
     const knownCities = ['Alpharetta','Atlanta','Brookhaven','Cumming','Duluth','Dunwoody','East Cobb','Johns Creek','Peachtree Corners','Roswell','Sandy Springs','Suwanee'];
     const hasOther = allEvents.some(e => e.city && !knownCities.includes(e.city));
     document.getElementById('city-filter-other').style.display = hasOther ? 'block' : 'none';
