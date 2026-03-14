@@ -2667,7 +2667,7 @@ async function submitEvent() {
       organizer_name: organizer,
       organizer_email: email,
       event_name: name,
-      event_date: formatDate(date),
+      event_date: formatDate(date) + ', ' + date.split('-')[0],
       edit_link: editLink,
     });
 
