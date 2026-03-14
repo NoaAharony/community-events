@@ -84,7 +84,7 @@ serve(async (req) => {
       const bodyContent = `
         <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #3a342a; margin: 0 0 6px; line-height: 1.4;">Hi <strong style="color: #3a342a;">${organizer_name}</strong>,</p>
         <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b6355; margin: 0 0 24px; line-height: 1.6;">Thank you for adding your event to Atlanta IL Community Events. It will appear on the events page shortly.</p>
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="email-event-box" style="margin-bottom: 6px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="email-event-box" style="margin-bottom: 0;">
           <tr>
             <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>
             <td bgcolor="#f9f5ef" style="background-color: #f9f5ef; padding: 14px 18px; border-radius: 0 8px 8px 0;">
@@ -94,7 +94,7 @@ serve(async (req) => {
             </td>
           </tr>
         </table>
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 6px;"><tr><td bgcolor="#e8e2d8" style="background-color: #e8e2d8; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</td></tr></table>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td bgcolor="#ffffff" height="16" style="background-color:#ffffff; height:16px; font-size:16px; line-height:16px; mso-line-height-rule:exactly;">&nbsp;</td></tr></table>
         <table class="email-manage-box" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 8px;">
           <tr>
             <td bgcolor="#fff8ee" style="background-color: #fff8ee; border: 2px solid #c8963e; border-radius: 8px; padding: 20px 24px; text-align: center;">
