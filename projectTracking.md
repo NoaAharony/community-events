@@ -277,3 +277,49 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - **Background scroll while modal open:** Added body scroll lock (`overflow: hidden`) when any modal opens, released when all modals are closed. Fixes iOS Safari background jump bug.
 - **Contact Organizer form fields cramped on small phones:** Confirmed `.form-row` single-column rule applies globally on mobile (already in place).
 - **Notice bar completely unstyled:** The `.notice-bar` CSS class selector was accidentally missing - only the style block `{ background:... }` remained with no class name attached. The yellow fallback banner (shown when no events match filters) had no background, border, or padding on any device. Restored the selector. Also fixed missing space between sentences, added `white-space:nowrap` to "Clear filters" link, and bumped mobile font size from 12px to 13px.
+
+### Session 13 continued (Mar 13, 2026) — WhatsApp OG Tags, Mobile UI, Email Mobile, Autocomplete
+
+**WhatsApp OG tags:**
+- Discovered the site runs as a Cloudflare Worker (not Pages) — the `functions/_middleware.js` was never running
+- Created `worker.js` and `wrangler.toml` to properly intercept requests and inject event-specific OG tags
+- Added `run_worker_first = true` to wrangler.toml to force Worker to run before static asset serving
+- Removed static OG tags from index.html — Worker now injects them dynamically for both homepage and event links
+- Fixed column name bug: was querying `title` instead of `name` from Supabase
+
+**Event modal — registration link:**
+- Events with a registration link now open the event modal when shared via WhatsApp (?event=ID)
+- Register Now button restyled from gold to navy, matching site design language
+- Button size/weight adjusted to not be too dominant on the page
+- Event modal header updated to navy gradient + gold border (was plain blue, inconsistent with other modals)
+- 44px min tap target on modal close button and action buttons
+- Small screen grid fix for iPhone SE (375px and below): modal fields stack to 1 column
+
+**Mobile UI audit (comprehensive):**
+- `100vh` → `100dvh` for event modal (fixes Android Chrome address bar overlap)
+- `interactive-widget=resizes-content` added to viewport meta (fixes Android keyboard pushing modals)
+- Body scroll lock when any modal is open (fixes iOS Safari background jump)
+- Long event titles now clamp to 2 lines with ellipsis on cards
+- Organizer name truncates cleanly on small screens
+- Card right padding fixed to account for both share button and arrow
+- Modal body bottom padding uses `safe-area-inset-bottom` (iPhone home bar)
+- Sticky form action bars use `safe-area-inset-bottom` (iPhone home bar)
+- Toggle buttons get `min-height: 44px`
+- Error page buttons get `min-height: 44px` and full width
+- Lightbox padding and close button fixed for small screens
+- `text-size-adjust: 100%` added globally (prevents Android Samsung browser from resizing text)
+- Global `word-break: break-word` added as safety net for long words/Hebrew text
+- `* { box-sizing: border-box }` added globally
+- Extra media query for 375px and below screens
+
+**Email mobile fixes:**
+- Fixed `width="560"` table → `max-width: 560px; width: 100%` (was cut off on Android phones)
+- Added `@media (max-width: 600px)` with reduced padding, smaller font sizes
+- Added `email-btn-text` class for mobile button font scaling
+- Added `word-break: break-all` on edit link button
+
+**Autocomplete:**
+- Added `autocomplete="name"` to organizer name field (submit + edit forms)
+- Added `autocomplete="email"` to organizer email field (submit + edit forms)
+- Address field intentionally left as `autocomplete="off"` — will conflict with future Google Places integration
+- Event-specific fields (name, description, date, amount) correctly remain `autocomplete="off"`

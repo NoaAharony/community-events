@@ -7,7 +7,7 @@
 
 ## Priority 2 — Soon After Launch
 - [ ] **Analytics** — add website behavior tracking (visits, event clicks, contact organizer clicks, share clicks, traffic sources). Options: Google Analytics (detailed) or Plausible (simpler, privacy-friendly). ~10 min to set up.
-- [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form.
+- [ ] **Address autocomplete** — Google Places API or similar for the address field in the submit/edit form. Note: address field intentionally kept autocomplete="off" to avoid conflict with future Places dropdown.
 - [ ] **Hebrew language toggle** — full UI toggle between Hebrew and English.
 - [ ] **Spam / fake event submissions** — no verification exists; anyone can post anything. Options: admin approval before events go live, or a "Report this event" button for visitors.
 - [ ] **Old event cleanup** — events stay in the database forever. Add auto-delete for events older than 60 days to keep the database clean.
@@ -26,7 +26,7 @@
 ## Priority 3 — Nice to Have
 - [ ] **Accessibility audit** — WCAG color contrast, font sizes, keyboard navigation, screen reader support.
 - [ ] **Phone number format validation** — confirm edge cases (international numbers, paste).
-- [ ] **Repeat organizer memory** — organizers who submit multiple events currently fill in all their details from scratch every time. Allow the form to remember name, email, phone, and org type based on their email address.
+- [x] **Repeat organizer memory** — added autocomplete="name" and autocomplete="email" to organizer fields. Browser will suggest previously typed values from the second submission onward. *(Session 13, Mar 13 2026)*
 - [ ] **Google indexing** — add sitemap.xml and robots.txt so the site appears in Google search results (e.g. "Israeli events Atlanta"). Skipped for now for privacy reasons — revisit in the future.
 
 ---
