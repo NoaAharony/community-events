@@ -11,7 +11,7 @@ const corsHeaders = {
 const goldDivider = `<tr><td bgcolor="#c8963e" style="background-color: #c8963e; height: 3px; font-size: 1px; line-height: 1px; mso-line-height-rule: exactly;">&nbsp;</td></tr>`;
 const sectionDivider = `<tr><td bgcolor="#f4f1ec" style="background-color: #f4f1ec; height: 16px; font-size: 1px; line-height: 1px; mso-line-height-rule: exactly;">&nbsp;</td></tr>`;
 const siteTitle = `<p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; color: #ffffff; font-weight: 600; margin: 0 0 20px; line-height: 1.3; text-align: center;">Atlanta <span style="color: #e8b86a; font-style: italic; font-weight: 400;">IL</span> Community Events</p>`;
-const footer = `<tr><td bgcolor="#f4f1ec" style="background-color: #f4f1ec; border-radius: 0 0 10px 10px; padding: 16px 32px; text-align: center;"><p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #a09880; margin: 0;"><a href="https://ilcommunityevents.com" style="color: #1a3a5c; text-decoration: none; font-weight: 600;">ilcommunityevents.com</a></p></td></tr>`;
+const footer = `<tr><td bgcolor="#f4f1ec" style="background-color: #f4f1ec; border-radius: 0 0 10px 10px; padding: 16px 32px; text-align: center;"><p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #a09880; margin: 0;"><a href="https://ilcommunityevents.com" style="color: #a09880; text-decoration: none; font-weight: 400;">Atlanta IL Community Events</a></p></td></tr>`;
 
 function wrapEmail(headerContent: string, bodyContent: string): string {
   return `<!DOCTYPE html>
@@ -79,11 +79,11 @@ serve(async (req) => {
 
       const headerContent = `
         <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; color: #ffffff; font-weight: 400; margin: 0 0 4px; line-height: 1.3; text-align: center;">Your event was added successfully!</p>
-        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #a8c4e0; margin: 0; line-height: 1.4; text-align: center;">It's now live on the site</p>`;
+        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: #a8c4e0; margin: 0; line-height: 1.4; text-align: center;">It will appear on the events page shortly</p>`;
 
       const bodyContent = `
         <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #3a342a; margin: 0 0 6px; line-height: 1.4;">Hi <strong style="color: #3a342a;">${organizer_name}</strong>,</p>
-        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b6355; margin: 0 0 24px; line-height: 1.6;">Thank you for adding your event to Atlanta IL Community Events. It's now live on the site.</p>
+        <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b6355; margin: 0 0 24px; line-height: 1.6;">Thank you for adding your event to Atlanta IL Community Events. It will appear on the events page shortly.</p>
         <table width="100%" cellpadding="0" cellspacing="0" border="0" class="email-event-box" style="margin-bottom: 6px;">
           <tr>
             <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>
