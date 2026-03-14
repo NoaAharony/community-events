@@ -120,7 +120,7 @@
   .row-org-name { font-size: 11.5px; font-weight: 600; color: #5a5048; }
   .row-tags { display: flex; gap: 5px; flex-wrap: wrap; padding-top: 8px; border-top: 1px solid #f0ebe0; }
   .tag { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 20px; border: 1.5px solid #c8c0b0; background: transparent; color: #5a5048; font-family: 'Nunito', sans-serif; }
-  .tag-party, .tag-meetup, .tag-food, .tag-conf, .tag-talk, .tag-workshop, .tag-other, .tag-kids, .tag-adults, .tag-all, .tag-teens { background: transparent; border-color: #c8c0b0; color: #5a5048; }
+  .tag-party, .tag-meetup, .tag-food, .tag-conf, .tag-talk, .tag-workshop, .tag-other, .tag-kids, .tag-adults, .tag-all, .tag-teens, .tag-women, .tag-men { background: transparent; border-color: #c8c0b0; color: #5a5048; }
   .row-arrow { display: flex; align-items: center; justify-content: center; width: 52px; flex: 0 0 52px; padding: 0; font-size: 25px; color: var(--gold); border-left: 1px solid #f0ebe0; }
   .event-row { position: relative; }
 
@@ -720,7 +720,8 @@
       <div class="dropdown-menu" id="dd-audience">
         <div class="dropdown-item selected" onclick="setAudienceFilter('all','For',event)">All</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Adults','Adults',event)">Adults</div>
-        <div class="dropdown-item" onclick="setAudienceFilter('Parents','Parents',event)">Parents</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Women','Women',event)">Women</div>
+        <div class="dropdown-item" onclick="setAudienceFilter('Men','Men',event)">Men</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Families','Families',event)">Families</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Kids','Kids',event)">Kids</div>
         <div class="dropdown-item" onclick="setAudienceFilter('Teens','Teens',event)">Teens</div>
@@ -902,7 +903,9 @@
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="s-audience" value="Adults" onchange="handleSpecificAudience(this,'s')"> Adults</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="s-audience" value="Parents" onchange="handleSpecificAudience(this,'s')"> Parents</label>
+              <input type="checkbox" name="s-audience" value="Women" onchange="handleSpecificAudience(this,'s')"> Women</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="s-audience" value="Men" onchange="handleSpecificAudience(this,'s')"> Men</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="s-audience" value="Families" onchange="handleSpecificAudience(this,'s')"> Families</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
@@ -1253,7 +1256,9 @@
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="e-audience" value="Adults" onchange="handleSpecificAudience(this,'e')"> Adults</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
-              <input type="checkbox" name="e-audience" value="Parents" onchange="handleSpecificAudience(this,'e')"> Parents</label>
+              <input type="checkbox" name="e-audience" value="Women" onchange="handleSpecificAudience(this,'e')"> Women</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
+              <input type="checkbox" name="e-audience" value="Men" onchange="handleSpecificAudience(this,'e')"> Men</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
               <input type="checkbox" name="e-audience" value="Families" onchange="handleSpecificAudience(this,'e')"> Families</label>
             <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-800); cursor:pointer; background:var(--gray-100); border:1px solid var(--gray-200); padding:6px 12px; border-radius:20px;">
@@ -1931,7 +1936,7 @@ function getTagClass(type) {
 }
 
 function getAudienceTagClass(a) {
-  const map = { 'Adults':'tag-adults','Kids':'tag-kids','Teens':'tag-teens','Families':'tag-all','Parents':'tag-adults','All Ages':'tag-all','Seniors':'tag-all' };
+  const map = { 'Adults':'tag-adults','Kids':'tag-kids','Teens':'tag-teens','Families':'tag-all','Parents':'tag-adults','All Ages':'tag-all','Seniors':'tag-all','Women':'tag-women','Men':'tag-men' };
   return map[a] || 'tag-all';
 }
 
