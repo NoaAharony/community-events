@@ -154,8 +154,7 @@
   .footer-links { display: flex; gap: 24px; }
   .footer-link { color: rgba(255,255,255,0.92); font-weight: 700; font-size: 13px; cursor: pointer; transition: color 0.15s; letter-spacing: 0.2px; }
   .footer-link:hover { color: var(--gold-light); }
-  .footer-link.footer-add { color: var(--gold-light); border: 1.5px solid rgba(232,184,106,0.5); padding: 5px 13px; border-radius: 20px; font-size: 12.5px; transition: all 0.15s; }
-  .footer-link.footer-add:hover { background: var(--gold); color: white; border-color: var(--gold); }
+  .footer-link.footer-add { color: rgba(255,255,255,0.92); font-size: 13px; font-weight: 700; }
 
   .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 24px 16px; }
   .overlay.open { display: flex; }
@@ -595,7 +594,7 @@
     }
     .footer-links { gap: 20px; }
     .footer-link { min-height: 44px; display: flex; align-items: center; font-size: 13px; }
-    .footer-link.footer-add { min-height: 36px; font-size: 12.5px; padding: 4px 12px; }
+    .footer-link.footer-add { min-height: 44px; font-size: 13px; padding: 0; border: none; border-radius: 0; }
     .footer-tagline { display: none; }
 
     /* === ABOUT === */
