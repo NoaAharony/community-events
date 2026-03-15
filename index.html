@@ -1662,8 +1662,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const SEND_EMAIL_URL = 'https://pscedpbjswyajgledixu.supabase.co/functions/v1/send-email';
 
 async function sendEmail(payload) {
-  try {
-    console.log('Sending email:', payload.type, 'to', payload.organizer_email);
+  const attempt = async () => {
     const res = await fetch(SEND_EMAIL_URL, {
       method: 'POST',
       headers: {
@@ -1674,9 +1673,23 @@ async function sendEmail(payload) {
       body: JSON.stringify(payload),
     });
     const data = await res.json();
-    console.log('Email result:', res.status, JSON.stringify(data));
+    if (!res.ok) throw new Error(data.error || 'Email function error: ' + res.status);
+    return data;
+  };
+
+  try {
+    console.log('Sending email:', payload.type, 'to', payload.organizer_email);
+    const data = await attempt();
+    console.log('Email sent:', JSON.stringify(data));
   } catch (e) {
-    console.warn('Email send failed:', e.message);
+    console.warn('Email attempt 1 failed:', e.message, '— retrying in 3s...');
+    try {
+      await new Promise(r => setTimeout(r, 3000));
+      const data = await attempt();
+      console.log('Email sent (retry):', JSON.stringify(data));
+    } catch (e2) {
+      console.error('Email failed after retry:', e2.message);
+    }
   }
 }
 
