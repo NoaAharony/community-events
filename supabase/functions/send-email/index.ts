@@ -86,7 +86,7 @@ serve(async (req) => {
         <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b6355; margin: 0 0 24px; line-height: 1.6;">Thank you for adding your event to Atlanta IL Community Events. It will appear on the events page shortly.</p>
         <table width="100%" cellpadding="0" cellspacing="0" border="0" class="email-event-box" style="margin-bottom: 0;">
           <tr>
-            <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>
+            <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px; width: 4px; min-width: 4px; max-width: 4px;">&nbsp;</td>
             <td bgcolor="#f9f5ef" style="background-color: #f9f5ef; padding: 14px 18px; border-radius: 0 8px 8px 0;">
               <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 8px;">Your Event</p>
               <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 20px; font-weight: 400; color: #1a3a5c; margin: 0 0 4px; line-height: 1.3;">${event_name}</p>
@@ -139,7 +139,7 @@ serve(async (req) => {
       const addressBlock = event_address ? `
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
           <tr>
-            <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>
+            <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px; width: 4px; min-width: 4px; max-width: 4px;">&nbsp;</td>
             <td bgcolor="#fff8ee" style="background-color: #fff8ee; padding: 14px 18px; border-radius: 0 8px 8px 0;">
               <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 8px;">Event Address</p>
               <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: #1a3a5c; font-weight: 700; margin: 0 0 6px;">${event_address}</p>
@@ -167,7 +167,7 @@ serve(async (req) => {
         ${isAddressRequest ? addressBlock : ''}
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 28px;">
           <tr>
-            <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px;">&nbsp;</td>
+            <td width="4" bgcolor="#c8963e" style="background-color: #c8963e; border-radius: 3px 0 0 3px; font-size: 1px; line-height: 1px; width: 4px; min-width: 4px; max-width: 4px;">&nbsp;</td>
             <td bgcolor="#f9f5ef" style="background-color: #f9f5ef; padding: 14px 18px; border-radius: 0 8px 8px 0;">
               <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a09880; font-weight: 700; margin: 0 0 12px;">Requester Details</p>
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
