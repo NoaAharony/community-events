@@ -57,6 +57,11 @@
   body { font-family: 'Nunito', 'Assistant', sans-serif; background: var(--cream); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); color: var(--gray-800); min-height: 100vh; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   * { box-sizing: border-box; }
   p, li, span, div { word-break: break-word; overflow-wrap: break-word; }
+  /* Visually hidden but readable by screen readers */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  /* Visible focus ring for keyboard navigation */
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 3px; }
+  .form-input:focus-visible { outline: 2px solid var(--blue-light); outline-offset: 0; border-radius: 4px; }
 
   .topbar { background: linear-gradient(160deg, #1e4068 0%, #152d4a 60%, #0f2035 100%); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 68px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.3); }
   .site-name-wrap { display: flex; flex-direction: column; gap: 2px; cursor: pointer; }
@@ -114,7 +119,7 @@
   .event-row { position: relative; }
 
   /* Share button on card */
-  .share-card-btn { position: absolute; top: 10px; right: 60px; width: 28px; height: 28px; border-radius: 50%; background: white; border: 1.5px solid rgba(200,150,62,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 4px rgba(26,58,92,0.08); transition: all 0.18s; color: #c8963e; z-index: 2; }
+  .share-card-btn { position: absolute; top: 50%; transform: translateY(-50%); right: 54px; width: 44px; height: 44px; min-width: 44px; min-height: 44px; border-radius: 50%; background: white; border: 1.5px solid rgba(200,150,62,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 4px rgba(26,58,92,0.08); transition: all 0.18s; color: #c8963e; z-index: 2; touch-action: manipulation; }
   .share-card-btn:hover { background: var(--gold); border-color: var(--gold); color: white; box-shadow: 0 2px 8px rgba(200,150,62,0.35); }
   .share-card-btn svg { width: 12px; height: 12px; }
   .notice-bar { background: #fef8e8; border: 1.5px solid #e8c96a; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #6b5010; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 10px; }
@@ -140,7 +145,7 @@
   .site-footer { background: linear-gradient(160deg, #1e4068, #0f2035); color: rgba(255,255,255,0.7); padding: 0 24px; height: 60px; display: flex; justify-content: space-between; align-items: center; margin-top: 40px; font-size: 13px; flex-wrap: nowrap; gap: 12px; }
   #page-home > .site-footer { position: fixed; left: 0; right: 0; bottom: 0; margin-top: 0; z-index: 98; }
   .footer-links { display: flex; gap: 24px; }
-  .footer-link { color: rgba(255,255,255,0.92); font-weight: 700; font-size: 13px; cursor: pointer; transition: color 0.15s; letter-spacing: 0.2px; }
+  .footer-link { color: rgba(255,255,255,0.92); font-weight: 700; font-size: 13px; cursor: pointer; transition: color 0.15s; letter-spacing: 0.2px; background: none; border: none; padding: 0; font-family: 'Nunito', sans-serif; }
   .footer-link:hover { color: var(--gold-light); }
   .footer-link.footer-add { color: rgba(255,255,255,0.92); font-size: 13px; font-weight: 700; }
 
@@ -430,11 +435,11 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      right: 40px;        /* sits left of the arrow column */
-      width: 36px;
-      height: 36px;
-      min-width: 36px;
-      min-height: 36px;
+      right: 38px;        /* sits left of the arrow column */
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
       z-index: 3;
     }
     .share-card-btn svg { width: 13px; height: 13px; }
@@ -655,9 +660,10 @@
     <button class="btn-submit-top" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</button>
   </div>
 
-  <div class="filter-bar">
+  <h1 class="sr-only">Atlanta IL Community Events - Upcoming Events</h1>
+  <nav aria-label="Event filters" class="filter-bar">
     <span class="filter-label">Filter:</span>
-    <div class="filter-chip active" id="chip-date" onclick="toggleDropdown('dd-date', event)">
+    <div class="filter-chip active" id="chip-date" onclick="toggleDropdown('dd-date', event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown('dd-date',event);}" role="button" tabindex="0">
       <span id="date-label">All Upcoming</span> ▾
       <div class="dropdown-menu" id="dd-date">
         <div class="dropdown-item" onclick="setDateFilter('this-week','This Week',event)">This Week</div>
@@ -667,7 +673,7 @@
         <div class="dropdown-item selected" onclick="setDateFilter('all','All Upcoming',event)">All Upcoming</div>
       </div>
     </div>
-    <div class="filter-chip" id="chip-city" onclick="toggleDropdown('dd-city', event)">
+    <div class="filter-chip" id="chip-city" onclick="toggleDropdown('dd-city', event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown('dd-city',event);}" role="button" tabindex="0">
       <span id="city-label">Location</span> ▾
       <div class="dropdown-menu" id="dd-city">
         <div class="dropdown-item selected" onclick="setCityFilter('all','City',event)">All Cities</div>
@@ -687,7 +693,7 @@
         <div class="dropdown-item" id="city-filter-other" style="display:none" onclick="setCityFilter('other','Other',event)">Other</div>
       </div>
     </div>
-    <div class="filter-chip" id="chip-type" onclick="toggleDropdown('dd-type', event)">
+    <div class="filter-chip" id="chip-type" onclick="toggleDropdown('dd-type', event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown('dd-type',event);}" role="button" tabindex="0">
       <span id="type-label">Event Type</span> ▾
       <div class="dropdown-menu" id="dd-type">
         <div class="dropdown-item selected" onclick="setTypeFilter('all','Event Type',event)">All Types</div>
@@ -702,7 +708,7 @@
         <div class="dropdown-item" onclick="setTypeFilter('Other','Other',event)">Other</div>
       </div>
     </div>
-    <div class="filter-chip" id="chip-cost" onclick="toggleDropdown('dd-cost', event)">
+    <div class="filter-chip" id="chip-cost" onclick="toggleDropdown('dd-cost', event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown('dd-cost',event);}" role="button" tabindex="0">
       <span id="cost-label">Cost</span> ▾
       <div class="dropdown-menu" id="dd-cost">
         <div class="dropdown-item selected" onclick="setCostFilter('all','Cost',event)">Any Cost</div>
@@ -710,7 +716,7 @@
         <div class="dropdown-item" onclick="setCostFilter('Paid','Paid',event)">Paid Only</div>
       </div>
     </div>
-    <div class="filter-chip" id="chip-audience" onclick="toggleDropdown('dd-audience', event)">
+    <div class="filter-chip" id="chip-audience" onclick="toggleDropdown('dd-audience', event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown('dd-audience',event);}" role="button" tabindex="0">
       <span id="audience-label">For</span> ▾
       <div class="dropdown-menu" id="dd-audience">
         <div class="dropdown-item selected" onclick="setAudienceFilter('all','For',event)">All</div>
@@ -722,17 +728,17 @@
         <div class="dropdown-item" onclick="setAudienceFilter('Teens','Teens',event)">Teens</div>
       </div>
     </div>
-  </div>
+  </nav>
 
-  <div class="main" id="events-container">
+  <main id="events-container" class="main" aria-label="Events list">
     <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
     <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
-  </div>
+  </main>
 
   <footer class="site-footer">
     <div class="footer-links">
-      <span class="footer-link" onclick="showPage('page-about')">About</span>
-      <span class="footer-link footer-add" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</span>
+      <button class="footer-link" onclick="showPage('page-about')">About</button>
+      <button class="footer-link footer-add" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</button>
     </div>
     <span class="footer-tagline">Community links coming soon</span>
   </footer>
@@ -1475,8 +1481,8 @@
   </div>
   <footer class="site-footer">
     <div class="footer-links">
-      <span class="footer-link" onclick="showPage('page-about')">About</span>
-      <span class="footer-link footer-add" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</span>
+      <button class="footer-link" onclick="showPage('page-about')">About</button>
+      <button class="footer-link footer-add" onclick="resetSubmitForm(); showPage('page-submit')">+ Add Event</button>
     </div>
     <span class="footer-tagline">Community links coming soon</span>
   </footer>
@@ -1517,30 +1523,30 @@
 <!-- ═══ MODALS ═══ -->
 
 <!-- Event Detail Modal -->
-<div class="overlay" id="overlay-event" onclick="closeModalOnBg(event,'overlay-event')">
-  <div class="modal" id="modal-event">
+<div class="overlay" id="overlay-event" onclick="closeModalOnBg(event,'overlay-event')" role="presentation">
+  <div class="modal" id="modal-event" role="dialog" aria-modal="true" aria-labelledby="modal-event-title">
     <div class="modal-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold);">
-      <h3>Event Details</h3>
-      <button class="modal-close-btn" onclick="closeModal('overlay-event')">✕</button>
+      <h3 id="modal-event-title">Event Details</h3>
+      <button class="modal-close-btn" onclick="closeModal('overlay-event')" aria-label="Close event details">✕</button>
     </div>
     <div class="modal-body" id="modal-event-body"></div>
   </div>
 </div>
 
 <!-- Request Address Modal -->
-<div class="overlay" id="overlay-address" onclick="closeModalOnBg(event,'overlay-address')">
-  <div class="modal" style="max-width:460px;">
+<div class="overlay" id="overlay-address" onclick="closeModalOnBg(event,'overlay-address')" role="presentation">
+  <div class="modal" id="modal-address" style="max-width:460px;" role="dialog" aria-modal="true" aria-labelledby="modal-address-title">
     <div class="modal-header addr-modal-header">
       <div style="display:flex; align-items:center; gap:12px;">
         <div class="addr-modal-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3,7 12,13 21,7"></polyline></svg>
         </div>
         <div>
-          <div style="font-family:'Source Serif 4',serif; font-size:17px; font-weight:400; color:white;">Contact Organizer</div>
+          <div id="modal-address-title" style="font-family:'Source Serif 4',serif; font-size:17px; font-weight:400; color:white;">Contact Organizer</div>
           
         </div>
       </div>
-      <button class="modal-close-btn" onclick="closeModal('overlay-address')">✕</button>
+      <button class="modal-close-btn" onclick="closeModal('overlay-address')" aria-label="Close contact organizer">✕</button>
     </div>
     <div class="modal-body">
       <div id="address-form">
@@ -1588,16 +1594,16 @@
 <div class="share-toast" id="share-toast">✓ Link copied to clipboard!</div>
 
 <!-- Cancel Event Confirmation Modal -->
-<div class="overlay" id="overlay-cancel" onclick="closeModalOnBg(event,'overlay-cancel')">
-  <div class="modal cancel-modal">
+<div class="overlay" id="overlay-cancel" onclick="closeModalOnBg(event,'overlay-cancel')" role="presentation">
+  <div class="modal cancel-modal" role="dialog" aria-modal="true" aria-labelledby="modal-cancel-title">
     <div class="modal-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold); padding:16px 20px;">
       <div style="display:flex; align-items:center; gap:10px;">
         <div style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(232,184,106,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
         </div>
-        <div style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Cancel Event</div>
+        <div id="modal-cancel-title" style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Cancel Event</div>
       </div>
-      <button class="modal-close-btn" onclick="closeModal('overlay-cancel')">✕</button>
+      <button class="modal-close-btn" onclick="closeModal('overlay-cancel')" aria-label="Close cancel event dialog">✕</button>
     </div>
     <div class="modal-body">
       <p style="font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px;">Are you sure you want to cancel this event?</p>
@@ -1619,16 +1625,16 @@
 </div>
 
 <!-- Admin Delete Modal -->
-<div class="overlay" id="overlay-admin-delete" onclick="closeModalOnBg(event,'overlay-admin-delete')">
-  <div class="modal cancel-modal">
+<div class="overlay" id="overlay-admin-delete" onclick="closeModalOnBg(event,'overlay-admin-delete')" role="presentation">
+  <div class="modal cancel-modal" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
     <div class="modal-header" style="background:linear-gradient(160deg,#5c1a1a,#3a0f0f); border-bottom:3px solid var(--red); padding:16px 20px;">
       <div style="display:flex; align-items:center; gap:10px;">
         <div style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(184,48,48,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,140,140,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
         </div>
-        <div style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Delete Event</div>
+        <div id="modal-delete-title" style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Delete Event</div>
       </div>
-      <button class="modal-close-btn" onclick="closeModal('overlay-admin-delete')">✕</button>
+      <button class="modal-close-btn" onclick="closeModal('overlay-admin-delete')" aria-label="Close delete event dialog">✕</button>
     </div>
     <div class="modal-body">
       <p style="font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px;">Are you sure you want to permanently delete this event?</p>
@@ -2016,12 +2022,17 @@ function positionOverlayModalUnderToolbar(overlay, modal) {
   if (!overlay || !modal) return;
 
   if (window.matchMedia('(max-width: 600px)').matches) {
-    // On mobile, modal slides up from bottom — no top-pinning needed.
-    // CSS handles the bottom-sheet style. Just reset any JS overrides.
+    // On mobile, modal slides up from bottom as a bottom-sheet.
+    // Reset overlay positioning overrides but explicitly enforce max-height
+    // so the modal never exceeds the viewport on short devices (iPhone SE, etc.)
     overlay.style.alignItems = '';
     overlay.style.justifyContent = '';
     overlay.style.padding = '';
-    modal.style.maxHeight = '';
+    // Use dvh for Android Chrome, vh fallback for Samsung Internet
+    modal.style.maxHeight = 'calc(100dvh - 96px)';
+    if (!CSS.supports('max-height', 'calc(100dvh - 96px)')) {
+      modal.style.maxHeight = 'calc(100vh - 96px)';
+    }
     modal.style.width = '';
     modal.style.maxWidth = '';
     modal.style.marginLeft = '';
@@ -3456,16 +3467,61 @@ function showPage(id) {
   setTimeout(scrollToTopNow, 0);
   setTimeout(scrollToTopNow, 120);
 }
+// Track which element had focus before a modal opened so we can restore it
+const _modalPreviousFocus = {};
+
 function openModal(id) {
-  document.getElementById(id).classList.add('open');
+  const overlay = document.getElementById(id);
+  overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  // Save current focus so we can restore it when modal closes
+  _modalPreviousFocus[id] = document.activeElement;
+  // Move focus into the modal — first focusable element, or the modal itself
+  const focusable = overlay.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  const first = Array.from(focusable).find(el => !el.disabled);
+  if (first) { setTimeout(() => first.focus(), 50); }
+  else { overlay.setAttribute('tabindex', '-1'); overlay.focus(); }
 }
+
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
   // Only unlock scroll if no other modals are open
   const anyOpen = document.querySelector('.overlay.open');
   if (!anyOpen) document.body.style.overflow = '';
+  // Restore focus to wherever it was before the modal opened
+  const prev = _modalPreviousFocus[id];
+  if (prev && typeof prev.focus === 'function') { try { prev.focus(); } catch(e) {} }
+  delete _modalPreviousFocus[id];
 }
+
+// Focus trap: keeps Tab inside open modal; Escape closes it
+document.addEventListener('keydown', function(e) {
+  const overlay = document.querySelector('.overlay.open');
+  if (!overlay) return;
+  const overlayId = overlay.id;
+
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    closeModal(overlayId);
+    return;
+  }
+
+  if (e.key === 'Tab') {
+    const focusable = Array.from(overlay.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(el => el.offsetParent !== null); // visible only
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+});
 
 function shareEvent(e, id) {
   if (e) e.stopPropagation();
