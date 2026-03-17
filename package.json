@@ -1,0 +1,13 @@
+{
+  "name": "community-events-qa",
+  "private": true,
+  "scripts": {
+    "test:qa": "playwright test",
+    "test:qa:headed": "playwright test --headed",
+    "test:qa:smoke": "playwright test --grep @smoke"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.2"
+  }
+}

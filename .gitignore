@@ -1,0 +1,7 @@
+node_modules/
+output/
+test-results/
+test-results-live/
+.cursor/
+.upstream-check/
+community-events.code-workspace
