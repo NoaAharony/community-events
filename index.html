@@ -451,9 +451,11 @@
     }
     .modal {
       border-radius: 18px 18px 0 0;
-      /* Use dvh for Android Chrome, fall back to vh */
-      max-height: calc(100dvh - 96px);
-      max-height: calc(100vh - 96px);
+      /* Use dvh for Android Chrome, fall back to vh.
+         114px = 58px topbar + ~56px filter bar on mobile.
+         JS overrides this with a live measurement at open time. */
+      max-height: calc(100dvh - 114px);
+      max-height: calc(100vh - 114px);
       width: 100%;
       max-width: 100%;
       overflow-y: auto;
@@ -2022,16 +2024,21 @@ function positionOverlayModalUnderToolbar(overlay, modal) {
 
   if (window.matchMedia('(max-width: 600px)').matches) {
     // On mobile, modal slides up from bottom as a bottom-sheet.
-    // Reset overlay positioning overrides but explicitly enforce max-height
-    // so the modal never exceeds the viewport on short devices (iPhone SE, etc.)
+    // Measure the actual bottom of the sticky toolbar+filter stack so max-height
+    // is always correct regardless of device — avoids the modal overlapping the
+    // filter bar on short-toolbar devices (iPhone SE, iPhone 12, Pixel 5, etc.)
+    const activeFilterBar = document.querySelector('.page-view.active .filter-bar');
+    const homeFilterBar = document.querySelector('#page-home .filter-bar');
+    const filterBar = activeFilterBar || homeFilterBar;
+    // Fall back to 114px (58px topbar + ~56px filter bar) if measurement unavailable
+    const toolbarBottom = filterBar ? Math.ceil(filterBar.getBoundingClientRect().bottom) : 114;
     overlay.style.alignItems = '';
     overlay.style.justifyContent = '';
     overlay.style.padding = '';
     // Use dvh for Android Chrome, vh fallback for Samsung Internet
-    modal.style.maxHeight = 'calc(100dvh - 96px)';
-    if (!CSS.supports('max-height', 'calc(100dvh - 96px)')) {
-      modal.style.maxHeight = 'calc(100vh - 96px)';
-    }
+    const mhDvh = `calc(100dvh - ${toolbarBottom}px)`;
+    const mhVh  = `calc(100vh - ${toolbarBottom}px)`;
+    modal.style.maxHeight = CSS.supports('max-height', mhDvh) ? mhDvh : mhVh;
     modal.style.width = '';
     modal.style.maxWidth = '';
     modal.style.marginLeft = '';
