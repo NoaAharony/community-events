@@ -3524,15 +3524,16 @@ document.addEventListener('keydown', function(e) {
 
 function shareEvent(e, id) {
   if (e) e.stopPropagation();
+  const btn = e && e.currentTarget ? e.currentTarget : null;
   const url = `${window.location.origin}${window.location.pathname}?event=${id}`;
   if (navigator.share) {
-    navigator.share({ url }).catch(() => {});
+    navigator.share({ url }).catch(() => {}).finally(() => { if (btn) btn.blur(); });
   } else {
     navigator.clipboard.writeText(url).then(() => {
       const t = document.getElementById('share-toast');
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2500);
-    });
+    }).finally(() => { if (btn) btn.blur(); });
   }
 }
 
