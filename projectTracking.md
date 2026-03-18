@@ -393,3 +393,4 @@ All pages are a single HTML file with JS toggling visibility between sections:
 
 ### 2026-03-18
 - **Modal content wrapper:** Wrapped header + body in a single `.modal-content` container for all four modals (event detail, request address, cancel event, admin delete). Enables styling/scripting the modal content as one block; layout unchanged via `display: flex; flex-direction: column`.
+- **CSS-only modal positioning:** Replaced JS-driven overlay positioning with a fixed `.overlay-root` that only covers the area between the top bar and footer using CSS variables (`--app-top`, `--app-bottom`). Desktop: 68px / 60px; mobile: 114px / 56px + safe-area. All four modals live inside this root; modal max-height is 80% of that region. Removed `positionOverlayModalUnderToolbar`, `positionAddressModalForMobile`, and the resize listener that called them.

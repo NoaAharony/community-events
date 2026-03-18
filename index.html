@@ -149,10 +149,12 @@
   .footer-link:hover { color: var(--gold-light); }
   .footer-link.footer-add { color: rgba(255,255,255,0.92); font-size: 13px; font-weight: 700; }
 
-  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 24px 16px; }
-  .overlay.open { display: flex; }
-  /* 80% of space between top bar (68px) and footer (60px) */
-  .modal { background: var(--white); border-radius: 10px; width: 100%; max-width: 520px; max-height: calc(0.8 * (100vh - 128px)); overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
+  /* Overlay root: only covers the area between top bar and footer (CSS-only, no JS measurement) */
+  .overlay-root { position: fixed; left: 0; right: 0; top: var(--app-top, 68px); bottom: var(--app-bottom, 60px); z-index: 300; pointer-events: none; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+  .overlay { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; padding: 24px 16px; pointer-events: none; }
+  .overlay.open { display: flex; pointer-events: auto; }
+  .modal { background: var(--white); border-radius: 10px; width: 100%; max-width: 520px; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
+  .overlay-root .modal { max-height: 90%; }
   @keyframes modalIn { from { opacity:0; } to { opacity:1; } }
   .modal-header { background: var(--blue); color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px 10px 0 0; }
   .addr-modal-header { background: linear-gradient(160deg, #1e4068, #0f2035); padding: 18px 20px; border-bottom: 3px solid var(--gold); position: sticky; top: 0; z-index: 10; }
@@ -446,19 +448,13 @@
     .share-card-btn svg { width: 13px; height: 13px; }
 
     /* === EVENT MODAL === */
-    /* On mobile: slides up from bottom edge */
-    .overlay {
-      padding: 0;
-      align-items: flex-end;
-    }
+    /* Overlay root insets: top bar 58px + filter ~56px = 114px; footer + safe-area */
+    .overlay-root { --app-top: 114px; --app-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); padding: 0 12px 16px; }
+    .overlay { padding: 0; }
     .modal {
       border-radius: 18px 18px 0 0;
-      /* 80% of space between top bar (58px) and footer (56px); dvh for Android Chrome */
-      max-height: calc(0.8 * (100dvh - 114px));
-      max-height: calc(0.8 * (100vh - 114px));
       width: 100%;
       max-width: 100%;
-      overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
     .modal-header {
@@ -1521,8 +1517,8 @@
 </div>
 
 
-<!-- ═══ MODALS ═══ -->
-
+<!-- ═══ MODALS (inside overlay-root so they only cover the area between top bar and footer) ═══ -->
+<div class="overlay-root">
 <!-- Event Detail Modal -->
 <div class="overlay" id="overlay-event" onclick="closeModalOnBg(event,'overlay-event')" role="presentation">
   <div class="modal" id="modal-event" role="dialog" aria-modal="true" aria-labelledby="modal-event-title">
@@ -1655,6 +1651,8 @@
     </div>
   </div>
 </div>
+</div>
+<!-- end overlay-root -->
 
 
 <script>
@@ -2025,122 +2023,8 @@ function renderEventRow(e) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// EVENT DETAIL MODAL
+// EVENT DETAIL MODAL (positioning is CSS-only via .overlay-root insets)
 // ═══════════════════════════════════════════════════════════
-function positionOverlayModalUnderToolbar(overlay, modal) {
-  if (!overlay || !modal) return;
-  const isMobileUa = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-  const isPhoneViewport = window.matchMedia('(max-width: 600px)').matches;
-  const isCompactTouchTablet = (window.matchMedia('(pointer: coarse)').matches || isMobileUa) && window.innerHeight <= 900;
-
-  if (isPhoneViewport) {
-    // On mobile, pin the sheet below the sticky toolbar stack instead of relying
-    // on the default flex-end overlay alignment. That keeps the top edge clear of
-    // the filter bar on short viewports while still respecting safe-area padding.
-    const activeFilterBar = document.querySelector('.page-view.active .filter-bar');
-    const homeFilterBar = document.querySelector('#page-home .filter-bar');
-    const filterBar = activeFilterBar || homeFilterBar;
-    const toolbarBottom = filterBar ? Math.ceil(filterBar.getBoundingClientRect().bottom) : 114;
-    const topOffset = Math.max(0, toolbarBottom);
-    const availableHeight = Math.max(220, Math.floor(window.innerHeight - topOffset));
-
-    overlay.style.alignItems = 'flex-start';
-    overlay.style.justifyContent = 'center';
-    overlay.style.paddingTop = `${topOffset}px`;
-    overlay.style.paddingRight = '0';
-    overlay.style.paddingBottom = 'env(safe-area-inset-bottom, 0px)';
-    overlay.style.paddingLeft = '0';
-
-    modal.style.maxHeight = `${availableHeight}px`;
-    modal.style.width = '100%';
-    modal.style.maxWidth = '100%';
-    modal.style.marginTop = '0';
-    modal.style.marginRight = '0';
-    modal.style.marginBottom = '0';
-    modal.style.marginLeft = '0';
-    return;
-  }
-
-  // Tablet (601–768px): pin below toolbar
-  if (window.matchMedia('(max-width: 768px)').matches || isCompactTouchTablet) {
-    const activeFilterBar = document.querySelector('.page-view.active .filter-bar');
-    const homeFilterBar = document.querySelector('#page-home .filter-bar');
-    const filterBar = activeFilterBar || homeFilterBar;
-    const toolbarBottom = filterBar ? filterBar.getBoundingClientRect().bottom : 92;
-    const topOffset = Math.max(0, Math.round(toolbarBottom));
-
-    const availableHeight = Math.max(260, Math.floor(window.innerHeight - topOffset));
-
-    overlay.style.alignItems = 'flex-start';
-    overlay.style.justifyContent = 'center';
-    overlay.style.paddingTop = `${topOffset}px`;
-    overlay.style.paddingRight = '16px';
-    overlay.style.paddingBottom = 'env(safe-area-inset-bottom, 16px)';
-    overlay.style.paddingLeft = '16px';
-    modal.style.maxHeight = `${availableHeight}px`;
-    modal.style.width = '100%';
-    modal.style.maxWidth = '520px';
-    modal.style.marginLeft = 'auto';
-    modal.style.marginRight = 'auto';
-    return;
-  }
-
-  // Desktop — reset to CSS defaults
-  overlay.style.alignItems = '';
-  overlay.style.justifyContent = '';
-  overlay.style.padding = '';
-  modal.style.maxHeight = '';
-  modal.style.width = '';
-  modal.style.maxWidth = '';
-  modal.style.marginTop = '';
-  modal.style.marginLeft = '';
-  modal.style.marginBottom = '';
-  modal.style.marginRight = '';
-}
-
-function positionEventModalForMobile() {
-  const overlay = document.getElementById('overlay-event');
-  const modal = document.getElementById('modal-event');
-  positionOverlayModalUnderToolbar(overlay, modal);
-}
-
-function positionAddressModalForMobile() {
-  const overlay = document.getElementById('overlay-address');
-  const modal = overlay ? overlay.querySelector('.modal') : null;
-  if (!overlay || !modal) return;
-
-  if (window.matchMedia('(max-width: 768px)').matches) {
-    // Safe centered positioning — this modal stacks on top of the event modal,
-    // so toolbar measurement would be unreliable.
-    // Use dvh so the modal shrinks when the iOS/Android keyboard opens,
-    // keeping the header (and X button) always visible.
-    // Fall back to vh for Samsung Internet < 17 which doesn't support dvh.
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
-    overlay.style.padding = '16px';
-    modal.style.maxHeight = CSS.supports('max-height', 'calc(100dvh - 32px)')
-      ? 'calc(100dvh - 32px)'
-      : 'calc(100vh - 32px)';
-    modal.style.width = '100%';
-    modal.style.maxWidth = '520px';
-    modal.style.marginLeft = 'auto';
-    modal.style.marginRight = 'auto';
-    modal.style.overflowY = 'auto';
-    return;
-  }
-
-  // Desktop — reset to CSS defaults
-  overlay.style.alignItems = '';
-  overlay.style.justifyContent = '';
-  overlay.style.padding = '';
-  modal.style.maxHeight = '';
-  modal.style.width = '';
-  modal.style.maxWidth = '';
-  modal.style.marginLeft = '';
-  modal.style.marginRight = '';
-  modal.style.overflowY = '';
-}
-
 function openEventModal(id) {
   const e = allEvents.find(ev => ev.id === id);
   if (!e) return;
@@ -2269,11 +2153,6 @@ function openEventModal(id) {
   openModal('overlay-event');
   const modal = document.getElementById('modal-event');
   if (modal) modal.scrollTop = 0;
-  positionEventModalForMobile();
-  requestAnimationFrame(() => {
-    positionEventModalForMobile();
-  });
-  setTimeout(positionEventModalForMobile, 0);
 }
 
 let currentAddressRequestEventId = null;
@@ -2300,7 +2179,6 @@ function openAddressRequest(eventId) {
   toggleAddressRequestIntro();
   document.getElementById('address-form').style.display = 'block';
   document.getElementById('address-success').classList.remove('show');
-  positionAddressModalForMobile();
   openModal('overlay-address');
 }
 
@@ -3582,13 +3460,6 @@ function closeLightbox() {
   document.getElementById('lightbox-img').src = '';
 }
 function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
-
-window.addEventListener('resize', () => {
-  const eventOverlay = document.getElementById('overlay-event');
-  if (eventOverlay && eventOverlay.classList.contains('open')) positionEventModalForMobile();
-  const addressOverlay = document.getElementById('overlay-address');
-  if (addressOverlay && addressOverlay.classList.contains('open')) positionAddressModalForMobile();
-});
 
 // ═══════════════════════════════════════════════════════════
 // INIT
