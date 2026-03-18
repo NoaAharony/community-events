@@ -154,7 +154,7 @@
   .modal { background: var(--white); border-radius: 10px; width: 100%; max-width: 520px; max-height: 86vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
   @keyframes modalIn { from { opacity:0; } to { opacity:1; } }
   .modal-header { background: var(--blue); color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px 10px 0 0; }
-  .addr-modal-header { background: linear-gradient(160deg, #1e4068, #0f2035); padding: 18px 20px; border-bottom: 3px solid var(--gold); }
+  .addr-modal-header { background: linear-gradient(160deg, #1e4068, #0f2035); padding: 18px 20px; border-bottom: 3px solid var(--gold); position: sticky; top: 0; z-index: 10; }
   .addr-modal-icon { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(232,184,106,0.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .modal-header h3 { font-family: 'Source Serif 4', serif; font-size: 16px; font-weight: 400; }
   .modal-close-btn { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 20px; cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 3px; transition: color 0.15s; min-width: 36px; min-height: 36px; display: flex; align-items: center; justify-content: center; }
@@ -2103,12 +2103,16 @@ function positionAddressModalForMobile() {
 
   if (window.matchMedia('(max-width: 768px)').matches) {
     // Safe centered positioning — this modal stacks on top of the event modal,
-    // so toolbar measurement would be unreliable
+    // so toolbar measurement would be unreliable.
+    // Use dvh so the modal shrinks when the iOS/Android keyboard opens,
+    // keeping the header (and X button) always visible.
+    // Fall back to vh for Samsung Internet < 17 which doesn't support dvh.
     overlay.style.alignItems = 'center';
     overlay.style.justifyContent = 'center';
     overlay.style.padding = '16px';
-    // Use vh as primary (100svh not supported on Samsung Internet < 17)
-    modal.style.maxHeight = 'calc(100vh - 32px)';
+    modal.style.maxHeight = CSS.supports('max-height', 'calc(100dvh - 32px)')
+      ? 'calc(100dvh - 32px)'
+      : 'calc(100vh - 32px)';
     modal.style.width = '100%';
     modal.style.maxWidth = '520px';
     modal.style.marginLeft = 'auto';
