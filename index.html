@@ -151,11 +151,13 @@
 
   .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 24px 16px; }
   .overlay.open { display: flex; }
-  .modal { background: var(--white); border-radius: 10px; width: 100%; max-width: 520px; max-height: 86vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
+  /* 80% of space between top bar (68px) and footer (60px) */
+  .modal { background: var(--white); border-radius: 10px; width: 100%; max-width: 520px; max-height: calc(0.8 * (100vh - 128px)); overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
   @keyframes modalIn { from { opacity:0; } to { opacity:1; } }
   .modal-header { background: var(--blue); color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px 10px 0 0; }
   .addr-modal-header { background: linear-gradient(160deg, #1e4068, #0f2035); padding: 18px 20px; border-bottom: 3px solid var(--gold); position: sticky; top: 0; z-index: 10; }
   .addr-modal-icon { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(232,184,106,0.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-content { display: flex; flex-direction: column; }
   .modal-header h3 { font-family: 'Source Serif 4', serif; font-size: 16px; font-weight: 400; }
   .modal-close-btn { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 20px; cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 3px; transition: color 0.15s; min-width: 36px; min-height: 36px; display: flex; align-items: center; justify-content: center; }
   .modal-close-btn:hover { color: white; }
@@ -451,11 +453,9 @@
     }
     .modal {
       border-radius: 18px 18px 0 0;
-      /* Use dvh for Android Chrome, fall back to vh.
-         114px = 58px topbar + ~56px filter bar on mobile.
-         JS overrides this with a live measurement at open time. */
-      max-height: calc(100dvh - 114px);
-      max-height: calc(100vh - 114px);
+      /* 80% of space between top bar (58px) and footer (56px); dvh for Android Chrome */
+      max-height: calc(0.8 * (100dvh - 114px));
+      max-height: calc(0.8 * (100vh - 114px));
       width: 100%;
       max-width: 100%;
       overflow-y: auto;
@@ -1526,30 +1526,33 @@
 <!-- Event Detail Modal -->
 <div class="overlay" id="overlay-event" onclick="closeModalOnBg(event,'overlay-event')" role="presentation">
   <div class="modal" id="modal-event" role="dialog" aria-modal="true" aria-labelledby="modal-event-title">
-    <div class="modal-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold);">
-      <h3 id="modal-event-title">Event Details</h3>
-      <button class="modal-close-btn" onclick="closeModal('overlay-event')" aria-label="Close event details">✕</button>
+    <div class="modal-content">
+      <div class="modal-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold);">
+        <h3 id="modal-event-title">Event Details</h3>
+        <button class="modal-close-btn" onclick="closeModal('overlay-event')" aria-label="Close event details">✕</button>
+      </div>
+      <div class="modal-body" id="modal-event-body"></div>
     </div>
-    <div class="modal-body" id="modal-event-body"></div>
   </div>
 </div>
 
 <!-- Request Address Modal -->
 <div class="overlay" id="overlay-address" onclick="closeModalOnBg(event,'overlay-address')" role="presentation">
   <div class="modal" id="modal-address" style="max-width:460px;" role="dialog" aria-modal="true" aria-labelledby="modal-address-title">
-    <div class="modal-header addr-modal-header">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <div class="addr-modal-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3,7 12,13 21,7"></polyline></svg>
+    <div class="modal-content">
+      <div class="modal-header addr-modal-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="addr-modal-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3,7 12,13 21,7"></polyline></svg>
+          </div>
+          <div>
+            <div id="modal-address-title" style="font-family:'Source Serif 4',serif; font-size:17px; font-weight:400; color:white;">Contact Organizer</div>
+            
+          </div>
         </div>
-        <div>
-          <div id="modal-address-title" style="font-family:'Source Serif 4',serif; font-size:17px; font-weight:400; color:white;">Contact Organizer</div>
-          
-        </div>
+        <button class="modal-close-btn" onclick="closeModal('overlay-address')" aria-label="Close contact organizer">✕</button>
       </div>
-      <button class="modal-close-btn" onclick="closeModal('overlay-address')" aria-label="Close contact organizer">✕</button>
-    </div>
-    <div class="modal-body">
+      <div class="modal-body">
       <div id="address-form">
         <div class="form-group">
           <label>Request Type</label>
@@ -1582,6 +1585,7 @@
         <p id="address-success-msg" style="font-size:14px; color:var(--gray-800); font-weight:600; line-height:1.6;"></p>
       </div>
     </div>
+    </div>
   </div>
 </div>
 
@@ -1597,16 +1601,17 @@
 <!-- Cancel Event Confirmation Modal -->
 <div class="overlay" id="overlay-cancel" onclick="closeModalOnBg(event,'overlay-cancel')" role="presentation">
   <div class="modal cancel-modal" role="dialog" aria-modal="true" aria-labelledby="modal-cancel-title">
-    <div class="modal-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold); padding:16px 20px;">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <div style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(232,184,106,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+    <div class="modal-content">
+      <div class="modal-header" style="background:linear-gradient(160deg,#1e4068,#0f2035); border-bottom:3px solid var(--gold); padding:16px 20px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(232,184,106,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(232,184,106,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          </div>
+          <div id="modal-cancel-title" style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Cancel Event</div>
         </div>
-        <div id="modal-cancel-title" style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Cancel Event</div>
+        <button class="modal-close-btn" onclick="closeModal('overlay-cancel')" aria-label="Close cancel event dialog">✕</button>
       </div>
-      <button class="modal-close-btn" onclick="closeModal('overlay-cancel')" aria-label="Close cancel event dialog">✕</button>
-    </div>
-    <div class="modal-body">
+      <div class="modal-body">
       <p style="font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px;">Are you sure you want to cancel this event?</p>
       <div class="cancel-warning" id="cancel-warning-text"></div>
       <p style="font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:16px;">How would you like to handle it?</p>
@@ -1622,28 +1627,31 @@
       </div>
       <button class="btn-secondary" style="width:100%; padding:11px;" onclick="closeModal('overlay-cancel')">No, Go Back</button>
     </div>
+    </div>
   </div>
 </div>
 
 <!-- Admin Delete Modal -->
 <div class="overlay" id="overlay-admin-delete" onclick="closeModalOnBg(event,'overlay-admin-delete')" role="presentation">
   <div class="modal cancel-modal" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
-    <div class="modal-header" style="background:linear-gradient(160deg,#5c1a1a,#3a0f0f); border-bottom:3px solid var(--red); padding:16px 20px;">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <div style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(184,48,48,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,140,140,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
+    <div class="modal-content">
+      <div class="modal-header" style="background:linear-gradient(160deg,#5c1a1a,#3a0f0f); border-bottom:3px solid var(--red); padding:16px 20px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(184,48,48,0.4); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,140,140,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
+          </div>
+          <div id="modal-delete-title" style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Delete Event</div>
         </div>
-        <div id="modal-delete-title" style="font-family:'Source Serif 4',serif; font-size:16px; font-weight:400; color:white;">Delete Event</div>
+        <button class="modal-close-btn" onclick="closeModal('overlay-admin-delete')" aria-label="Close delete event dialog">✕</button>
       </div>
-      <button class="modal-close-btn" onclick="closeModal('overlay-admin-delete')" aria-label="Close delete event dialog">✕</button>
-    </div>
-    <div class="modal-body">
+      <div class="modal-body">
       <p style="font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px;">Are you sure you want to permanently delete this event?</p>
       <div class="cancel-warning">This action cannot be undone. The event will be completely removed from the site.</div>
       <div style="display:flex; gap:10px; margin-top:16px;">
         <button class="btn-danger" style="flex:1; padding:11px; white-space:nowrap;" onclick="confirmAdminDelete()">Yes, Delete Permanently</button>
         <button class="btn-secondary" style="flex:1; padding:11px; white-space:nowrap;" onclick="closeModal('overlay-admin-delete')">No, Go Back</button>
       </div>
+    </div>
     </div>
   </div>
 </div>

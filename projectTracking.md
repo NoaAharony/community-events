@@ -390,3 +390,6 @@ All pages are a single HTML file with JS toggling visibility between sections:
 - `editFormState` now stores `existingImageUrl` so edit/save flows know which file to clean up
 - `adminDeleteImageUrl` variable added alongside `adminDeleteId` — passed from admin table row into delete modal
 - Orphaned images from before this fix remain in Storage but no new ones will accumulate
+
+### 2026-03-18
+- **Modal content wrapper:** Wrapped header + body in a single `.modal-content` container for all four modals (event detail, request address, cancel event, admin delete). Enables styling/scripting the modal content as one block; layout unchanged via `display: flex; flex-direction: column`.
