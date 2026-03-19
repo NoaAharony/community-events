@@ -77,6 +77,9 @@
   .filter-chip { background: white; border: 1.5px solid #ccc8be; padding: 6px 14px; font-size: 12px; font-family: 'Nunito', sans-serif; border-radius: 20px; cursor: pointer; transition: all 0.15s; color: #3a3028; font-weight: 700; box-shadow: inset 0 1px 3px rgba(0,0,0,0.07), 0 1px 3px rgba(255,255,255,0.9); white-space: nowrap; position: relative; }
   .filter-chip:hover { border-color: var(--blue-light); color: var(--blue); }
   .filter-chip.active { background: linear-gradient(135deg, #1e4068, #1a3a5c); color: white; border-color: #1a3a5c; box-shadow: 0 3px 10px rgba(26,58,92,0.35), inset 0 1px 0 rgba(255,255,255,0.12); }
+  .chip-clear { display: none; background: white; border: 1.5px solid #d9a0a0; padding: 6px 12px; font-size: 12px; font-family: 'Nunito', sans-serif; border-radius: 20px; cursor: pointer; color: #b83030; font-weight: 700; white-space: nowrap; transition: all 0.15s; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
+  .chip-clear:hover { background: #fdf0f0; border-color: #b83030; }
+  .chip-clear.visible { display: inline-flex; align-items: center; gap: 4px; }
   .dropdown-menu { display: none; position: fixed; background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 9999; min-width: 160px; overflow: hidden; }
   .filter-chip.open .dropdown-menu { display: block; }
   .dropdown-item { padding: 9px 16px; font-size: 13px; cursor: pointer; color: var(--gray-800); transition: background 0.1s; }
@@ -725,6 +728,7 @@
         <div class="dropdown-item" onclick="setAudienceFilter('Teens','Teens',event)">Teens</div>
       </div>
     </div>
+    <button class="chip-clear" id="chip-clear" onclick="clearFilters()" aria-label="Clear all filters">✕ Clear</button>
   </nav>
 
   <main id="events-container" class="main" aria-label="Events list">
@@ -2968,13 +2972,14 @@ function setDateFilter(value, label, e) {
   document.getElementById('date-label').textContent = label;
   updateFilterChip('chip-date', true);
   closeAllDropdowns();
+  updateClearChip();
   renderEvents();
   updateDropdownSelected('dd-date', label);
 }
-function setCityFilter(value, label, e) { e.stopPropagation(); filters.city = value; document.getElementById('city-label').textContent = label; updateFilterChip('chip-city', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-city', label); }
-function setTypeFilter(value, label, e) { e.stopPropagation(); filters.type = value; document.getElementById('type-label').textContent = label; updateFilterChip('chip-type', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-type', label); }
-function setCostFilter(value, label, e) { e.stopPropagation(); filters.cost = value; document.getElementById('cost-label').textContent = label; updateFilterChip('chip-cost', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-cost', label); }
-function setAudienceFilter(value, label, e) { e.stopPropagation(); filters.audience = value; document.getElementById('audience-label').textContent = label; updateFilterChip('chip-audience', value !== 'all'); closeAllDropdowns(); renderEvents(); updateDropdownSelected('dd-audience', label); }
+function setCityFilter(value, label, e) { e.stopPropagation(); filters.city = value; document.getElementById('city-label').textContent = label; updateFilterChip('chip-city', value !== 'all'); closeAllDropdowns(); updateClearChip(); renderEvents(); updateDropdownSelected('dd-city', label); }
+function setTypeFilter(value, label, e) { e.stopPropagation(); filters.type = value; document.getElementById('type-label').textContent = label; updateFilterChip('chip-type', value !== 'all'); closeAllDropdowns(); updateClearChip(); renderEvents(); updateDropdownSelected('dd-type', label); }
+function setCostFilter(value, label, e) { e.stopPropagation(); filters.cost = value; document.getElementById('cost-label').textContent = label; updateFilterChip('chip-cost', value !== 'all'); closeAllDropdowns(); updateClearChip(); renderEvents(); updateDropdownSelected('dd-cost', label); }
+function setAudienceFilter(value, label, e) { e.stopPropagation(); filters.audience = value; document.getElementById('audience-label').textContent = label; updateFilterChip('chip-audience', value !== 'all'); closeAllDropdowns(); updateClearChip(); renderEvents(); updateDropdownSelected('dd-audience', label); }
 
 function updateFilterChip(id, active) { document.getElementById(id).classList.toggle('active', active); }
 function updateDropdownSelected(ddId, label) { document.querySelectorAll(`#${ddId} .dropdown-item`).forEach(i => i.classList.toggle('selected', i.textContent.trim() === label)); }
@@ -2982,7 +2987,12 @@ function closeAllDropdowns() {
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('open'));
   document.querySelectorAll('.dropdown-menu').forEach(m => { m.style.display = 'none'; });
 }
-function clearFilters() { filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'All Upcoming'; document.getElementById('city-label').textContent = 'Location'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.add('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); renderEvents(); }
+function updateClearChip() {
+  const anyActive = filters.city !== 'all' || filters.type !== 'all' || filters.cost !== 'all' || filters.audience !== 'all' || filters.date !== 'all';
+  document.getElementById('chip-clear').classList.toggle('visible', anyActive);
+}
+
+function clearFilters() { filters = { date: 'all', city: 'all', type: 'all', cost: 'all', audience: 'all' }; document.getElementById('date-label').textContent = 'All Upcoming'; document.getElementById('city-label').textContent = 'Location'; document.getElementById('type-label').textContent = 'Event Type'; document.getElementById('cost-label').textContent = 'Cost'; document.getElementById('audience-label').textContent = 'For'; document.getElementById('chip-date').classList.add('active'); ['chip-city','chip-type','chip-cost','chip-audience'].forEach(id => document.getElementById(id).classList.remove('active')); updateClearChip(); renderEvents(); }
 
 function toggleDropdown(id, e) {
   e.stopPropagation();
