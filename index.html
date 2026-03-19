@@ -183,7 +183,7 @@
   .modal-event-img-wrap { position: relative; margin-bottom: 16px; }
 
   /* Lightbox */
-  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9000; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease; cursor: pointer; }
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9000; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease; cursor: pointer; pointer-events: none; }
   .lightbox.open { display: flex; }
   .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 6px; object-fit: contain; box-shadow: 0 8px 60px rgba(0,0,0,0.6); cursor: default; }
   .lightbox-close { position: fixed; top: 20px; right: 24px; background: rgba(255,255,255,0.15); border: none; color: white; font-size: 22px; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); transition: background 0.15s; z-index: 9001; }
@@ -1590,9 +1590,9 @@
 </div>
 
 <!-- Lightbox -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close flyer">✕</button>
-  <img id="lightbox-img" src="" alt="Full flyer" onclick="event.stopPropagation()">
+<div class="lightbox" id="lightbox" onclick="closeLightbox()" ontouchend="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()" ontouchend="event.stopPropagation();closeLightbox();" aria-label="Close flyer">✕</button>
+  <img id="lightbox-img" src="" alt="Full flyer" onclick="event.stopPropagation()" ontouchend="event.stopPropagation()">
 </div>
 
 <!-- Share Toast -->
@@ -3470,12 +3470,16 @@ function shareEvent(e, id) {
 }
 
 function openLightbox(src) {
+  const lb = document.getElementById('lightbox');
   document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox').classList.add('open');
+  lb.classList.add('open');
+  lb.style.pointerEvents = 'auto';
 }
 
 function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('open');
+  lb.style.pointerEvents = 'none';
   document.getElementById('lightbox-img').src = '';
 }
 function closeModalOnBg(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
